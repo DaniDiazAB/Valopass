@@ -1,0 +1,8 @@
+# Directorio de módulos de Node
+node_modules/
+cors-proxy/node_modules
+
+# Archivos de depuración y logs
+npm-debug.log
+.DS_Store # Archivos de sistema de macOS
+.env      # Archivo de variables de entorno con información sensible
