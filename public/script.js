@@ -1,26 +1,50 @@
-const btnBuscar = document.getElementById("buscar")
-
-const puntos = document.getElementById("puntos")
-
-btnBuscar.addEventListener("click", function(){
-    getRangos();
-})
-
-function getRangos(){
-    const nick = document.getElementById("nick")
-    const tag = document.getElementById("tag")
+const title = document.getElementById("title")
 
 
-     // URL de la página que devuelve el texto
-    const url = "http://localhost:3000/api/mmr/" + nick.value + "/" + tag.value + "/EU";
+document.addEventListener('DOMContentLoaded', function() {
+  getCuentas(); 
+});
 
-    // Usando fetch para obtener el contenido
+function getCuentas(){
+    fetch("http://localhost/Valopass/server/cuentas.php")
+  .then(response => response.json())
+  .then(data => {
+    const divCuentas = document.createElement("div")
+    divCuentas.id = "cuentas"
+    title.insertAdjacentElement("afterend", divCuentas)
+
+
+
+    data.forEach(cuenta => {
+      getRangos(cuenta.nick_cuenta, cuenta.tag_cuenta, divCuentas)
+    });
+  })
+  .catch(error => console.error("Error:", error));
+
+
+}
+
+function getRangos(nick, tag, divCuentas){
+    const url = "http://localhost:3000/api/mmr/" + nick + "/" + tag + "/EU";
+
     fetch(url)
-    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(response => response.text()) 
     .then(data => {
-        // Aquí "data" contiene el texto devuelto por la página
+
+
         let miTexto = data;
-        console.log(miTexto.split(','[0])[0]);
+        
+        const textoNick = document.createElement("h3")
+        textoNick.textContent = nick + ' - ' + miTexto.split(','[0])[0]
+        textoNick.classList.add('nick')
+
+        /* REUSAR PARA LA CONTRASEÑA
+        const nuevoParrafo = document.createElement("h4")
+        nuevoParrafo.textContent = miTexto.split(','[0])[0]
+        nuevoParrafo.classList.add('rango')
+        */
+
+        divCuentas.append(textoNick)
 
 
     })
