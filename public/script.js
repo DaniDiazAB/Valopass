@@ -103,8 +103,12 @@ function cargarInputs(rango, nick, tag, usename, password) {
     const divBtn = document.createElement("div");
     divBtn.classList.add("div-btn");
 
-    divBtn.onclick = function(){
-        editarCuenta(nick, tag)
+    btnEditar.onclick = function(){
+        editarCuenta(nick, tag, textoNick, textoUsername, textoPassword, divBtn) // Username es el de incio de sesion
+        btnEditar.setAttribute("hidden", "")
+        btnEliminar.setAttribute("hidden", "")
+        btnCopiarPassword.setAttribute("hidden", "")
+
     }
 
     agregarImgRango(rango, textoRango);
@@ -117,8 +121,27 @@ function cargarInputs(rango, nick, tag, usename, password) {
     infoRango.append(divBtn);
 }
 
-function editarCuenta(nick, tag){
-    alert(nick + " #" + tag)
+function editarCuenta(nick, tag, textoNick, textoUsername, textoPassword, divBtn){
+    textoNick.readOnly = false
+    textoUsername.readOnly = false
+    textoPassword.readOnly = false
+
+    
+
+    
+    const btnGuardarCambios = document.createElement("button");
+    btnGuardarCambios.innerHTML = "Guardar cambios";
+    btnGuardarCambios.classList.add("btn-guardar-cambios");
+
+    const btnDeshacerCambios = document.createElement("button");
+    btnDeshacerCambios.innerHTML = "No guardar cambios";
+    btnDeshacerCambios.classList.add("btn-deshacer-cambios");
+
+
+    divBtn.append(btnGuardarCambios)
+    divBtn.append(btnDeshacerCambios)
+
+
 
 }
 
