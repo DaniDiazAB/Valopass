@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 // Ejemplo: obtener todas las cuentas
-$sql = "SELECT id_cuenta, username_cuenta, nick_cuenta, tag_cuenta FROM cuentas";
+$sql = "SELECT id_cuenta, username_cuenta, nick_cuenta, tag_cuenta, username_cuenta, password_cuenta FROM cuentas";
 $result = $conn->query($sql);
 
 $datos = [];
