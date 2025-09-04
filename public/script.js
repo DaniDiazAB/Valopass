@@ -1,6 +1,6 @@
 // Index loging
 
-const title = document.getElementById("title");
+const title = document.getElementById("nav");
 const divCuenta = document.createElement("div");
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -43,7 +43,7 @@ function getRangos(nick, tag, usename, password, divCuentas) {
 
             let rango = data;
             rango = rango.split(","[0])[0];
-
+    
             cargarInputs(rango, nick, tag, usename, password);
         })
         .catch((error) => {
@@ -103,12 +103,23 @@ function cargarInputs(rango, nick, tag, usename, password) {
     const divBtn = document.createElement("div");
     divBtn.classList.add("div-btn");
 
-    btnEditar.onclick = function(){
-        editarCuenta(nick, tag, textoNick, textoUsername, textoPassword, divBtn) // Username es el de incio de sesion
+    btnEditar.onclick = function () {
+        editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) // Username es el de incio de sesion
         btnEditar.setAttribute("hidden", "")
         btnEliminar.setAttribute("hidden", "")
         btnCopiarPassword.setAttribute("hidden", "")
+    }
 
+    btnEliminar.onclick = function(){
+        let isBorrar = confirm("¿Estás seguro de que quieres borrar la cuenta?")
+        if (isBorrar){
+            modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, true)
+            infoRango.remove()
+        }
+    }
+
+    btnCopiarPassword.onclick = function(){
+        navigator.clipboard.writeText(password)       
     }
 
     agregarImgRango(rango, textoRango);
@@ -121,14 +132,11 @@ function cargarInputs(rango, nick, tag, usename, password) {
     infoRango.append(divBtn);
 }
 
-function editarCuenta(nick, tag, textoNick, textoUsername, textoPassword, divBtn){
+function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) {
     textoNick.readOnly = false
     textoUsername.readOnly = false
     textoPassword.readOnly = false
 
-    
-
-    
     const btnGuardarCambios = document.createElement("button");
     btnGuardarCambios.innerHTML = "Guardar cambios";
     btnGuardarCambios.classList.add("btn-guardar-cambios");
@@ -137,13 +145,69 @@ function editarCuenta(nick, tag, textoNick, textoUsername, textoPassword, divBtn
     btnDeshacerCambios.innerHTML = "No guardar cambios";
     btnDeshacerCambios.classList.add("btn-deshacer-cambios");
 
+    btnGuardarCambios.onclick = function () {
+        let isConfirmarNoGuardar = confirm("¿Estás seguro de SÍ guardar los cambios?", "")
 
+        if (isConfirmarNoGuardar) {
+            textoNick.readOnly = true
+            textoUsername.readOnly = true
+            textoPassword.readOnly = true
+            btnGuardarCambios.setAttribute("hidden", "")
+            btnDeshacerCambios.setAttribute("hidden", "")
+            btnEditar.removeAttribute("hidden")
+            btnEliminar.removeAttribute("hidden")
+            btnCopiarPassword.removeAttribute("hidden")
+            modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, false)
+
+        }
+
+    }
+
+    btnDeshacerCambios.onclick = function () {
+        let isConfirmarNoGuardar = confirm("¿Estás seguro de NO guardar los cambios?", "")
+
+        if (isConfirmarNoGuardar) {
+            textoNick.readOnly = true
+            textoUsername.readOnly = true
+            textoPassword.readOnly = true
+            btnGuardarCambios.setAttribute("hidden", "")
+            btnDeshacerCambios.setAttribute("hidden", "")
+            btnEditar.removeAttribute("hidden")
+            btnEliminar.removeAttribute("hidden")
+            btnCopiarPassword.removeAttribute("hidden")
+        }
+    }
     divBtn.append(btnGuardarCambios)
     divBtn.append(btnDeshacerCambios)
-
-
-
 }
+
+function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar) {
+    let partes = textoNick.split("#")
+
+    const datosCuenta = {
+        nick: partes[0],
+        tag: partes[1],
+        username: textoUsername,
+        password: textoPassword,
+        eliminar: isEliminar
+    };
+
+    fetch('../server/guardar-cambios-cuentas.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datosCuenta)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 
 function agregarImgRango(rango, textoNick) {
     const imgRango = document.createElement("img");

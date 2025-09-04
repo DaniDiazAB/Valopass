@@ -1,9 +1,6 @@
 <?php
 session_start();
-$host = "localhost";
-$user = "root";  // cambia si tu host tiene otro usuario
-$pass = "";      // pon tu contraseña de MySQL si tienes
-$dbname = "valopass";
+include "db.php";
 
 
 try {

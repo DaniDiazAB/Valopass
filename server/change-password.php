@@ -19,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $newPassword = $_POST["nueva_password"] ?? "";
 
     if ($username && $newPassword) {
-        // 🔐 Guardamos la contraseña con hash seguro
         $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
 
         $stmt = $pdo->prepare("UPDATE usuarios SET password_usuario = :password WHERE nombre_usuario = :username");
