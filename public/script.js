@@ -1,15 +1,54 @@
 // Index loging
 
-const title = document.getElementById("nav");
+const title = document.getElementById("title");
 const divCuenta = document.createElement("div");
+const navBar = document.createElement("div")
+navBar.classList.add("nav")
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     if (!document.cookie.includes("usuario=")) {
         window.location.href = "views/login.html";
     } else {
+        cargarNavegacion()
         getCuentas();
     }
 });
+
+function cargarNavegacion(){
+
+    const perfil = document.createElement("a")
+    const cuentas = document.createElement("a")
+    const agregar = document.createElement("a")
+    const cuentasPublicas = document.createElement("a")
+    const cerrarSesion = document.createElement("a")
+
+    perfil.classList.add("enlace-nav")
+    perfil.innerHTML = "Mi perfil"
+
+    cuentas.classList.add("enlace-nav")
+    cuentas.innerHTML = "Mis cuentas"
+
+    agregar.classList.add("enlace-nav")
+    agregar.innerHTML = "Agregar cuenta"
+
+    cuentasPublicas.classList.add("enlace-nav")
+    cuentasPublicas.innerHTML = "Cuentas publicas"
+
+    cerrarSesion.classList.add("enlace-nav")
+    cerrarSesion.innerHTML = "Cerrar Sesión"
+
+    title.insertAdjacentElement("afterend", navBar);
+
+    navBar.append(perfil)
+    navBar.append(cuentas)
+    navBar.append(agregar)
+    navBar.append(cuentasPublicas)
+    navBar.append(cerrarSesion)
+
+
+}
 
 function getCuentas() {
     fetch("http://localhost/Valopass/server/cuentas.php")
@@ -17,7 +56,7 @@ function getCuentas() {
         .then((data) => {
             const divCuentas = document.createElement("div");
             divCuentas.id = "cuentas";
-            title.insertAdjacentElement("afterend", divCuentas);
+            navBar.insertAdjacentElement("afterend", divCuentas);
 
             data.forEach((cuenta) => {
                 getRangos(
@@ -89,7 +128,7 @@ function cargarInputs(rango, nick, tag, usename, password) {
     infoRango.append(textoPassword);
 
     const btnEditar = document.createElement("button");
-    btnEditar.innerHTML = "Editar";
+    btnEditar.innerHTML = "Editar cuenta";
     btnEditar.classList.add("btn-editar");
 
     const btnEliminar = document.createElement("button");

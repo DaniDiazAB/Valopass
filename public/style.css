@@ -1,349 +1,239 @@
-/* Variables globales para consistencia */
-:root {
-    --primary-color: #6c5ce7;
-    --secondary-color: #a29bfe;
-    --accent-color: #fd79a8;
-    --dark-color: #2d3436;
-    --light-color: #f7f7f7;
-    --success-color: #00b894;
-    --warning-color: #fdcb6e;
-    --danger-color: #d63031;
-    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    --card-shadow-hover: 0 15px 45px rgba(0, 0, 0, 0.15);
-    --transition: all 0.3s ease;
-    --border-radius: 12px;
-}
-
-/* Reset y estilos base */
+/* ====== RESET GLOBAL ====== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
-    padding: 2rem;
-    color: var(--dark-color);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: #0c0c14;
+  color: #eaeaea;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Título principal */
+/* ====== TITULO PRINCIPAL ====== */
 #title {
-    text-align: center;
-    margin: 2rem 0 3rem;
-    font-size: 3.5rem;
-    font-weight: 800;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    position: relative;
-    display: inline-block;
-    left: 50%;
-    transform: translateX(-50%);
-    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  font-size: 3rem;
+  margin: 2rem 0 1rem;
+  color: #ff4655;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(255,70,85,0.8), 0 0 24px rgba(255,70,85,0.5);
+  animation: glowPulse 2s ease-in-out infinite alternate;
 }
 
-#title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 10%;
-    width: 80%;
-    height: 4px;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-    border-radius: 4px;
+@keyframes glowPulse {
+  from { text-shadow: 0 0 10px rgba(255,70,85,0.7), 0 0 20px rgba(255,70,85,0.4); }
+  to { text-shadow: 0 0 20px rgba(255,70,85,1), 0 0 35px rgba(255,70,85,0.7); }
 }
 
-/* Contenedor principal de cuentas */
+/* ====== NAVBAR ====== */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  background: linear-gradient(90deg, #12121c, #181828);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  border-radius: 0 0 1rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.enlace-nav {
+  color: #ddd;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.enlace-nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: #ff4655;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  border-radius: 2px;
+}
+
+.enlace-nav:hover {
+  color: #ff4655;
+  transform: translateY(-2px);
+}
+
+.enlace-nav:hover::after {
+  transform: scaleX(1);
+}
+
+/* ====== CONTENEDOR DE CUENTAS ====== */
 #cuentas {
-    display: flex;
-    justify-content: center;
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-/* Grid de cuentas con máximo 5 columnas */
-#cuentas > div {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 2rem;
-    width: 100%;
-    max-width: 1400px;
+.cuenta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 260px));
+  gap: 1.5rem;
+  justify-content: center;
+  max-width: calc(260px * 5 + 1.5rem * 4);
+  margin: 0 auto;
 }
 
-/* Tarjeta de cuenta individual */
+/* ====== TARJETA DE CUENTA ====== */
 .div-cuenta {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    position: relative;
-    overflow: hidden;
-    transform: translateY(0);
-}
-
-.div-cuenta::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  background: #14141f;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .div-cuenta:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--card-shadow-hover);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(255,70,85,0.3);
 }
 
-/* Campos de entrada con readonly */
-input[readonly] {
-    background-color: #f8f9fa;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    padding: 0.75rem;
-    font-size: 0.9rem;
-    color: #6c757d;
-    cursor: not-allowed;
-    transition: var(--transition);
-    position: relative;
+/* ====== INPUTS ====== */
+.div-cuenta input {
+  width: 100%;
+  margin: 0.4rem 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.6rem;
+  border: 1px solid #333;
+  background: #12121c;
+  color: #eaeaea;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
 }
 
-input[readonly]:focus {
-    outline: none;
-    border-color: var(--secondary-color);
+/* Inputs readonly → apagados */
+.div-cuenta input[readonly] {
+  background: #1b1b2b;
+  color: #777;
+  cursor: not-allowed;
+  border: 1px dashed #444;
 }
 
-/* Efecto visual para indicar que no es editable */
-input[readonly]::after {
-    content: '🔒';
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.8rem;
+/* Inputs editables → resaltados */
+.div-cuenta input:not([readonly]) {
+  border: 1px solid #ff4655;
+  background: #0f0f1a;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255,70,85,0.5);
 }
 
-/* Estilo específico para campos de contraseña */
-.password[readonly] {
-    font-family: 'Courier New', monospace;
-    letter-spacing: 1px;
-}
-
-/* Estilo para el nick */
-.nick {
-    font-weight: 700;
-    font-size: 1.2rem;
-    text-align: center;
-    background-color: rgba(108, 92, 231, 0.1) !important;
-}
-
-/* Contenedor de rango */
+/* ====== RANGO ====== */
 .rango {
-    text-align: center;
-    margin: 0.5rem 0;
+  text-align: center;
+  margin: 1rem 0;
 }
 
-/* Imagen de rango */
 .img-rango {
-    max-width: 80px;
-    height: auto;
-    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
-    transition: var(--transition);
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(255,70,85,0.5));
 }
 
-.div-cuenta:hover .img-rango {
-    transform: scale(1.05);
-}
-
-/* Contenedor de botones */
+/* ====== BOTONES ====== */
 .div-btn {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  justify-content: center;
 }
 
-/* Estilos de botones */
-button {
-    padding: 0.75rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
+.div-btn button {
+  flex: 1 1 120px;
+  padding: 0.65rem 0.9rem;
+  border: none;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #fff;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
 
-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: var(--transition);
+/* Botones con colores diferenciados */
+.btn-editar { background: #3a86ff; }
+.btn-eliminar { background: #ff4655; }
+.btn-password { background: #8338ec; }
+.btn-guardar-cambios { background: #06d6a0; }
+.btn-deshacercambios { background: #ffbe0b; color: #111; }
+
+/* Efecto hover con glow */
+.div-btn button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 12px rgba(255,255,255,0.25);
+  filter: brightness(1.1);
 }
 
-button:hover::before {
-    left: 100%;
+/* Efecto ripple sutil */
+.div-btn button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
 }
 
-.btn-editar {
-    background-color: var(--warning-color);
-    color: var(--dark-color);
+.div-btn button:active::after {
+  width: 200%;
+  height: 200%;
+  transition: 0s;
 }
 
-.btn-editar:hover {
-    background-color: #f0c44c;
-    transform: translateY(-2px);
+/* ====== RESPONSIVE ====== */
+@media (max-width: 900px) {
+  .cuenta {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
+  }
+  .img-rango {
+    width: 54px;
+    height: 54px;
+  }
 }
 
-.btn-eliminar {
-    background-color: var(--danger-color);
-    color: white;
-}
-
-.btn-eliminar:hover {
-    background-color: #c02b2b;
-    transform: translateY(-2px);
-}
-
-.btn-password {
-    background-color: var(--success-color);
-    color: white;
-}
-
-.btn-password:hover {
-    background-color: #00a382;
-    transform: translateY(-2px);
-}
-
-/* Efectos de animación para la aparición de tarjetas */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.div-cuenta {
-    animation: fadeInUp 0.5s ease forwards;
-    opacity: 0;
-}
-
-.div-cuenta:nth-child(1) { animation-delay: 0.1s; }
-.div-cuenta:nth-child(2) { animation-delay: 0.2s; }
-.div-cuenta:nth-child(3) { animation-delay: 0.3s; }
-.div-cuenta:nth-child(4) { animation-delay: 0.4s; }
-.div-cuenta:nth-child(5) { animation-delay: 0.5s; }
-
-/* Responsive design */
-@media (max-width: 1200px) {
-    #cuentas > div {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 1rem;
-    }
-    
-    #title {
-        font-size: 2.5rem;
-    }
-    
-    #cuentas > div {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 1.5rem;
-    }
-    
-    .div-cuenta {
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    #cuentas > div {
-        grid-template-columns: 1fr;
-        max-width: 320px;
-    }
-    
-    .div-cuenta {
-        max-width: 100%;
-    }
-}
-
-/* Barra de navegación principal */
-#nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem; /* separación entre enlaces */
-    padding: 1rem 2rem;
-    background: linear-gradient(90deg, #1e1e2f, #2d2d44);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-/* Estilos de los enlaces */
-#nav a {
-    position: relative;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-    font-size: 1rem;
-    color: #f0f0f0;
-    text-decoration: none;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    padding: 0.5rem 0.75rem;
-    transition: color 0.3s ease;
-    cursor: pointer;
-}
-
-/* Efecto hover: subrayado animado */
-#nav a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    width: 100%;
-    height: 2px;
-    background: #ff4655; /* color vibrante (tipo Valorant) */
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s ease;
-}
-
-#nav a:hover {
-    color: #ff4655;
-}
-
-#nav a:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
-/* Responsive: en móviles se apila en columna */
-@media (max-width: 768px) {
-    #nav {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-    }
+@media (max-width: 600px) {
+  #title {
+    font-size: 2rem;
+  }
+  .nav {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .enlace-nav {
+    font-size: 0.9rem;
+  }
 }
