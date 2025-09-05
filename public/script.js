@@ -1,11 +1,18 @@
 // Index loging
 
 const title = document.getElementById("title");
-const divCuenta = document.createElement("div");
 const navBar = document.createElement("div")
 navBar.classList.add("nav")
 
+const perfil = document.createElement("a")
+const cuentas = document.createElement("a")
+const agregarCuenta = document.createElement("a")
+const cuentasPublicas = document.createElement("a")
+const cerrarSesion = document.createElement("a")
 
+agregarCuenta.onclick = function () {
+    cargarInputs("", "", "", "", "", true)
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     if (!document.cookie.includes("usuario=")) {
@@ -16,13 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function cargarNavegacion(){
-
-    const perfil = document.createElement("a")
-    const cuentas = document.createElement("a")
-    const agregar = document.createElement("a")
-    const cuentasPublicas = document.createElement("a")
-    const cerrarSesion = document.createElement("a")
+function cargarNavegacion() {
 
     perfil.classList.add("enlace-nav")
     perfil.innerHTML = "Mi perfil"
@@ -30,8 +31,8 @@ function cargarNavegacion(){
     cuentas.classList.add("enlace-nav")
     cuentas.innerHTML = "Mis cuentas"
 
-    agregar.classList.add("enlace-nav")
-    agregar.innerHTML = "Agregar cuenta"
+    agregarCuenta.classList.add("enlace-nav")
+    agregarCuenta.innerHTML = "Agregar cuenta"
 
     cuentasPublicas.classList.add("enlace-nav")
     cuentasPublicas.innerHTML = "Cuentas publicas"
@@ -43,7 +44,7 @@ function cargarNavegacion(){
 
     navBar.append(perfil)
     navBar.append(cuentas)
-    navBar.append(agregar)
+    navBar.append(agregarCuenta)
     navBar.append(cuentasPublicas)
     navBar.append(cerrarSesion)
 
@@ -70,7 +71,7 @@ function getCuentas() {
         })
         .catch((error) => console.error("Error:", error));
 }
-
+/* BUENO
 function getRangos(nick, tag, usename, password, divCuentas) {
     const url = "http://localhost:3000/api/mmr/" + nick + "/" + tag + "/EU";
 
@@ -89,33 +90,34 @@ function getRangos(nick, tag, usename, password, divCuentas) {
             console.error("Error al obtener el texto:", error);
         });
 }
+*/
+function getRangos(nick, tag, usename, password, divCuentas) {
 
-function cargarInputs(rango, nick, tag, usename, password) {
+    cargarInputs("Radiant", nick, tag, usename, password, false, divCuentas);
+}
+
+function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCuentas) {
     const textoNick = document.createElement("input");
     textoNick.classList.add("nick");
     textoNick.setAttribute("type", "text");
     textoNick.setAttribute("name", "nick");
-    textoNick.readOnly = true;
     textoNick.value = nick + ' #' + tag;
 
     const textoRango = document.createElement("p");
     textoRango.classList.add("rango");
     textoRango.setAttribute("type", "text");
     textoRango.setAttribute("name", "rango");
-    textoRango.readOnly = true;
     textoRango.value = rango;
 
     const textoUsername = document.createElement("input");
     textoUsername.setAttribute("type", "text");
     textoUsername.setAttribute("name", "username");
     textoUsername.classList.add("username");
-    textoUsername.readOnly = true;
     textoUsername.value = usename;
 
     const textoPassword = document.createElement("input");
     textoPassword.setAttribute("type", "text");
     textoPassword.setAttribute("name", "password");
-    textoPassword.readOnly = true;
     textoPassword.classList.add("password");
     textoPassword.value = password;
 
@@ -127,48 +129,90 @@ function cargarInputs(rango, nick, tag, usename, password) {
     infoRango.append(textoUsername);
     infoRango.append(textoPassword);
 
-    const btnEditar = document.createElement("button");
-    btnEditar.innerHTML = "Editar cuenta";
-    btnEditar.classList.add("btn-editar");
-
-    const btnEliminar = document.createElement("button");
-    btnEliminar.innerHTML = "Eliminar cuenta";
-    btnEliminar.classList.add("btn-eliminar");
-
-    const btnCopiarPassword = document.createElement("button");
-    btnCopiarPassword.innerHTML = "Copiar contraseña";
-    btnCopiarPassword.classList.add("btn-password");
-
     const divBtn = document.createElement("div");
     divBtn.classList.add("div-btn");
 
-    btnEditar.onclick = function () {
-        editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) // Username es el de incio de sesion
-        btnEditar.setAttribute("hidden", "")
-        btnEliminar.setAttribute("hidden", "")
-        btnCopiarPassword.setAttribute("hidden", "")
-    }
+    if (isNuevaCuenta) {
+        textoNick.setAttribute("placeholder", "Int")
+        textoUsername.setAttribute("placeholder", "Nombre para el login")
+        textoPassword.setAttribute("placeholder", "Contraseña")
 
-    btnEliminar.onclick = function(){
-        let isBorrar = confirm("¿Estás seguro de que quieres borrar la cuenta?")
-        if (isBorrar){
-            modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, true)
-            infoRango.remove()
+        const btnGuardarCuenta = document.createElement("button");
+        btnGuardarCuenta.innerHTML = "Guardar cuenta";
+        btnGuardarCuenta.classList.add("btn-editar");
+
+        const btnNoGuardarCuenta = document.createElement("button");
+        btnNoGuardarCuenta.innerHTML = "No guardar cuenta";
+        btnNoGuardarCuenta.classList.add("btn-eliminar");
+
+        btnGuardarCuenta.onclick = function(){
+            guardarNuevaCuenta(textoNick.value, textoUsername.value, textoPassword.value)
         }
+
+        btnNoGuardarCuenta.onclick = function(){
+            infoRango.setAttribute("style", "display: none")
+        }
+
+        divBtn.append(btnGuardarCuenta);
+        divBtn.append(btnNoGuardarCuenta);
+
+        const elementoPadre = document.getElementById("cuentas")
+
+
+        elementoPadre.insertBefore(infoRango, elementoPadre.firstChild);
+        infoRango.append(divBtn);
+
+    } else {
+        textoNick.readOnly = true;
+        textoRango.readOnly = true;
+        textoUsername.readOnly = true;
+        textoPassword.readOnly = true;
+
+        const btnEditar = document.createElement("button");
+        btnEditar.innerHTML = "Editar cuenta";
+        btnEditar.classList.add("btn-guardar-cambios");
+
+        const btnEliminar = document.createElement("button");
+        btnEliminar.innerHTML = "Eliminar cuenta";
+        btnEliminar.classList.add("btn-deshacer-cambios");
+
+        const btnCopiarPassword = document.createElement("button");
+        btnCopiarPassword.innerHTML = "Copiar contraseña";
+        btnCopiarPassword.classList.add("btn-password");
+
+        
+
+        btnEditar.onclick = function () {
+            editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) // Username es el de incio de sesion
+            btnEditar.setAttribute("hidden", "")
+            btnEliminar.setAttribute("hidden", "")
+            btnCopiarPassword.setAttribute("hidden", "")
+        }
+
+        btnEliminar.onclick = function () {
+            let isBorrar = confirm("¿Estás seguro de que quieres borrar la cuenta?")
+            if (isBorrar) {
+                modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, true)
+                infoRango.remove()
+            }
+        }
+
+        btnCopiarPassword.onclick = function () {
+            navigator.clipboard.writeText(password)
+        }
+
+        agregarImgRango(rango, textoRango);
+
+        divBtn.append(btnEditar);
+        divBtn.append(btnEliminar);
+        divBtn.append(btnCopiarPassword);
+
+        divCuentas.append(infoRango);
+        infoRango.append(divBtn);
+
+        
     }
-
-    btnCopiarPassword.onclick = function(){
-        navigator.clipboard.writeText(password)       
-    }
-
-    agregarImgRango(rango, textoRango);
-
-    divBtn.append(btnEditar);
-    divBtn.append(btnEliminar);
-    divBtn.append(btnCopiarPassword);
-
-    divCuenta.append(infoRango);
-    infoRango.append(divBtn);
+    
 }
 
 function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) {
@@ -218,6 +262,43 @@ function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar
     }
     divBtn.append(btnGuardarCambios)
     divBtn.append(btnDeshacerCambios)
+}
+
+function guardarNuevaCuenta(textoNick, textoUsername, textoPassword){
+    const parent = document.getElementById("cuentas");
+    parent.remove()
+
+    let partes = textoNick.split("#")
+
+    const datosNuevaCuenta = {
+        nick: partes[0],
+        tag: partes[1],
+        username: textoUsername,
+        password: textoPassword,
+    }
+
+    fetch('../server/crear-nueva-cuenta.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datosNuevaCuenta)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        
+    setTimeout(function(){
+        getCuentas();
+    }, 100);
+
+
+
+    
 }
 
 function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar) {

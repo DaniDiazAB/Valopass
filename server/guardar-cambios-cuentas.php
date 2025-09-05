@@ -2,10 +2,8 @@
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
 
-// Incluir la conexión
 require_once "db.php";
 
-// Recibir JSON desde JS
 $input = file_get_contents("php://input");
 $datos = json_decode($input, true);
 
