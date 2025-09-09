@@ -1,30 +1,40 @@
 // Index loging
-
 const title = document.getElementById("title");
 const navBar = document.createElement("div")
 navBar.classList.add("nav")
 
-const perfil = document.createElement("a")
-const cuentas = document.createElement("a")
-const agregarCuenta = document.createElement("a")
-const cuentasPublicas = document.createElement("a")
-const cerrarSesion = document.createElement("a")
-
-agregarCuenta.onclick = function () {
-    cargarInputs("", "", "", "", "", true)
-}
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (!document.cookie.includes("usuario=")) {
-        window.location.href = "views/login.html";
-    } else {
+    if (document.cookie.includes("usuario=")) {
         cargarNavegacion()
         getCuentas();
     }
 });
 
-function cargarNavegacion() {
+// Links Navegacion
+const perfil = document.createElement("a")
+const cuentas = document.createElement("a")
+const agregarCuenta = document.createElement("a")
+const cuentasPublicas = document.createElement("a")
+const cerrarSesion = document.createElement("a")
+const cargandoRangos = document.createElement("img")
 
+
+agregarCuenta.onclick = function () {
+    cargarInputs("", "", "", "", "", true)
+}
+
+cerrarSesion.onclick = function(){
+    fetch("../server/outlog.php")
+        .then((response) => response.json())
+        .then((data) => {
+            alert("Sesión cerrada")
+            window.location.href = "views/login.html";
+        })
+        .catch((error) => console.error("Error:", error));
+}
+
+function cargarNavegacion() {
     perfil.classList.add("enlace-nav")
     perfil.innerHTML = "Mi perfil"
 
@@ -40,6 +50,15 @@ function cargarNavegacion() {
     cerrarSesion.classList.add("enlace-nav")
     cerrarSesion.innerHTML = "Cerrar Sesión"
 
+    cargandoRangos.src = "resources/loading.gif";
+    cargandoRangos.alt = "Actualizando los rangos en la base de datos";
+    cargandoRangos.id = "actulizando-rangos"
+    cargandoRangos.width = 25; 
+    cargandoRangos.height = 25; 
+    cargandoRangos.style.borderRadius = "10px"; 
+    document.body.insertBefore(cargandoRangos, document.body.firstChild); 
+
+
     title.insertAdjacentElement("afterend", navBar);
 
     navBar.append(perfil)
@@ -47,12 +66,10 @@ function cargarNavegacion() {
     navBar.append(agregarCuenta)
     navBar.append(cuentasPublicas)
     navBar.append(cerrarSesion)
-
-
 }
 
 function getCuentas() {
-    fetch("http://localhost/Valopass/server/cuentas.php")
+    fetch("../server/cuentas.php")
         .then((response) => response.json())
         .then((data) => {
             const divCuentas = document.createElement("div");
@@ -73,11 +90,12 @@ function getCuentas() {
 }
 
 function actualizarRangos(nick, tag, username, password, divCuentas) {
+    getRangos(nick, tag, username, password, divCuentas)
 
+    // PROXY, CAMBIAR EN LA VERSION FINAL -> https://vaccie.pythonanywhere.com/mmr/Dani/KKC/eu
     const url = "http://localhost:3000/api/mmr/" + nick + "/" + tag + "/EU";
     divCuentas.className = "cuenta";
 
-    getRangos(nick, tag, username, password, divCuentas)
 
     fetch(url)
         .then((response) => response.text())
@@ -97,6 +115,8 @@ function actualizarRangos(nick, tag, username, password, divCuentas) {
                 },
                 body: JSON.stringify(datosActuCuenta)
             })
+            cargandoRangos.setAttribute("hidden", "")
+
 
         })
         .catch((error) => {
@@ -154,6 +174,8 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
     textoPassword.classList.add("password");
     textoPassword.value = password;
 
+    
+
     const infoRango = document.createElement("div");
     infoRango.classList.add("div-cuenta");
 
@@ -161,6 +183,7 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
     infoRango.append(textoRango);
     infoRango.append(textoUsername);
     infoRango.append(textoPassword);
+
 
     const divBtn = document.createElement("div");
     divBtn.classList.add("div-btn");
@@ -190,8 +213,6 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         divBtn.append(btnNoGuardarCuenta);
 
         const elementoPadre = document.getElementById("cuentas")
-
-
         elementoPadre.insertBefore(infoRango, elementoPadre.firstChild);
         infoRango.append(divBtn);
 
@@ -304,10 +325,10 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
     let partes = textoNick.split("#")
 
     const datosNuevaCuenta = {
-        nick: partes[0],
-        tag: partes[1],
-        username: textoUsername,
-        password: textoPassword,
+        nick: partes[0].trim(),
+        tag: partes[1].trim(),
+        username: textoUsername.trim(),
+        password: textoPassword.trim(),
     }
 
     fetch('../server/crear-nueva-cuenta.php', {
@@ -329,18 +350,15 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
         getCuentas();
     }, 100);
 
-
-
-
 }
 
 function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar) {
     let partes = textoNick.split("#")
     const datosCuenta = {
-        nick: partes[0],
-        tag: partes[1],
-        username: textoUsername,
-        password: textoPassword,
+        nick: partes[0].trim(),
+        tag: partes[1].trim(),
+        username: textoUsername.trim(),
+        password: textoPassword.trim(),
         eliminar: isEliminar
     };
 
@@ -360,110 +378,94 @@ function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar) {
         });
 }
 
-
 function agregarImgRango(rango, textoNick) {
     const imgRango = document.createElement("img");
     imgRango.className = "img-rango";
+    imgRango.setAttribute("title", rango);
 
-    if (rango === "Iron 1") {
+
+
+   switch (rango) {
+    case "Iron 1":
         imgRango.src = "resources/iron1.png";
-    }
-
-    if (rango === "Iron 2") {
+        break;
+    case "Iron 2":
         imgRango.src = "resources/iron2.png";
-    }
-
-    if (rango === "Iron 3") {
+        break;
+    case "Iron 3":
         imgRango.src = "resources/iron3.png";
-    }
-
-    if (rango === "Bronze 1") {
+        break;
+    case "Bronze 1":
         imgRango.src = "resources/br1.png";
-    }
-
-    if (rango === "Bronze 2") {
+        break;
+    case "Bronze 2":
         imgRango.src = "resources/br2.png";
-    }
-
-    if (rango === "Bronze 3") {
+        break;
+    case "Bronze 3":
         imgRango.src = "resources/br3.png";
-    }
-
-    if (rango === "Silver 1") {
+        break;
+    case "Silver 1":
         imgRango.src = "resources/sil1.png";
-    }
-
-    if (rango === "Silver 2") {
+        break;
+    case "Silver 2":
         imgRango.src = "resources/sil2.png";
-    }
-
-    if (rango === "Silver 3") {
+        break;
+    case "Silver 3":
         imgRango.src = "resources/sil3.png";
-    }
-
-    if (rango === "Gold 1") {
+        break;
+    case "Gold 1":
         imgRango.src = "resources/gold1.png";
-    }
-
-    if (rango === "Gold 2") {
+        break;
+    case "Gold 2":
         imgRango.src = "resources/gold2.png";
-    }
-
-    if (rango === "Gold 3") {
+        break;
+    case "Gold 3":
         imgRango.src = "resources/gold3.png";
-    }
-
-    if (rango === "Platinum 1") {
+        break;
+    case "Platinum 1":
         imgRango.src = "resources/plat1.png";
-    }
-
-    if (rango === "Platinum 2") {
+        break;
+    case "Platinum 2":
         imgRango.src = "resources/plat2.png";
-    }
-
-    if (rango === "Platinum 3") {
+        break;
+    case "Platinum 3":
         imgRango.src = "resources/plat3.png";
-    }
-
-    if (rango === "Diamond 1") {
+        break;
+    case "Diamond 1":
         imgRango.src = "resources/dia1.png";
-    }
-
-    if (rango === "Diamond 2") {
+        break;
+    case "Diamond 2":
         imgRango.src = "resources/dia2.png";
-    }
-
-    if (rango === "Diamond 3") {
+        break;
+    case "Diamond 3":
         imgRango.src = "resources/dia3.png";
-    }
-
-    if (rango === "Ascendant 1") {
+        break;
+    case "Ascendant 1":
         imgRango.src = "resources/asc1.png";
-    }
-
-    if (rango === "Ascendant 2") {
+        break;
+    case "Ascendant 2":
         imgRango.src = "resources/asc2.png";
-    }
-
-    if (rango === "Ascendant 3") {
+        break;
+    case "Ascendant 3":
         imgRango.src = "resources/asc3.png";
-    }
-
-    if (rango === "Immortal 1") {
+        break;
+    case "Immortal 1":
         imgRango.src = "resources/imm1.png";
-    }
-
-    if (rango === "Immortal 2") {
+        break;
+    case "Immortal 2":
         imgRango.src = "resources/imm2.png";
-    }
-
-    if (rango === "Immortal 3") {
+        break;
+    case "Immortal 3":
         imgRango.src = "resources/imm3.png";
-    }
-
-    if (rango === "Radiant") {
+        break;
+    case "Radiant":
         imgRango.src = "resources/radiant.png";
-    }
+        break;
+    default:
+        // Opcional: puedes agregar un caso por defecto si lo necesitas
+        // imgRango.src = "resources/default.png";
+        break;
+}
 
     textoNick.append(imgRango);
 }

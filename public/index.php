@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+    echo json_encode([
+        "status" => "error",
+        "msg" => "No has iniciado sesión"
+    ]);
+    exit;
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +22,6 @@
 </head>
 <body>
     <h1 id="title">Valopass</h1>
-    
     
 </body>
     <script src="script.js"></script>

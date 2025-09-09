@@ -25,7 +25,7 @@ try {
         ":nick" => $nick,
         ":tag" => $tag,
         ":username" => $username,
-        ":passwordCuenta" => $passwordCuenta
+        ":passwordCuenta" => $passwordCuenta,
     ]);
 
     echo json_encode(["status" => "ok", "msg" => "Cuenta agregada correctamente"]);

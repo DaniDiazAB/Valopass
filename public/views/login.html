@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +28,7 @@
       padding: 30px;
       border-radius: 12px;
       width: 320px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
     }
 
     .login-container h2 {
@@ -119,6 +120,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="login-container">
     <h2>Iniciar Sesión</h2>
@@ -146,9 +148,8 @@
 
   <script>
 
-     if (document.cookie.includes("usuario=")) {
-        window.location.href = "../index.php";
-        
+    if (document.cookie.includes("usuario=")) {
+      //window.location.href = "../index.php";
     }
 
     function togglePassword() {
@@ -166,4 +167,5 @@
 
   </script>
 </body>
+
 </html>

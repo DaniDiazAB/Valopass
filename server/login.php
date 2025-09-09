@@ -2,7 +2,6 @@
 session_start();
 include "db.php";
 
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -15,7 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"] ?? "";
     $remember = isset($_POST["remember"]);
 
-    // Buscar usuario en la base de datos
     $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE nombre_usuario = :nombre_usuario");
     $stmt->execute(["nombre_usuario" => $username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,8 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Cookie: 7 días si recordar, sino hasta cerrar navegador
         $cookieTime = $remember ? time() + (86400 * 7) : 0;
         setcookie("usuario", $username, $cookieTime, "/");
-
-        header("Location: ../public/index.html");
+        $_SESSION['usuario'] = $username;   
+        header("Location: ../public/index.php");
         exit;
     } else {
         $_SESSION["error"] = "Usuario o contraseña incorrectos ❌";
