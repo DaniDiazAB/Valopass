@@ -25,6 +25,7 @@ try {
         $stmt->execute([
             ":username" => $username
         ]);
+        echo json_encode(["status" => "ok", "msg" => "Cuenta eliminada"]);
 
     }else{
         $sql = "UPDATE cuentas 
@@ -37,10 +38,11 @@ try {
                 ":password" => $password,
                 ":username" => $username
             ]);
+        echo json_encode(["status" => "ok", "msg" => "Cuenta actualizada correctamente", "nick" => $nick]);
+
     }
     
 
-    echo json_encode(["status" => "ok", "msg" => "Cuenta actualizada correctamente"]);
 } catch (PDOException $e) {
     echo json_encode(["status" => "error", "msg" => $e->getMessage()]);
 }

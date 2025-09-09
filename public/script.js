@@ -60,7 +60,7 @@ function getCuentas() {
             navBar.insertAdjacentElement("afterend", divCuentas);
 
             data.forEach((cuenta) => {
-                getRangos(
+                actualizarRangos(
                     cuenta.nick_cuenta,
                     cuenta.tag_cuenta,
                     cuenta.username_cuenta,
@@ -71,32 +71,65 @@ function getCuentas() {
         })
         .catch((error) => console.error("Error:", error));
 }
-/* BUENO
-function getRangos(nick, tag, usename, password, divCuentas) {
+
+function actualizarRangos(nick, tag, username, password, divCuentas) {
+
     const url = "http://localhost:3000/api/mmr/" + nick + "/" + tag + "/EU";
+    divCuentas.className = "cuenta";
+
+    getRangos(nick, tag, username, password, divCuentas)
 
     fetch(url)
         .then((response) => response.text())
         .then((data) => {
-            divCuenta.className = "cuenta";
-            divCuentas.append(divCuenta);
-
             let rango = data;
             rango = rango.split(","[0])[0];
-    
-            cargarInputs(rango, nick, tag, usename, password);
+
+            const datosActuCuenta = {
+                username: username,
+                rango: rango
+            }
+
+            fetch('../server/cambiar-rango.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datosActuCuenta)
+            })
+
         })
         .catch((error) => {
             console.error("Error al obtener el texto:", error);
         });
 }
-*/
-function getRangos(nick, tag, usename, password, divCuentas) {
 
-    cargarInputs("Radiant", nick, tag, usename, password, false, divCuentas);
+function getRangos(nick, tag, username, password, divCuentas) {
+    const datosCuenta = {
+        username: username,
+    }
+
+    fetch('../server/get-rangos.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datosCuenta)
+    })
+        .then(response => response.json())
+        .then(data => {
+            let rango = data[0]
+            cargarInputs(rango, nick, tag, username, password, false, divCuentas);
+
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCuentas) {
+
     const textoNick = document.createElement("input");
     textoNick.classList.add("nick");
     textoNick.setAttribute("type", "text");
@@ -145,11 +178,11 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         btnNoGuardarCuenta.innerHTML = "No guardar cuenta";
         btnNoGuardarCuenta.classList.add("btn-eliminar");
 
-        btnGuardarCuenta.onclick = function(){
+        btnGuardarCuenta.onclick = function () {
             guardarNuevaCuenta(textoNick.value, textoUsername.value, textoPassword.value)
         }
 
-        btnNoGuardarCuenta.onclick = function(){
+        btnNoGuardarCuenta.onclick = function () {
             infoRango.setAttribute("style", "display: none")
         }
 
@@ -180,7 +213,7 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         btnCopiarPassword.innerHTML = "Copiar contraseña";
         btnCopiarPassword.classList.add("btn-password");
 
-        
+
 
         btnEditar.onclick = function () {
             editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) // Username es el de incio de sesion
@@ -210,9 +243,9 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         divCuentas.append(infoRango);
         infoRango.append(divBtn);
 
-        
+
     }
-    
+
 }
 
 function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) {
@@ -264,7 +297,7 @@ function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar
     divBtn.append(btnDeshacerCambios)
 }
 
-function guardarNuevaCuenta(textoNick, textoUsername, textoPassword){
+function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
     const parent = document.getElementById("cuentas");
     parent.remove()
 
@@ -291,19 +324,18 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword){
         .catch(error => {
             console.error('Error:', error);
         });
-        
-    setTimeout(function(){
+
+    setTimeout(function () {
         getCuentas();
     }, 100);
 
 
 
-    
+
 }
 
 function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar) {
     let partes = textoNick.split("#")
-
     const datosCuenta = {
         nick: partes[0],
         tag: partes[1],
