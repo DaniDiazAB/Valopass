@@ -96,6 +96,7 @@ function actualizarRangos(nick, tag, username, password, divCuentas) {
     const url = "http://localhost:3000/api/mmr/" + nick + "/" + tag + "/EU";
     divCuentas.className = "cuenta";
 
+    cargandoRangos.removeAttribute("hidden")
 
     fetch(url)
         .then((response) => response.text())
@@ -115,7 +116,9 @@ function actualizarRangos(nick, tag, username, password, divCuentas) {
                 },
                 body: JSON.stringify(datosActuCuenta)
             })
-            cargandoRangos.setAttribute("hidden", "")
+            .then(() => {
+                cargandoRangos.setAttribute("hidden", "")
+            })
 
 
         })
