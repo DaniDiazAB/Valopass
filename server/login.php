@@ -12,17 +12,15 @@ try {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = trim($_POST["username"] ?? "");
     $password = $_POST["password"] ?? "";
-    $remember = isset($_POST["remember"]);
 
     $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE nombre_usuario = :nombre_usuario");
-    $stmt->execute(["nombre_usuario" => $username]);
+    $stmt->execute([":nombre_usuario" => $username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user["password_usuario"])) {
-        // Cookie: 7 días si recordar, sino hasta cerrar navegador
-        $cookieTime = $remember ? time() + (86400 * 7) : 0;
-        setcookie("usuario", $username, $cookieTime, "/");
-        $_SESSION['usuario'] = $username;   
+        // Guardar en sesión
+        $_SESSION["usuario_id"] = $user["id_usuario"];
+        $_SESSION["usuario"] = $username;
         header("Location: ../public/index.php");
         exit;
     } else {
@@ -32,3 +30,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
+

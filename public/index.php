@@ -1,15 +1,11 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['usuario'])) {
-    echo json_encode([
-        "status" => "error",
-        "msg" => "No has iniciado sesión"
-    ]);
+if (!isset($_SESSION["usuario_id"])) {
+    header("Location: views/login.html");
     exit;
 }
 ?>
-
 
 
 <!DOCTYPE html>

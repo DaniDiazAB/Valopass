@@ -5,10 +5,10 @@ navBar.classList.add("nav")
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (document.cookie.includes("usuario=")) {
+    //if (document.cookie.includes("usuario=")) {
         cargarNavegacion()
-        getCuentas();
-    }
+        getCuentas(true);
+    //}
 });
 
 // Links Navegacion
@@ -22,6 +22,13 @@ const cargandoRangos = document.createElement("img")
 
 agregarCuenta.onclick = function () {
     cargarInputs("", "", "", "", "", true)
+
+    fetch("../server/test.php")
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data)
+        })
+        .catch((error) => console.error("Error:", error));
 }
 
 cerrarSesion.onclick = function(){
@@ -68,7 +75,7 @@ function cargarNavegacion() {
     navBar.append(cerrarSesion)
 }
 
-function getCuentas() {
+function getCuentas(isTodasCuentas) {
     fetch("../server/cuentas.php")
         .then((response) => response.json())
         .then((data) => {
@@ -350,7 +357,7 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
         });
 
     setTimeout(function () {
-        getCuentas();
+        getCuentas(true);
     }, 100);
 
 }
