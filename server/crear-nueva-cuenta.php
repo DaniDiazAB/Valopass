@@ -27,6 +27,17 @@ try {
         ":username" => $username,
         ":passwordCuenta" => $passwordCuenta,
     ]);
+    
+    $idCuenta = $pdo->lastInsertId();
+    $usuarioId = $_SESSION['usuario_id'] ?? null;
+
+    $sql = "INSERT INTO cuentas_usuario (id_cuenta, id_usuario) VALUES
+    ($idCuenta, $usuarioId)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        
+    ]);
+    
 
     echo json_encode(["status" => "ok", "msg" => "Cuenta agregada correctamente"]);
 } catch (PDOException $e) {

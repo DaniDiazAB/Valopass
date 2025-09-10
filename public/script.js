@@ -19,14 +19,25 @@ const cuentasPublicas = document.createElement("a")
 const cerrarSesion = document.createElement("a")
 const cargandoRangos = document.createElement("img")
 
+perfil.onclick = function(){
+    document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
+    document.getElementById("cuentas").remove()
+    getCuentas(true);
+}
+
+cuentas.onclick = function(){
+    document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
+    document.getElementById("cuentas").remove()
+    getCuentas(false);
+}
 
 agregarCuenta.onclick = function () {
     cargarInputs("", "", "", "", "", true)
 
-    fetch("../server/test.php")
+    fetch("../server/crear-nueva-cuenta.php")
         .then((response) => response.json())
         .then((data) => {
-            console.log(data)
+            //console.log(data)
         })
         .catch((error) => console.error("Error:", error));
 }
@@ -76,9 +87,16 @@ function cargarNavegacion() {
 }
 
 function getCuentas(isTodasCuentas) {
-    fetch("../server/cuentas.php")
+     fetch("../server/cuentas.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "isTodasCuentas=" + encodeURIComponent(isTodasCuentas)
+    })
         .then((response) => response.json())
         .then((data) => {
+
             const divCuentas = document.createElement("div");
             divCuentas.id = "cuentas";
             navBar.insertAdjacentElement("afterend", divCuentas);
