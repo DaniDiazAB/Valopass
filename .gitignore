@@ -143,4 +143,7 @@ dist
 
 cors-proxy/
 
+public/style.css
+
+
 # End of https://www.toptal.com/developers/gitignore/api/node

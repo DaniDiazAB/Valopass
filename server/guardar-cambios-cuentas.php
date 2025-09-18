@@ -12,6 +12,7 @@ $tag      = $datos['tag'] ?? '';
 $username = $datos['username'] ?? '';
 $password = $datos['password'] ?? '';
 $eliminar = $datos['eliminar'] ?? '';
+$isPublica = $datos['isPublica'] ?? '';
 
 if ($username === '') {
     echo json_encode(["status" => "error", "msg" => "Falta username para identificar la fila"]);
@@ -29,16 +30,17 @@ try {
 
     }else{
         $sql = "UPDATE cuentas 
-            SET nick_cuenta = :nick, tag_cuenta = :tag, password_cuenta = :password 
+            SET nick_cuenta = :nick, tag_cuenta = :tag, password_cuenta = :password, isCuentaPublica = :isPublica
             WHERE username_cuenta = :username";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 ":nick"     => $nick,
                 ":tag"      => $tag,
                 ":password" => $password,
-                ":username" => $username
+                ":username" => $username,
+                ":isPublica" => $isPublica
             ]);
-        echo json_encode(["status" => "ok", "msg" => "Cuenta actualizada correctamente", "nick" => $nick]);
+        echo json_encode(["status" => "ok", "msg" => "Cuenta actualizada correctamente", "nick" => $nick, "Publica" => $isPublica]);
 
     }
     

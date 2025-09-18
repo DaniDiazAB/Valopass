@@ -6,29 +6,35 @@ navBar.classList.add("nav")
 
 document.addEventListener("DOMContentLoaded", function () {
     //if (document.cookie.includes("usuario=")) {
-        cargarNavegacion()
-        getCuentas(true);
+    cargarNavegacion()
+    getCuentas(true);
     //}
 });
 
 // Links Navegacion
 const perfil = document.createElement("a")
 const cuentas = document.createElement("a")
-const agregarCuenta = document.createElement("a")
 const cuentasPublicas = document.createElement("a")
+const agregarCuenta = document.createElement("a")
 const cerrarSesion = document.createElement("a")
 const cargandoRangos = document.createElement("img")
 
-perfil.onclick = function(){
+perfil.onclick = function () {
     document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
     document.getElementById("cuentas").remove()
     getCuentas(true);
 }
 
-cuentas.onclick = function(){
+cuentas.onclick = function () {
     document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
     document.getElementById("cuentas").remove()
     getCuentas(false);
+}
+
+cuentasPublicas.onclick = function () {
+    const divBorrar = document.getElementById("cuentas")
+    divBorrar.remove()
+    getCuentas(true)
 }
 
 agregarCuenta.onclick = function () {
@@ -37,12 +43,11 @@ agregarCuenta.onclick = function () {
     fetch("../server/crear-nueva-cuenta.php")
         .then((response) => response.json())
         .then((data) => {
-            //console.log(data)
         })
         .catch((error) => console.error("Error:", error));
 }
 
-cerrarSesion.onclick = function(){
+cerrarSesion.onclick = function () {
     fetch("../server/outlog.php")
         .then((response) => response.json())
         .then((data) => {
@@ -59,11 +64,11 @@ function cargarNavegacion() {
     cuentas.classList.add("enlace-nav")
     cuentas.innerHTML = "Mis cuentas"
 
-    agregarCuenta.classList.add("enlace-nav")
-    agregarCuenta.innerHTML = "Agregar cuenta"
-
     cuentasPublicas.classList.add("enlace-nav")
     cuentasPublicas.innerHTML = "Cuentas publicas"
+
+    agregarCuenta.classList.add("enlace-nav")
+    agregarCuenta.innerHTML = "Agregar cuenta"
 
     cerrarSesion.classList.add("enlace-nav")
     cerrarSesion.innerHTML = "Cerrar Sesión"
@@ -71,23 +76,23 @@ function cargarNavegacion() {
     cargandoRangos.src = "resources/loading.gif";
     cargandoRangos.alt = "Actualizando los rangos en la base de datos";
     cargandoRangos.id = "actulizando-rangos"
-    cargandoRangos.width = 25; 
-    cargandoRangos.height = 25; 
-    cargandoRangos.style.borderRadius = "10px"; 
-    document.body.insertBefore(cargandoRangos, document.body.firstChild); 
+    cargandoRangos.width = 25;
+    cargandoRangos.height = 25;
+    cargandoRangos.style.borderRadius = "10px";
+    document.body.insertBefore(cargandoRangos, document.body.firstChild);
 
 
     title.insertAdjacentElement("afterend", navBar);
 
-    navBar.append(perfil)
+    //navBar.append(perfil)
+    navBar.append(cuentasPublicas)
     navBar.append(cuentas)
     navBar.append(agregarCuenta)
-    navBar.append(cuentasPublicas)
     navBar.append(cerrarSesion)
 }
 
 function getCuentas(isTodasCuentas) {
-     fetch("../server/cuentas.php", {
+    fetch("../server/get-cuentas.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -121,7 +126,6 @@ function actualizarRangos(nick, tag, username, password, divCuentas) {
     const url = "http://localhost:3000/api/mmr/" + nick + "/" + tag + "/EU";
     divCuentas.className = "cuenta";
 
-    cargandoRangos.removeAttribute("hidden")
 
     fetch(url)
         .then((response) => response.text())
@@ -141,9 +145,9 @@ function actualizarRangos(nick, tag, username, password, divCuentas) {
                 },
                 body: JSON.stringify(datosActuCuenta)
             })
-            .then(() => {
-                cargandoRangos.setAttribute("hidden", "")
-            })
+                .then(() => {
+                    cargandoRangos.setAttribute("hidden", "")
+                })
 
 
         })
@@ -202,8 +206,6 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
     textoPassword.classList.add("password");
     textoPassword.value = password;
 
-    
-
     const infoRango = document.createElement("div");
     infoRango.classList.add("div-cuenta");
 
@@ -212,12 +214,12 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
     infoRango.append(textoUsername);
     infoRango.append(textoPassword);
 
-
     const divBtn = document.createElement("div");
     divBtn.classList.add("div-btn");
 
     if (isNuevaCuenta) {
-        textoNick.setAttribute("placeholder", "Int")
+        textoNick.setAttribute("placeholder", "Nick")
+
         textoUsername.setAttribute("placeholder", "Nombre para el login")
         textoPassword.setAttribute("placeholder", "Contraseña")
 
@@ -229,14 +231,25 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         btnNoGuardarCuenta.innerHTML = "No guardar cuenta";
         btnNoGuardarCuenta.classList.add("btn-eliminar");
 
+        const isPublica = document.createElement("input");
+        isPublica.setAttribute("type", "checkbox")
+        isPublica.classList.add("checkbox-publica");
+        isPublica.id = "is-publica";
+
+        const labelPublica = document.createElement("label");
+        labelPublica.innerHTML = "¿La cuenta es publica?"
+
+        labelPublica.append(isPublica)
+
         btnGuardarCuenta.onclick = function () {
-            guardarNuevaCuenta(textoNick.value, textoUsername.value, textoPassword.value)
+            guardarNuevaCuenta(textoNick.value, textoUsername.value, textoPassword.value, isPublica.checked)
         }
 
         btnNoGuardarCuenta.onclick = function () {
             infoRango.setAttribute("style", "display: none")
         }
 
+        divBtn.append(labelPublica);
         divBtn.append(btnGuardarCuenta);
         divBtn.append(btnNoGuardarCuenta);
 
@@ -261,8 +274,6 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         const btnCopiarPassword = document.createElement("button");
         btnCopiarPassword.innerHTML = "Copiar contraseña";
         btnCopiarPassword.classList.add("btn-password");
-
-
 
         btnEditar.onclick = function () {
             editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) // Username es el de incio de sesion
@@ -310,6 +321,37 @@ function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar
     btnDeshacerCambios.innerHTML = "No guardar cambios";
     btnDeshacerCambios.classList.add("btn-deshacer-cambios");
 
+    const isCuentaPublica = document.createElement("input");
+    isCuentaPublica.setAttribute("type", "checkbox")
+    isCuentaPublica.classList.add("checkbox-publica");
+    isCuentaPublica.id = "is-publica";
+
+    const labelPublica = document.createElement("label");
+    labelPublica.innerHTML = "¿La cuenta es publica?"
+
+    let partes = textoNick.value.split("#")
+
+    let isChecked = false
+
+    fetch("../server/get-cuenta-publica.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: partes[0] })
+    })
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.isPublica) {
+                isCuentaPublica.checked = true;
+                isChecked = true
+            } else {
+                isCuentaPublica.checked = false;
+                isChecked = false
+            }
+        });
+
+    labelPublica.append(isCuentaPublica)
+
     btnGuardarCambios.onclick = function () {
         let isConfirmarNoGuardar = confirm("¿Estás seguro de SÍ guardar los cambios?", "")
 
@@ -319,10 +361,14 @@ function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar
             textoPassword.readOnly = true
             btnGuardarCambios.setAttribute("hidden", "")
             btnDeshacerCambios.setAttribute("hidden", "")
+            isCuentaPublica.setAttribute("hidden", "")
             btnEditar.removeAttribute("hidden")
             btnEliminar.removeAttribute("hidden")
             btnCopiarPassword.removeAttribute("hidden")
-            modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, false)
+            const isPublicaChecked = document.getElementById("is-publica").checked 
+            labelPublica.remove()   
+
+            modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, false, isPublicaChecked)
 
         }
 
@@ -340,13 +386,20 @@ function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar
             btnEditar.removeAttribute("hidden")
             btnEliminar.removeAttribute("hidden")
             btnCopiarPassword.removeAttribute("hidden")
+
+            const divBorrar = document.getElementById("cuentas")
+            divBorrar.remove()
+            getCuentas(true);
         }
+
     }
+
+    divBtn.append(labelPublica)
     divBtn.append(btnGuardarCambios)
     divBtn.append(btnDeshacerCambios)
 }
 
-function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
+function guardarNuevaCuenta(textoNick, textoUsername, textoPassword, isPublica) {
     const parent = document.getElementById("cuentas");
     parent.remove()
 
@@ -357,6 +410,7 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
         tag: partes[1].trim(),
         username: textoUsername.trim(),
         password: textoPassword.trim(),
+        isPublica: isPublica,
     }
 
     fetch('../server/crear-nueva-cuenta.php', {
@@ -368,7 +422,7 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
     })
         .then(response => response.json())
         .then(data => {
-            console.log('Respuesta:', data);
+            //console.log('Respuesta:', data);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -380,14 +434,15 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword) {
 
 }
 
-function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar) {
+function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar, isPublica) {
     let partes = textoNick.split("#")
     const datosCuenta = {
         nick: partes[0].trim(),
         tag: partes[1].trim(),
         username: textoUsername.trim(),
         password: textoPassword.trim(),
-        eliminar: isEliminar
+        eliminar: isEliminar,
+        isPublica: isPublica
     };
 
     fetch('../server/guardar-cambios-cuentas.php', {
@@ -399,7 +454,7 @@ function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar) {
     })
         .then(response => response.json())
         .then(data => {
-            console.log('Respuesta:', data);
+            //console.log('Respuesta:', isPublica);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -411,89 +466,87 @@ function agregarImgRango(rango, textoNick) {
     imgRango.className = "img-rango";
     imgRango.setAttribute("title", rango);
 
-
-
-   switch (rango) {
-    case "Iron 1":
-        imgRango.src = "resources/iron1.png";
-        break;
-    case "Iron 2":
-        imgRango.src = "resources/iron2.png";
-        break;
-    case "Iron 3":
-        imgRango.src = "resources/iron3.png";
-        break;
-    case "Bronze 1":
-        imgRango.src = "resources/br1.png";
-        break;
-    case "Bronze 2":
-        imgRango.src = "resources/br2.png";
-        break;
-    case "Bronze 3":
-        imgRango.src = "resources/br3.png";
-        break;
-    case "Silver 1":
-        imgRango.src = "resources/sil1.png";
-        break;
-    case "Silver 2":
-        imgRango.src = "resources/sil2.png";
-        break;
-    case "Silver 3":
-        imgRango.src = "resources/sil3.png";
-        break;
-    case "Gold 1":
-        imgRango.src = "resources/gold1.png";
-        break;
-    case "Gold 2":
-        imgRango.src = "resources/gold2.png";
-        break;
-    case "Gold 3":
-        imgRango.src = "resources/gold3.png";
-        break;
-    case "Platinum 1":
-        imgRango.src = "resources/plat1.png";
-        break;
-    case "Platinum 2":
-        imgRango.src = "resources/plat2.png";
-        break;
-    case "Platinum 3":
-        imgRango.src = "resources/plat3.png";
-        break;
-    case "Diamond 1":
-        imgRango.src = "resources/dia1.png";
-        break;
-    case "Diamond 2":
-        imgRango.src = "resources/dia2.png";
-        break;
-    case "Diamond 3":
-        imgRango.src = "resources/dia3.png";
-        break;
-    case "Ascendant 1":
-        imgRango.src = "resources/asc1.png";
-        break;
-    case "Ascendant 2":
-        imgRango.src = "resources/asc2.png";
-        break;
-    case "Ascendant 3":
-        imgRango.src = "resources/asc3.png";
-        break;
-    case "Immortal 1":
-        imgRango.src = "resources/imm1.png";
-        break;
-    case "Immortal 2":
-        imgRango.src = "resources/imm2.png";
-        break;
-    case "Immortal 3":
-        imgRango.src = "resources/imm3.png";
-        break;
-    case "Radiant":
-        imgRango.src = "resources/radiant.png";
-        break;
-    default:
-        // Opcional: puedes agregar un caso por defecto si lo necesitas
-        // imgRango.src = "resources/default.png";
-        break;
-}
+    switch (rango) {
+        case "Iron 1":
+            imgRango.src = "resources/iron1.png";
+            break;
+        case "Iron 2":
+            imgRango.src = "resources/iron2.png";
+            break;
+        case "Iron 3":
+            imgRango.src = "resources/iron3.png";
+            break;
+        case "Bronze 1":
+            imgRango.src = "resources/br1.png";
+            break;
+        case "Bronze 2":
+            imgRango.src = "resources/br2.png";
+            break;
+        case "Bronze 3":
+            imgRango.src = "resources/br3.png";
+            break;
+        case "Silver 1":
+            imgRango.src = "resources/sil1.png";
+            break;
+        case "Silver 2":
+            imgRango.src = "resources/sil2.png";
+            break;
+        case "Silver 3":
+            imgRango.src = "resources/sil3.png";
+            break;
+        case "Gold 1":
+            imgRango.src = "resources/gold1.png";
+            break;
+        case "Gold 2":
+            imgRango.src = "resources/gold2.png";
+            break;
+        case "Gold 3":
+            imgRango.src = "resources/gold3.png";
+            break;
+        case "Platinum 1":
+            imgRango.src = "resources/plat1.png";
+            break;
+        case "Platinum 2":
+            imgRango.src = "resources/plat2.png";
+            break;
+        case "Platinum 3":
+            imgRango.src = "resources/plat3.png";
+            break;
+        case "Diamond 1":
+            imgRango.src = "resources/dia1.png";
+            break;
+        case "Diamond 2":
+            imgRango.src = "resources/dia2.png";
+            break;
+        case "Diamond 3":
+            imgRango.src = "resources/dia3.png";
+            break;
+        case "Ascendant 1":
+            imgRango.src = "resources/asc1.png";
+            break;
+        case "Ascendant 2":
+            imgRango.src = "resources/asc2.png";
+            break;
+        case "Ascendant 3":
+            imgRango.src = "resources/asc3.png";
+            break;
+        case "Immortal 1":
+            imgRango.src = "resources/imm1.png";
+            break;
+        case "Immortal 2":
+            imgRango.src = "resources/imm2.png";
+            break;
+        case "Immortal 3":
+            imgRango.src = "resources/imm3.png";
+            break;
+        case "Radiant":
+            imgRango.src = "resources/radiant.png";
+            break;
+        default:
+            // Opcional: puedes agregar un caso por defecto si lo necesitas
+            // imgRango.src = "resources/default.png";
+            break;
+    }
 
     textoNick.append(imgRango);
 }

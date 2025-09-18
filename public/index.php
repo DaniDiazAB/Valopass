@@ -7,7 +7,6 @@ if (!isset($_SESSION["usuario_id"])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

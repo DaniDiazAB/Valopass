@@ -11,6 +11,7 @@ $nick     = $datos['nick'] ?? '';
 $tag      = $datos['tag'] ?? '';
 $username = $datos['username'] ?? '';
 $passwordCuenta = $datos['password'] ?? '';
+$isPublica = $datos['isPublica'] ?? '';
 
 if ($username === '') {
     echo json_encode(["status" => "error", "msg" => "Falta username para identificar la fila"]);
@@ -19,13 +20,14 @@ if ($username === '') {
 
 try {
     $sql = "INSERT INTO cuentas (nick_cuenta, tag_cuenta, username_cuenta, password_cuenta, isVisibleAmigos, isCuentaPublica) VALUES
-    (:nick, :tag, :username, :passwordCuenta, 1, 1)";
+    (:nick, :tag, :username, :passwordCuenta, 1, :isPublica)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ":nick" => $nick,
         ":tag" => $tag,
         ":username" => $username,
         ":passwordCuenta" => $passwordCuenta,
+        ":isPublica" => $isPublica,
     ]);
     
     $idCuenta = $pdo->lastInsertId();
