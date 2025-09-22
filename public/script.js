@@ -17,7 +17,7 @@ const cuentas = document.createElement("a")
 const cuentasPublicas = document.createElement("a")
 const agregarCuenta = document.createElement("a")
 const cerrarSesion = document.createElement("a")
-const cargandoRangos = document.createElement("img")
+const linkActualizarRangos = document.createElement("a")
 
 perfil.onclick = function () {
     document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
@@ -73,20 +73,15 @@ function cargarNavegacion() {
     cerrarSesion.classList.add("enlace-nav")
     cerrarSesion.innerHTML = "Cerrar Sesión"
 
-    cargandoRangos.src = "resources/loading.gif";
-    cargandoRangos.alt = "Actualizando los rangos en la base de datos";
-    cargandoRangos.id = "actulizando-rangos"
-    cargandoRangos.width = 25;
-    cargandoRangos.height = 25;
-    cargandoRangos.style.borderRadius = "10px";
-    document.body.insertBefore(cargandoRangos, document.body.firstChild);
-
+    linkActualizarRangos.classList.add("enlace-nav")
+    linkActualizarRangos.innerHTML = "Actualizar rangos"
 
     title.insertAdjacentElement("afterend", navBar);
 
     //navBar.append(perfil)
     navBar.append(cuentasPublicas)
     navBar.append(cuentas)
+    navBar.append(linkActualizarRangos)
     navBar.append(agregarCuenta)
     navBar.append(cerrarSesion)
 }
@@ -106,8 +101,9 @@ function getCuentas(isTodasCuentas) {
             divCuentas.id = "cuentas";
             navBar.insertAdjacentElement("afterend", divCuentas);
 
+
             data.forEach((cuenta) => {
-                actualizarRangos(
+                getRangos(
                     cuenta.nick_cuenta,
                     cuenta.tag_cuenta,
                     cuenta.username_cuenta,
@@ -117,43 +113,70 @@ function getCuentas(isTodasCuentas) {
             });
         })
         .catch((error) => console.error("Error:", error));
+
 }
 
-function actualizarRangos(nick, tag, username, password, divCuentas) {
-    getRangos(nick, tag, username, password, divCuentas)
+linkActualizarRangos.onclick = function () {
+    const cargandoRangos = document.createElement("img")
+    cargandoRangos.src = "resources/loading.gif";
+    cargandoRangos.alt = "Actualizando los rangos en la base de datos";
+    cargandoRangos.id = "actulizando-rangos"
+    cargandoRangos.width = 25;
+    cargandoRangos.height = 25;
+    cargandoRangos.style.borderRadius = "10px";
+    document.body.insertBefore(cargandoRangos, document.body.firstChild);
 
-    // PROXY, CAMBIAR EN LA VERSION FINAL -> https://vaccie.pythonanywhere.com/mmr/Dani/KKC/eu
-    const url = "http://localhost:3000/api/mmr/" + nick + "/" + tag + "/EU";
-    divCuentas.className = "cuenta";
+    const divCuentas = document.getElementById("cuentas")
 
+    fetch("../server/conseguir-cuentas.php")
+        .then(res => res.json())
+        .then(data => {
+            const arrayPlano = [];
+            data.forEach(cuenta => {
+                arrayPlano.push(cuenta.nick_cuenta);
+                arrayPlano.push(cuenta.tag_cuenta);
+                arrayPlano.push(cuenta.username_cuenta);
+            });
 
-    fetch(url)
-        .then((response) => response.text())
-        .then((data) => {
-            let rango = data;
-            rango = rango.split(","[0])[0];
+            for (let i = 0; i < arrayPlano.length; i += 3) {
+                // PROXY, CAMBIAR EN LA VERSION FINAL -> https://vaccie.pythonanywhere.com/mmr/Dani/KKC/eu
+                const url = "http://localhost:3000/api/mmr/" + arrayPlano[i] + "/" + arrayPlano[i + 1] + "/EU";
+                divCuentas.className = "cuenta";
 
-            const datosActuCuenta = {
-                username: username,
-                rango: rango
+                fetch(url)
+                    .then((response) => response.text())
+                    .then((data) => {
+                        let rango = data;
+                        rango = rango.split(","[0])[0];
+
+                        const datosActuCuenta = {
+                            username: arrayPlano[i + 2],
+                            rango: rango
+                        }
+
+                        fetch('../server/cambiar-rango.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(datosActuCuenta)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                //console.log(data); 
+                                if (data.status === "ok") {
+                                    actualizarImagenRango(data.username, data.rango);
+                                }
+                                cargandoRangos.setAttribute("hidden", "");
+                            })
+                            .catch(err => console.error("Error al actualizar rango:", err));
+                    })
+                    .catch((error) => {
+                        console.error("Error al obtener el texto:", error);
+                    });
             }
-
-            fetch('../server/cambiar-rango.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(datosActuCuenta)
-            })
-                .then(() => {
-                    cargandoRangos.setAttribute("hidden", "")
-                })
-
-
         })
-        .catch((error) => {
-            console.error("Error al obtener el texto:", error);
-        });
+        .catch(err => console.error("Error:", err));
 }
 
 function getRangos(nick, tag, username, password, divCuentas) {
@@ -208,6 +231,7 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
 
     const infoRango = document.createElement("div");
     infoRango.classList.add("div-cuenta");
+    infoRango.setAttribute("data-username", usename)
 
     infoRango.append(textoNick);
     infoRango.append(textoRango);
@@ -365,8 +389,8 @@ function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar
             btnEditar.removeAttribute("hidden")
             btnEliminar.removeAttribute("hidden")
             btnCopiarPassword.removeAttribute("hidden")
-            const isPublicaChecked = document.getElementById("is-publica").checked 
-            labelPublica.remove()   
+            const isPublicaChecked = document.getElementById("is-publica").checked
+            labelPublica.remove()
 
             modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, false, isPublicaChecked)
 
@@ -549,4 +573,33 @@ function agregarImgRango(rango, textoNick) {
     }
 
     textoNick.append(imgRango);
+}
+
+function actualizarImagenRango(username, nuevoRango) {
+    // Mapeo de rangos a imágenes
+    const mapaRangos = {
+        "Iron 1": "resources/iron1.png",
+        "Iron 2": "resources/iron2.png",
+        "Iron 3": "resources/iron3.png",
+        "Bronze 1": "resources/bron1.png",
+        "Bronze 2": "resources/bron2.png",
+        "Bronze 3": "resources/bron3.png",
+        "Silver 1": "resources/sil1.png",
+        "Silver 2": "resources/sil2.png",
+        "Silver 3": "resources/sil3.png",
+        "Gold 1": "resources/gold1.png",
+        "Gold 2": "resources/gold2.png",
+        "Gold 3": "resources/gold3.png"
+    };
+
+    // Seleccionamos la cuenta correcta por el data-username
+    const cuentaDiv = document.querySelector(`.div-cuenta[data-username="${username}"]`);
+
+    if (cuentaDiv) {
+        const img = cuentaDiv.querySelector(".img-rango");
+        if (img) {
+            img.src = mapaRangos[nuevoRango] || "resources/default.png"; // fallback si no existe
+            img.title = nuevoRango; // también actualiza el tooltip
+        }
+    }
 }
