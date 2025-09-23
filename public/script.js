@@ -5,39 +5,50 @@ navBar.classList.add("nav")
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    //if (document.cookie.includes("usuario=")) {
     cargarNavegacion()
     getCuentas(true);
-    //}
+    cuentasPublicas.classList.add("nav-marcado")
 });
+
+
 
 // Links Navegacion
 const perfil = document.createElement("a")
-const cuentas = document.createElement("a")
 const cuentasPublicas = document.createElement("a")
+const cuentas = document.createElement("a")
 const agregarCuenta = document.createElement("a")
 const cerrarSesion = document.createElement("a")
 const linkActualizarRangos = document.createElement("a")
 
 perfil.onclick = function () {
+    eliminarNavMarcado()
     document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
     document.getElementById("cuentas").remove()
     getCuentas(true);
+    marcarNav(perfil)
 }
 
 cuentas.onclick = function () {
+    eliminarNavMarcado()
     document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
     document.getElementById("cuentas").remove()
     getCuentas(false);
+    marcarNav(cuentas)
+
+
 }
 
 cuentasPublicas.onclick = function () {
+    eliminarNavMarcado()
     const divBorrar = document.getElementById("cuentas")
     divBorrar.remove()
     getCuentas(true)
+    marcarNav(cuentasPublicas)
+
 }
 
 agregarCuenta.onclick = function () {
+    eliminarNavMarcado()
     cargarInputs("", "", "", "", "", true)
 
     fetch("../server/crear-nueva-cuenta.php")
@@ -45,6 +56,8 @@ agregarCuenta.onclick = function () {
         .then((data) => {
         })
         .catch((error) => console.error("Error:", error));
+    marcarNav(agregarCuenta)
+    
 }
 
 cerrarSesion.onclick = function () {
@@ -575,8 +588,8 @@ function agregarImgRango(rango, textoNick) {
     textoNick.append(imgRango);
 }
 
+// Implementar de forna mas optima
 function actualizarImagenRango(username, nuevoRango) {
-    // Mapeo de rangos a imágenes
     const mapaRangos = {
         "Iron 1": "resources/iron1.png",
         "Iron 2": "resources/iron2.png",
@@ -602,4 +615,18 @@ function actualizarImagenRango(username, nuevoRango) {
             img.title = nuevoRango; // también actualiza el tooltip
         }
     }
+}
+
+
+function eliminarNavMarcado(){
+    perfil.classList.remove("nav-marcado")
+    cuentasPublicas.classList.remove("nav-marcado")
+    cuentas.classList.remove("nav-marcado")
+    agregarCuenta.classList.remove("nav-marcado")
+    cerrarSesion.classList.remove("nav-marcado")
+}
+
+function marcarNav(navMarcado){
+    navMarcado.classList.add("nav-marcado")
+
 }
