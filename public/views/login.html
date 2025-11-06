@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <div class="login-container">
+  <div id="div-login" class="login-container">
     <h2>Iniciar Sesión</h2>
     <form id="login" action="../../server/login.php" method="POST">
       <div class="form-group">
@@ -35,11 +35,18 @@
     </form>
   </div>
 
-  <script>
+  <div id="cookie-banner" class="cookie-banner">
+    <p>
+      Utilizamos cookies propias para analizar el tráfico y mejorar tu experiencia.
+      Si no las aceptas no podrás usar la aplicación.
+    </p>
+    <div class="cookie-buttons">
+      <button id="acceptCookies" class="cookie-btn aceptar">Aceptar</button>
+      <button id="rejectCookies" class="cookie-btn rechazar">Rechazar</button>
+    </div>
+  </div>
 
-    if (document.cookie.includes("usuario=")) {
-      //window.location.href = "../index.php";
-    }
+  <script>
 
     function togglePassword() {
       const passwordInput = document.getElementById("password");
@@ -53,6 +60,32 @@
       }
     }
 
+
+
+    // Mostrar solo si no hay consentimiento guardado
+document.addEventListener("DOMContentLoaded", () => {
+  const banner = document.getElementById("cookie-banner");
+  const acceptBtn = document.getElementById("acceptCookies");
+  const rejectBtn = document.getElementById("rejectCookies");
+
+  const consent = localStorage.getItem("cookieConsent");
+
+  if (!consent) banner.classList.remove("hidden");
+
+  acceptBtn.addEventListener("click", () => {
+    localStorage.setItem("cookieConsent", "accepted");
+    banner.classList.add("hidden");
+    // activar cookies analíticas aquí
+  });
+
+  rejectBtn.addEventListener("click", () => {
+    localStorage.setItem("cookieConsent", "rejected");
+    banner.classList.add("hidden");
+    // no activar cookies analíticas
+    const divLogin = document.getElementById("div-login")
+    divLogin.setAttribute("hidden", "")
+  });
+});
 
   </script>
 </body>

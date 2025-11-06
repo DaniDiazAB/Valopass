@@ -93,3 +93,63 @@ input:focus {
 .forgot-password:hover {
   color: #80c0ff;
 }
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0b1220;
+  color: #fff;
+  font-family: "Segoe UI", sans-serif;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+  z-index: 9999;
+}
+
+.cookie-banner p {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.cookie-banner a {
+  color: #7dd3fc;
+  text-decoration: none;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.cookie-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.aceptar {
+  background: #4ade80;
+  color: #071533;
+}
+
+.rechazar {
+  background: #f87171;
+  color: #fff;
+}
+
+.config {
+  background: #7dd3fc;
+  color: #071533;
+}
+
+.cookie-banner.hidden {
+  display: none;
+}
