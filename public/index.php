@@ -1,10 +1,11 @@
 <?php
 session_start();
-
+/*
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: views/login.html");
     exit;
 }
+    */
 ?>
 
 <!DOCTYPE html>
@@ -12,6 +13,8 @@ if (!isset($_SESSION["usuario_id"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../resources/favicon.ico">
+
     <title>Valopass</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -20,5 +23,7 @@ if (!isset($_SESSION["usuario_id"])) {
     
 </body>
     <script src="script.js"></script>
+
+    
 
 </html>

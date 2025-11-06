@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="../resources/favicon.ico">
+
+  <title>Aviso Legal — Valopass (Demo)</title>
+  <link rel="stylesheet" type="text/css" href="styles/aviso.css">
+  
+</head>
+<body>
+  <div class="container" role="main">
+    <header>
+      <div class="logo">VP</div>
+      <div>
+        <h1>Aviso Legal — Live Demo de ValoPass</h1>
+        <p class="lead">Advertencia sobre el uso del entorno de demostración (live demo) y el tratamiento de datos.</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="important">
+        <strong>IMPORTANTE — DEMO NO SEGURO</strong>
+        <p style="margin:6px 0 0;color:var(--muted)">Esta versión en línea es <strong>únicamente una demo</strong> para mostrar el funcionamiento de la aplicación. <strong>Aunque no se almacenen datos se recomienda no introducir ningún tipo de información</strong>
+      </div>
+
+      <h2 style="margin-top:8px">¿Cómo se almacenan los datos?</h2>
+      <p>En esta demo, las cuentas de Valorant (las que aparecen en la lista de "cuentas") <strong>no almacenan las contraseñas cifradas en la base de datos</strong>. Es decir, las contraseñas relacionadas con las cuentas que se ven en la demo <strong>están guardadas en texto plano</strong> en la base de datos de demostración. Por el contrario, las contraseñas de los usuarios que se registran en la aplicación (login) <strong>sí están encriptadas</strong> según el comportamiento actual de la aplicación.</p>
+
+      <h3>Resumen rápido</h3>
+      <ul>
+        <li><strong>No almacenar datos sensibles:</strong>, aunque no se guarden evita introducir contraseñas reales en la demo.</li>
+        <li><strong>Demo visible públicamente:</strong> la demo está pensada para mostrar funcionalidad, no para operar en producción.</li>
+        <li><strong>Código abierto:</strong> puedes descargar, revisar y modificar el código desde el repositorio del proyecto.</li>
+      </ul>
+
+      <div class="tips">
+        <strong>Recomendaciones de seguridad (para quien use o instale el código):</strong>
+        <ul>
+          <li>Usa <code>password_hash</code> / <code>password_verify</code> en PHP para almacenar contraseñas de forma segura.</li>
+          <li>Aplica consultas preparadas / parámetros enlazados para evitar inyecciones SQL.</li>
+          <li>Protege la aplicación con HTTPS y controla el acceso a la base de datos.</li>
+          <li>Si publicas una instancia en producción, encripta todas las contraseñas y datos sensibles, y no reutilices contraseñas reales de usuarios.</li>
+        </ul>
+      </div>
+
+      <p><a class="btn" href="login.html">Volver al login</a></p>
+
+
+      <p style="margin-top:12px">El repositorio con el código fuente, instrucciones e historial está disponible en GitHub:</p>
+      <p><a class="btn" href="https://github.com/DaniDiazAB/Valopass" target="_blank" rel="noopener">Abrir repositorio en GitHub</a></p>
+
+      <footer>
+        <div>Última actualización: <span id="year"></span></div>
+        <div style="text-align:right">Contacto del autor: <em> danidiazab@hotmail.com </em></div>
+      </footer>
+    </section>
+
+  </div>
+
+  <script>
+    // Rellenar año dinámicamente
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

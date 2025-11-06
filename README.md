@@ -4,6 +4,9 @@ Este proyecto es una aplicación web que utiliza **PHP** para la lógica de serv
 El **CSS** y este READ.ME que encontrarás en este repositorio fueron generado con ayuda de **Inteligencia Artificial (IA)**.  
 Aunque esto permitió avanzar rápido, **todavía faltan algunos puntos clave por completar y mejorar**, por lo que este repositorio debe considerarse una **versión en desarrollo**.
 
+# AVISO DEL LIVE DEMO
+IMPORTANTE: El uso de la aplicación en el live demo no funciona correctamente y realmente nunca fue utilizado con un propósito de uso real. Este proyecto es únicamente una demostración técnica y educativa. Por esta razón, el proyecto cuenta con un documento .HTML de aviso al usuario que explica las limitaciones y el propósito educativo de esta demostración.
+
 ---
 
 ## Características principales

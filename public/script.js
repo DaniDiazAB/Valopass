@@ -20,6 +20,8 @@ const agregarCuenta = document.createElement("a")
 const cerrarSesion = document.createElement("a")
 const linkActualizarRangos = document.createElement("a")
 
+
+
 perfil.onclick = function () {
     eliminarNavMarcado()
     document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
@@ -27,6 +29,7 @@ perfil.onclick = function () {
     getCuentas(true);
     marcarNav(perfil)
 }
+
 
 cuentas.onclick = function () {
     eliminarNavMarcado()
