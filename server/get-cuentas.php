@@ -21,7 +21,7 @@ $isTodas = filter_var($_POST["isTodasCuentas"] ?? false, FILTER_VALIDATE_BOOLEAN
 if ($isTodas) {
     $sql = "SELECT c.id_cuenta,  c.username_cuenta, c.nick_cuenta, c.tag_cuenta, c.password_cuenta, c.rango_cuenta
             FROM cuentas c
-            WHERE isCuentaPublica = 1";
+            WHERE cuenta_publica = 1";
     $stmt = $conn->prepare($sql);
 } else {
     $sql = "SELECT c.id_cuenta, c.username_cuenta, c.nick_cuenta, c.tag_cuenta, c.password_cuenta, c.rango_cuenta

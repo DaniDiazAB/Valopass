@@ -15,7 +15,7 @@ if ($username === '') {
 }
 
 try {
-    $sql = "SELECT isCuentaPublica 
+    $sql = "SELECT cuenta_publica 
             FROM cuentas 
             WHERE nick_cuenta = :username";
     

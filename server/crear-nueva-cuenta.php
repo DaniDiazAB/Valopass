@@ -19,7 +19,7 @@ if ($username === '') {
 }
 
 try {
-    $sql = "INSERT INTO cuentas (nick_cuenta, tag_cuenta, username_cuenta, password_cuenta, isVisibleAmigos, isCuentaPublica) VALUES
+    $sql = "INSERT INTO cuentas (nick_cuenta, tag_cuenta, username_cuenta, password_cuenta, cuenta_visible_amigos, cuenta_publica) VALUES
     (:nick, :tag, :username, :passwordCuenta, 1, :isPublica)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([

@@ -15,7 +15,7 @@ if ($username === '') {
 }
 
 try {
-    $sql = "SELECT isVisibleAmigos 
+    $sql = "SELECT cuenta_visible_amigos 
             FROM cuentas 
             WHERE nick_cuenta = :username";
     

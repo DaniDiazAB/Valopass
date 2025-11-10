@@ -26,5 +26,6 @@ RewriteRule ^recuperar$ public/views/recuperar.html [L]
 RewriteRule ^crear-cuenta$ public/views/crear-cuenta.html [L]
 
 # --- Opcional: manejar 404 personalizados ---
-ErrorDocument 404 /public/views/aviso.html
+ErrorDocument 404 /valopass/public/views/error.php
+
 

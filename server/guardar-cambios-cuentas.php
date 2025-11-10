@@ -30,7 +30,7 @@ try {
 
     }else{
         $sql = "UPDATE cuentas 
-            SET nick_cuenta = :nick, tag_cuenta = :tag, password_cuenta = :password, isCuentaPublica = :isPublica
+            SET nick_cuenta = :nick, tag_cuenta = :tag, password_cuenta = :password, cuenta_publica = :isPublica
             WHERE username_cuenta = :username";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([

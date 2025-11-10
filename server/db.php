@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
-$user = "root";  // cambia si tu host tiene otro usuario
-$pass = "";      // pon tu contraseña de MySQL si tienes
+$user = "root";  
+$pass = "";      
 $dbname = "valopass";
 
 
