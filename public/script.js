@@ -241,8 +241,26 @@ function cargarInputs(
     const textoPassword = document.createElement("input");
     textoPassword.setAttribute("type", "password");
     textoPassword.setAttribute("name", "password");
+    textoPassword.id = "password"
     textoPassword.classList.add("password");
     textoPassword.value = password;
+
+    const btnVerPassword = document.createElement("span")
+    btnVerPassword.classList.add("toggle-password")
+    btnVerPassword.innerHTML = "👁️"
+
+
+    btnVerPassword.onclick = function(){
+        const passwordInput = document.getElementById("password");
+        const toggle = document.querySelector(".toggle-password");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggle.textContent = "🙈";
+        } else {
+            passwordInput.type = "password";
+            toggle.textContent = "👁️";
+        }
+    }
 
     const infoRango = document.createElement("div");
     infoRango.classList.add("div-cuenta");
@@ -252,6 +270,8 @@ function cargarInputs(
     infoRango.append(textoRango);
     infoRango.append(textoUsername);
     infoRango.append(textoPassword);
+    infoRango.append(btnVerPassword)
+
 
     const divBtn = document.createElement("div");
     divBtn.classList.add("div-btn");
@@ -402,9 +422,7 @@ function editarCuenta(
         body: JSON.stringify({ username: partes[0] }),
     })
         .then((res) => res.json())
-        .then((data) => {
-            console.log(data.cuenta_publica);
-            
+        .then((data) => {            
             if (data.cuenta_publica) {
                 isCuentaPublica.checked = true;
                 isChecked = true;
@@ -412,7 +430,6 @@ function editarCuenta(
             } else {
                 isCuentaPublica.checked = false;
                 isChecked = false;
-
             }
         });
 

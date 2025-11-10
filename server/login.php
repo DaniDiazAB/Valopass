@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     } else {
         $_SESSION["error"] = "Usuario o contraseña incorrectos ❌";
-        header("Location: /valopass/public/views/login");
+        header("Location: /valopass/login");
         exit;
     }
 }
