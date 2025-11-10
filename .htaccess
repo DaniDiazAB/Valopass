@@ -20,7 +20,7 @@ RewriteRule ^ - [L]
 RewriteRule ^$ public/index.php [L]
 
 # Páginas HTML dentro de /views/
-RewriteRule ^login$ public/views/login.html [L]
+RewriteRule ^login$ public/views/login.php [L]
 RewriteRule ^aviso$ public/views/aviso.html [L]
 RewriteRule ^recuperar$ public/views/recuperar.html [L]
 RewriteRule ^crear-cuenta$ public/views/crear-cuenta.html [L]

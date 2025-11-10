@@ -54,13 +54,13 @@ agregarCuenta.onclick = function () {
 };
 
 cerrarSesion.onclick = function () {
+    alert("Sesión cerrada");
+    window.location.href = "/valopass/login";
+    
     fetch("/valopass/server/outlog.php")
         .then((response) => response.json())
         .then((data) => {
-            console.log();
 
-            alert("Sesión cerrada");
-            window.location.href = "/valopass/public/views/login.html";
         })
         .catch((error) => console.error("Error:", error));
 };
