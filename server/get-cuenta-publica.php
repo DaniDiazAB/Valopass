@@ -26,7 +26,7 @@ try {
     if ($resultado) {
         echo json_encode([
             "status" => "ok",
-            "isPublica" => (bool)$resultado['isCuentaPublica']
+            "cuenta_publica" => (bool)$resultado['cuenta_publica']
         ]);
     } else {
         echo json_encode([

@@ -239,7 +239,7 @@ function cargarInputs(
     textoUsername.value = usename;
 
     const textoPassword = document.createElement("input");
-    textoPassword.setAttribute("type", "text");
+    textoPassword.setAttribute("type", "password");
     textoPassword.setAttribute("name", "password");
     textoPassword.classList.add("password");
     textoPassword.value = password;
@@ -328,6 +328,7 @@ function cargarInputs(
                 btnEliminar,
                 btnCopiarPassword
             ); // Username es el de incio de sesion
+
             btnEditar.setAttribute("hidden", "");
             btnEliminar.setAttribute("hidden", "");
             btnCopiarPassword.setAttribute("hidden", "");
@@ -359,6 +360,7 @@ function cargarInputs(
         divCuentas.append(infoRango);
         infoRango.append(divBtn);
     }
+
 }
 
 function editarCuenta(
@@ -401,12 +403,16 @@ function editarCuenta(
     })
         .then((res) => res.json())
         .then((data) => {
-            if (data.isPublica) {
+            console.log(data.cuenta_publica);
+            
+            if (data.cuenta_publica) {
                 isCuentaPublica.checked = true;
                 isChecked = true;
+
             } else {
                 isCuentaPublica.checked = false;
                 isChecked = false;
+
             }
         });
 
