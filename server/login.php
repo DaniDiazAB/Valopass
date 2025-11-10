@@ -18,13 +18,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user["password_usuario"])) {
-        // Guardar en sesión
         $_SESSION["usuario_id"] = $user["id_usuario"];
         $_SESSION["usuario"] = $username;
         header("Location: /valopass/");
         exit;
     } else {
         $_SESSION["error"] = "Usuario o contraseña incorrectos ❌";
+        $_SESSION["usuario"] = $username;
+        $_SESSION["mensaje"] = "Credenciales incorrectas";
+
         header("Location: /valopass/login");
         exit;
     }
