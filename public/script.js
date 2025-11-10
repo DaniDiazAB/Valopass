@@ -1,122 +1,112 @@
 // Index loging
 const title = document.getElementById("title");
-const navBar = document.createElement("div")
-navBar.classList.add("nav")
+const navBar = document.createElement("div");
+navBar.classList.add("nav");
+
+title.onclick = function(){
+    recagarDefault()
+}
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    cargarNavegacion()
+    cargarNavegacion();
     getCuentas(true);
-    cuentasPublicas.classList.add("nav-marcado")
+    cuentasPublicas.classList.add("nav-marcado");
 });
 
-
-
 // Links Navegacion
-const perfil = document.createElement("a")
-const cuentasPublicas = document.createElement("a")
-const cuentas = document.createElement("a")
-const agregarCuenta = document.createElement("a")
-const cerrarSesion = document.createElement("a")
-const linkActualizarRangos = document.createElement("a")
-
-
+const perfil = document.createElement("a");
+const cuentasPublicas = document.createElement("a");
+const cuentas = document.createElement("a");
+const agregarCuenta = document.createElement("a");
+const cerrarSesion = document.createElement("a");
+const linkActualizarRangos = document.createElement("a");
 
 perfil.onclick = function () {
-    eliminarNavMarcado()
-    document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
-    document.getElementById("cuentas").remove()
+    eliminarNavMarcado();
+    document.querySelectorAll(".div-cuenta").forEach((el) => el.remove());
+    document.getElementById("cuentas").remove();
     getCuentas(true);
-    marcarNav(perfil)
-}
-
+    marcarNav(perfil);
+};
 
 cuentas.onclick = function () {
-    eliminarNavMarcado()
-    document.querySelectorAll(".div-cuenta").forEach(el => el.remove());
-    document.getElementById("cuentas").remove()
+    eliminarNavMarcado();
+    document.querySelectorAll(".div-cuenta").forEach((el) => el.remove());
+    document.getElementById("cuentas").remove();
     getCuentas(false);
-    marcarNav(cuentas)
-
-
-}
+    marcarNav(cuentas);
+};
 
 cuentasPublicas.onclick = function () {
-    eliminarNavMarcado()
-    const divBorrar = document.getElementById("cuentas")
-    divBorrar.remove()
-    getCuentas(true)
-    marcarNav(cuentasPublicas)
-
-}
+    recagarDefault()
+};
 
 agregarCuenta.onclick = function () {
-    eliminarNavMarcado()
-    cargarInputs("", "", "", "", "", true)
+    eliminarNavMarcado();
+    cargarInputs("", "", "", "", "", true);
 
-    fetch("../server/crear-nueva-cuenta.php")
+    fetch("/valopass/server/crear-nueva-cuenta.php")
         .then((response) => response.json())
-        .then((data) => {
-        })
+        .then((data) => { })
         .catch((error) => console.error("Error:", error));
-    marcarNav(agregarCuenta)
-    
-}
+    marcarNav(agregarCuenta);
+};
 
 cerrarSesion.onclick = function () {
-    fetch("../server/outlog.php")
+    fetch("/valopass/server/outlog.php")
         .then((response) => response.json())
         .then((data) => {
-            alert("Sesión cerrada")
-            window.location.href = "views/login.html";
+            console.log();
+
+            alert("Sesión cerrada");
+            window.location.href = "/valopass/public/views/login.html";
         })
         .catch((error) => console.error("Error:", error));
-}
+};
 
 function cargarNavegacion() {
-    perfil.classList.add("enlace-nav")
-    perfil.innerHTML = "Mi perfil"
+    perfil.classList.add("enlace-nav");
+    perfil.innerHTML = "Mi perfil";
 
-    cuentas.classList.add("enlace-nav")
-    cuentas.innerHTML = "Mis cuentas"
+    cuentas.classList.add("enlace-nav");
+    cuentas.innerHTML = "Mis cuentas";
 
-    cuentasPublicas.classList.add("enlace-nav")
-    cuentasPublicas.innerHTML = "Cuentas publicas"
+    cuentasPublicas.classList.add("enlace-nav");
+    cuentasPublicas.innerHTML = "Cuentas publicas";
 
-    agregarCuenta.classList.add("enlace-nav")
-    agregarCuenta.innerHTML = "Agregar cuenta"
+    agregarCuenta.classList.add("enlace-nav");
+    agregarCuenta.innerHTML = "Agregar cuenta";
 
-    cerrarSesion.classList.add("enlace-nav")
-    cerrarSesion.innerHTML = "Cerrar Sesión"
+    cerrarSesion.classList.add("enlace-nav");
+    cerrarSesion.innerHTML = "Cerrar Sesión";
 
-    linkActualizarRangos.classList.add("enlace-nav")
-    linkActualizarRangos.innerHTML = "Actualizar rangos"
+    linkActualizarRangos.classList.add("enlace-nav");
+    linkActualizarRangos.innerHTML = "Actualizar rangos";
 
     title.insertAdjacentElement("afterend", navBar);
 
     //navBar.append(perfil)
-    navBar.append(cuentasPublicas)
-    navBar.append(cuentas)
-    navBar.append(linkActualizarRangos)
-    navBar.append(agregarCuenta)
-    navBar.append(cerrarSesion)
+    navBar.append(cuentasPublicas);
+    navBar.append(cuentas);
+    navBar.append(linkActualizarRangos);
+    navBar.append(agregarCuenta);
+    navBar.append(cerrarSesion);
 }
 
 function getCuentas(isTodasCuentas) {
-    fetch("../server/get-cuentas.php", {
+    fetch("/valopass/server/get-cuentas.php", {
         method: "POST",
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: "isTodasCuentas=" + encodeURIComponent(isTodasCuentas)
+        body: "isTodasCuentas=" + encodeURIComponent(isTodasCuentas),
     })
         .then((response) => response.json())
         .then((data) => {
-
             const divCuentas = document.createElement("div");
             divCuentas.id = "cuentas";
             navBar.insertAdjacentElement("afterend", divCuentas);
-
 
             data.forEach((cuenta) => {
                 getRangos(
@@ -129,26 +119,25 @@ function getCuentas(isTodasCuentas) {
             });
         })
         .catch((error) => console.error("Error:", error));
-
 }
 
 linkActualizarRangos.onclick = function () {
-    const cargandoRangos = document.createElement("img")
-    cargandoRangos.src = "resources/loading.gif";
+    const cargandoRangos = document.createElement("img");
+    cargandoRangos.src = "/valopass/public/resources/loading.gif";
     cargandoRangos.alt = "Actualizando los rangos en la base de datos";
-    cargandoRangos.id = "actulizando-rangos"
+    cargandoRangos.id = "actulizando-rangos";
     cargandoRangos.width = 25;
     cargandoRangos.height = 25;
     cargandoRangos.style.borderRadius = "10px";
     document.body.insertBefore(cargandoRangos, document.body.firstChild);
 
-    const divCuentas = document.getElementById("cuentas")
+    const divCuentas = document.getElementById("cuentas");
 
-    fetch("../server/conseguir-cuentas.php")
-        .then(res => res.json())
-        .then(data => {
+    fetch("/valopass/server/conseguir-cuentas.php")
+        .then((res) => res.json())
+        .then((data) => {
             const arrayPlano = [];
-            data.forEach(cuenta => {
+            data.forEach((cuenta) => {
                 arrayPlano.push(cuenta.nick_cuenta);
                 arrayPlano.push(cuenta.tag_cuenta);
                 arrayPlano.push(cuenta.username_cuenta);
@@ -156,7 +145,12 @@ linkActualizarRangos.onclick = function () {
 
             for (let i = 0; i < arrayPlano.length; i += 3) {
                 // PROXY, CAMBIAR EN LA VERSION FINAL -> https://vaccie.pythonanywhere.com/mmr/Dani/KKC/eu
-                const url = "http://localhost:3000/api/mmr/" + arrayPlano[i] + "/" + arrayPlano[i + 1] + "/EU";
+                const url =
+                    "http://localhost:3000/api/mmr/" +
+                    arrayPlano[i] +
+                    "/" +
+                    arrayPlano[i + 1] +
+                    "/EU";
                 divCuentas.className = "cuenta";
 
                 fetch(url)
@@ -167,65 +161,70 @@ linkActualizarRangos.onclick = function () {
 
                         const datosActuCuenta = {
                             username: arrayPlano[i + 2],
-                            rango: rango
-                        }
+                            rango: rango,
+                        };
 
-                        fetch('../server/cambiar-rango.php', {
-                            method: 'POST',
+                        fetch("/valopass/server/cambiar-rango.php", {
+                            method: "POST",
                             headers: {
-                                'Content-Type': 'application/json',
+                                "Content-Type": "application/json",
                             },
-                            body: JSON.stringify(datosActuCuenta)
+                            body: JSON.stringify(datosActuCuenta),
                         })
-                            .then(res => res.json())
-                            .then(data => {
-                                //console.log(data); 
+                            .then((res) => res.json())
+                            .then((data) => {
+                                //console.log(data);
                                 if (data.status === "ok") {
                                     actualizarImagenRango(data.username, data.rango);
                                 }
                                 cargandoRangos.setAttribute("hidden", "");
                             })
-                            .catch(err => console.error("Error al actualizar rango:", err));
+                            .catch((err) => console.error("Error al actualizar rango:", err));
                     })
                     .catch((error) => {
                         console.error("Error al obtener el texto:", error);
                     });
             }
         })
-        .catch(err => console.error("Error:", err));
-}
+        .catch((err) => console.error("Error:", err));
+};
 
 function getRangos(nick, tag, username, password, divCuentas) {
     const datosCuenta = {
         username: username,
-    }
+    };
 
-    fetch('../server/get-rangos.php', {
-        method: 'POST',
+    fetch("/valopass/server/get-rangos.php", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(datosCuenta)
+        body: JSON.stringify(datosCuenta),
     })
-        .then(response => response.json())
-        .then(data => {
-            let rango = data[0]
+        .then((response) => response.json())
+        .then((data) => {
+            let rango = data[0];
             cargarInputs(rango, nick, tag, username, password, false, divCuentas);
-
-
         })
-        .catch(error => {
-            console.error('Error:', error);
+        .catch((error) => {
+            console.error("Error:", error);
         });
 }
 
-function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCuentas) {
-
+function cargarInputs(
+    rango,
+    nick,
+    tag,
+    usename,
+    password,
+    isNuevaCuenta,
+    divCuentas
+) {
     const textoNick = document.createElement("input");
     textoNick.classList.add("nick");
     textoNick.setAttribute("type", "text");
     textoNick.setAttribute("name", "nick");
-    textoNick.value = nick + ' #' + tag;
+    textoNick.value = nick + " #" + tag;
 
     const textoRango = document.createElement("p");
     textoRango.classList.add("rango");
@@ -247,7 +246,7 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
 
     const infoRango = document.createElement("div");
     infoRango.classList.add("div-cuenta");
-    infoRango.setAttribute("data-username", usename)
+    infoRango.setAttribute("data-username", usename);
 
     infoRango.append(textoNick);
     infoRango.append(textoRango);
@@ -258,10 +257,10 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
     divBtn.classList.add("div-btn");
 
     if (isNuevaCuenta) {
-        textoNick.setAttribute("placeholder", "Nick")
+        textoNick.setAttribute("placeholder", "Nick");
 
-        textoUsername.setAttribute("placeholder", "Nombre para el login")
-        textoPassword.setAttribute("placeholder", "Contraseña")
+        textoUsername.setAttribute("placeholder", "Nombre para el login");
+        textoPassword.setAttribute("placeholder", "Contraseña");
 
         const btnGuardarCuenta = document.createElement("button");
         btnGuardarCuenta.innerHTML = "Guardar cuenta";
@@ -272,31 +271,35 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         btnNoGuardarCuenta.classList.add("btn-eliminar");
 
         const isPublica = document.createElement("input");
-        isPublica.setAttribute("type", "checkbox")
+        isPublica.setAttribute("type", "checkbox");
         isPublica.classList.add("checkbox-publica");
         isPublica.id = "is-publica";
 
         const labelPublica = document.createElement("label");
-        labelPublica.innerHTML = "¿La cuenta es publica?"
+        labelPublica.innerHTML = "¿La cuenta es publica?";
 
-        labelPublica.append(isPublica)
+        labelPublica.append(isPublica);
 
         btnGuardarCuenta.onclick = function () {
-            guardarNuevaCuenta(textoNick.value, textoUsername.value, textoPassword.value, isPublica.checked)
-        }
+            guardarNuevaCuenta(
+                textoNick.value,
+                textoUsername.value,
+                textoPassword.value,
+                isPublica.checked
+            );
+        };
 
         btnNoGuardarCuenta.onclick = function () {
-            infoRango.setAttribute("style", "display: none")
-        }
+            infoRango.setAttribute("style", "display: none");
+        };
 
         divBtn.append(labelPublica);
         divBtn.append(btnGuardarCuenta);
         divBtn.append(btnNoGuardarCuenta);
 
-        const elementoPadre = document.getElementById("cuentas")
+        const elementoPadre = document.getElementById("cuentas");
         elementoPadre.insertBefore(infoRango, elementoPadre.firstChild);
         infoRango.append(divBtn);
-
     } else {
         textoNick.readOnly = true;
         textoRango.readOnly = true;
@@ -316,23 +319,36 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
         btnCopiarPassword.classList.add("btn-password");
 
         btnEditar.onclick = function () {
-            editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) // Username es el de incio de sesion
-            btnEditar.setAttribute("hidden", "")
-            btnEliminar.setAttribute("hidden", "")
-            btnCopiarPassword.setAttribute("hidden", "")
-        }
+            editarCuenta(
+                textoNick,
+                textoUsername,
+                textoPassword,
+                divBtn,
+                btnEditar,
+                btnEliminar,
+                btnCopiarPassword
+            ); // Username es el de incio de sesion
+            btnEditar.setAttribute("hidden", "");
+            btnEliminar.setAttribute("hidden", "");
+            btnCopiarPassword.setAttribute("hidden", "");
+        };
 
         btnEliminar.onclick = function () {
-            let isBorrar = confirm("¿Estás seguro de que quieres borrar la cuenta?")
+            let isBorrar = confirm("¿Estás seguro de que quieres borrar la cuenta?");
             if (isBorrar) {
-                modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, true)
-                infoRango.remove()
+                modificarCambios(
+                    textoNick.value,
+                    textoUsername.value,
+                    textoPassword.value,
+                    true
+                );
+                infoRango.remove();
             }
-        }
+        };
 
         btnCopiarPassword.onclick = function () {
-            navigator.clipboard.writeText(password)
-        }
+            navigator.clipboard.writeText(password);
+        };
 
         agregarImgRango(rango, textoRango);
 
@@ -342,16 +358,21 @@ function cargarInputs(rango, nick, tag, usename, password, isNuevaCuenta, divCue
 
         divCuentas.append(infoRango);
         infoRango.append(divBtn);
-
-
     }
-
 }
 
-function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar, btnEliminar, btnCopiarPassword) {
-    textoNick.readOnly = false
-    textoUsername.readOnly = false
-    textoPassword.readOnly = false
+function editarCuenta(
+    textoNick,
+    textoUsername,
+    textoPassword,
+    divBtn,
+    btnEditar,
+    btnEliminar,
+    btnCopiarPassword
+) {
+    textoNick.readOnly = false;
+    textoUsername.readOnly = false;
+    textoPassword.readOnly = false;
 
     const btnGuardarCambios = document.createElement("button");
     btnGuardarCambios.innerHTML = "Guardar cambios";
@@ -362,88 +383,101 @@ function editarCuenta(textoNick, textoUsername, textoPassword, divBtn, btnEditar
     btnDeshacerCambios.classList.add("btn-deshacer-cambios");
 
     const isCuentaPublica = document.createElement("input");
-    isCuentaPublica.setAttribute("type", "checkbox")
+    isCuentaPublica.setAttribute("type", "checkbox");
     isCuentaPublica.classList.add("checkbox-publica");
     isCuentaPublica.id = "is-publica";
 
     const labelPublica = document.createElement("label");
-    labelPublica.innerHTML = "¿La cuenta es publica?"
+    labelPublica.innerHTML = "¿La cuenta es publica?";
 
-    let partes = textoNick.value.split("#")
+    let partes = textoNick.value.split("#");
 
-    let isChecked = false
+    let isChecked = false;
 
-    fetch("../server/get-cuenta-publica.php", {
+    fetch("/valopass/server/get-cuenta-publica.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: partes[0] })
+        body: JSON.stringify({ username: partes[0] }),
     })
-        .then(res => res.json())
-        .then(data => {
-
+        .then((res) => res.json())
+        .then((data) => {
             if (data.isPublica) {
                 isCuentaPublica.checked = true;
-                isChecked = true
+                isChecked = true;
             } else {
                 isCuentaPublica.checked = false;
-                isChecked = false
+                isChecked = false;
             }
         });
 
-    labelPublica.append(isCuentaPublica)
+    labelPublica.append(isCuentaPublica);
 
     btnGuardarCambios.onclick = function () {
-        let isConfirmarNoGuardar = confirm("¿Estás seguro de SÍ guardar los cambios?", "")
+        let isConfirmarNoGuardar = confirm(
+            "¿Estás seguro de SÍ guardar los cambios?",
+            ""
+        );
 
         if (isConfirmarNoGuardar) {
-            textoNick.readOnly = true
-            textoUsername.readOnly = true
-            textoPassword.readOnly = true
-            btnGuardarCambios.setAttribute("hidden", "")
-            btnDeshacerCambios.setAttribute("hidden", "")
-            isCuentaPublica.setAttribute("hidden", "")
-            btnEditar.removeAttribute("hidden")
-            btnEliminar.removeAttribute("hidden")
-            btnCopiarPassword.removeAttribute("hidden")
-            const isPublicaChecked = document.getElementById("is-publica").checked
-            labelPublica.remove()
+            textoNick.readOnly = true;
+            textoUsername.readOnly = true;
+            textoPassword.readOnly = true;
+            btnGuardarCambios.setAttribute("hidden", "");
+            btnDeshacerCambios.setAttribute("hidden", "");
+            isCuentaPublica.setAttribute("hidden", "");
+            btnEditar.removeAttribute("hidden");
+            btnEliminar.removeAttribute("hidden");
+            btnCopiarPassword.removeAttribute("hidden");
+            const isPublicaChecked = document.getElementById("is-publica").checked;
+            labelPublica.remove();
 
-            modificarCambios(textoNick.value, textoUsername.value, textoPassword.value, false, isPublicaChecked)
-
+            modificarCambios(
+                textoNick.value,
+                textoUsername.value,
+                textoPassword.value,
+                false,
+                isPublicaChecked
+            );
         }
-
-    }
+    };
 
     btnDeshacerCambios.onclick = function () {
-        let isConfirmarNoGuardar = confirm("¿Estás seguro de NO guardar los cambios?", "")
+        let isConfirmarNoGuardar = confirm(
+            "¿Estás seguro de NO guardar los cambios?",
+            ""
+        );
 
         if (isConfirmarNoGuardar) {
-            textoNick.readOnly = true
-            textoUsername.readOnly = true
-            textoPassword.readOnly = true
-            btnGuardarCambios.setAttribute("hidden", "")
-            btnDeshacerCambios.setAttribute("hidden", "")
-            btnEditar.removeAttribute("hidden")
-            btnEliminar.removeAttribute("hidden")
-            btnCopiarPassword.removeAttribute("hidden")
+            textoNick.readOnly = true;
+            textoUsername.readOnly = true;
+            textoPassword.readOnly = true;
+            btnGuardarCambios.setAttribute("hidden", "");
+            btnDeshacerCambios.setAttribute("hidden", "");
+            btnEditar.removeAttribute("hidden");
+            btnEliminar.removeAttribute("hidden");
+            btnCopiarPassword.removeAttribute("hidden");
 
-            const divBorrar = document.getElementById("cuentas")
-            divBorrar.remove()
+            const divBorrar = document.getElementById("cuentas");
+            divBorrar.remove();
             getCuentas(true);
         }
+    };
 
-    }
-
-    divBtn.append(labelPublica)
-    divBtn.append(btnGuardarCambios)
-    divBtn.append(btnDeshacerCambios)
+    divBtn.append(labelPublica);
+    divBtn.append(btnGuardarCambios);
+    divBtn.append(btnDeshacerCambios);
 }
 
-function guardarNuevaCuenta(textoNick, textoUsername, textoPassword, isPublica) {
+function guardarNuevaCuenta(
+    textoNick,
+    textoUsername,
+    textoPassword,
+    isPublica
+) {
     const parent = document.getElementById("cuentas");
-    parent.remove()
+    parent.remove();
 
-    let partes = textoNick.split("#")
+    let partes = textoNick.split("#");
 
     const datosNuevaCuenta = {
         nick: partes[0].trim(),
@@ -451,53 +485,58 @@ function guardarNuevaCuenta(textoNick, textoUsername, textoPassword, isPublica) 
         username: textoUsername.trim(),
         password: textoPassword.trim(),
         isPublica: isPublica,
-    }
+    };
 
-    fetch('../server/crear-nueva-cuenta.php', {
-        method: 'POST',
+    fetch("/valopass/server/crear-nueva-cuenta.php", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(datosNuevaCuenta)
+        body: JSON.stringify(datosNuevaCuenta),
     })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             //console.log('Respuesta:', data);
         })
-        .catch(error => {
-            console.error('Error:', error);
+        .catch((error) => {
+            console.error("Error:", error);
         });
 
     setTimeout(function () {
         getCuentas(true);
     }, 100);
-
 }
 
-function modificarCambios(textoNick, textoUsername, textoPassword, isEliminar, isPublica) {
-    let partes = textoNick.split("#")
+function modificarCambios(
+    textoNick,
+    textoUsername,
+    textoPassword,
+    isEliminar,
+    isPublica
+) {
+    let partes = textoNick.split("#");
     const datosCuenta = {
         nick: partes[0].trim(),
         tag: partes[1].trim(),
         username: textoUsername.trim(),
         password: textoPassword.trim(),
         eliminar: isEliminar,
-        isPublica: isPublica
+        isPublica: isPublica,
     };
 
-    fetch('../server/guardar-cambios-cuentas.php', {
-        method: 'POST',
+    fetch("/valopass/server/guardar-cambios-cuentas.php", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(datosCuenta)
+        body: JSON.stringify(datosCuenta),
     })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             //console.log('Respuesta:', isPublica);
         })
-        .catch(error => {
-            console.error('Error:', error);
+        .catch((error) => {
+            console.error("Error:", error);
         });
 }
 
@@ -508,83 +547,82 @@ function agregarImgRango(rango, textoNick) {
 
     switch (rango) {
         case "Iron 1":
-            imgRango.src = "resources/iron1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/iron1.png";
             break;
         case "Iron 2":
-            imgRango.src = "resources/iron2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/iron2.png";
             break;
         case "Iron 3":
-            imgRango.src = "resources/iron3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/iron3.png";
             break;
         case "Bronze 1":
-            imgRango.src = "resources/br1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/br1.png";
             break;
         case "Bronze 2":
-            imgRango.src = "resources/br2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/br2.png";
             break;
         case "Bronze 3":
-            imgRango.src = "resources/br3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/br3.png";
             break;
         case "Silver 1":
-            imgRango.src = "resources/sil1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/sil1.png";
             break;
         case "Silver 2":
-            imgRango.src = "resources/sil2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/sil2.png";
             break;
         case "Silver 3":
-            imgRango.src = "resources/sil3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/sil3.png";
             break;
         case "Gold 1":
-            imgRango.src = "resources/gold1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/gold1.png";
             break;
         case "Gold 2":
-            imgRango.src = "resources/gold2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/gold2.png";
             break;
         case "Gold 3":
-            imgRango.src = "resources/gold3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/gold3.png";
             break;
         case "Platinum 1":
-            imgRango.src = "resources/plat1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/plat1.png";
             break;
         case "Platinum 2":
-            imgRango.src = "resources/plat2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/plat2.png";
             break;
         case "Platinum 3":
-            imgRango.src = "resources/plat3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/plat3.png";
             break;
         case "Diamond 1":
-            imgRango.src = "resources/dia1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/dia1.png";
             break;
         case "Diamond 2":
-            imgRango.src = "resources/dia2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/dia2.png";
             break;
         case "Diamond 3":
-            imgRango.src = "resources/dia3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/dia3.png";
             break;
         case "Ascendant 1":
-            imgRango.src = "resources/asc1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/asc1.png";
             break;
         case "Ascendant 2":
-            imgRango.src = "resources/asc2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/asc2.png";
             break;
         case "Ascendant 3":
-            imgRango.src = "resources/asc3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/asc3.png";
             break;
         case "Immortal 1":
-            imgRango.src = "resources/imm1.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/imm1.png";
             break;
         case "Immortal 2":
-            imgRango.src = "resources/imm2.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/imm2.png";
             break;
         case "Immortal 3":
-            imgRango.src = "resources/imm3.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/imm3.png";
             break;
         case "Radiant":
-            imgRango.src = "resources/radiant.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/radiant.png";
             break;
         default:
-            // Opcional: puedes agregar un caso por defecto si lo necesitas
-            // imgRango.src = "resources/default.png";
+            imgRango.src = "/valopass/public/resources/img_rangos/unranked.png";
             break;
     }
 
@@ -594,42 +632,52 @@ function agregarImgRango(rango, textoNick) {
 // Implementar de forna mas optima
 function actualizarImagenRango(username, nuevoRango) {
     const mapaRangos = {
-        "Iron 1": "resources/iron1.png",
-        "Iron 2": "resources/iron2.png",
-        "Iron 3": "resources/iron3.png",
-        "Bronze 1": "resources/bron1.png",
-        "Bronze 2": "resources/bron2.png",
-        "Bronze 3": "resources/bron3.png",
-        "Silver 1": "resources/sil1.png",
-        "Silver 2": "resources/sil2.png",
-        "Silver 3": "resources/sil3.png",
-        "Gold 1": "resources/gold1.png",
-        "Gold 2": "resources/gold2.png",
-        "Gold 3": "resources/gold3.png"
+        "Iron 1": "/valopass/public/resources/img_rangos/iron1.png",
+        "Iron 2": "/valopass/public/resources/img_rangos/iron2.png",
+        "Iron 3": "/valopass/public/resources/img_rangos/iron3.png",
+        "Bronze 1": "/valopass/public/resources/img_rangos/bron1.png",
+        "Bronze 2": "/valopass/public/resources/img_rangos/bron2.png",
+        "Bronze 3": "/valopass/public/resources/img_rangos/bron3.png",
+        "Silver 1": "/valopass/public/resources/img_rangos/sil1.png",
+        "Silver 2": "/valopass/public/resources/img_rangos/sil2.png",
+        "Silver 3": "/valopass/public/resources/img_rangos/sil3.png",
+        "Gold 1": "/valopass/public/resources/img_rangos/gold1.png",
+        "Gold 2": "/valopass/public/resources/img_rangos/gold2.png",
+        "Gold 3": "/valopass/public/resources/img_rangos/gold3.png",
+        "Platinum 1": "/valopass/public/resources/img_rangos/plat1.png",
+        "Platinum 2": "/valopass/public/resources/img_rangos/plat2.png",
+        "Platinum 3": "/valopass/public/resources/img_rangos/plat3.png",
     };
 
-    // Seleccionamos la cuenta correcta por el data-username
-    const cuentaDiv = document.querySelector(`.div-cuenta[data-username="${username}"]`);
+    const cuentaDiv = document.querySelector(
+        `.div-cuenta[data-username="${username}"]`
+    );
 
     if (cuentaDiv) {
         const img = cuentaDiv.querySelector(".img-rango");
         if (img) {
-            img.src = mapaRangos[nuevoRango] || "resources/default.png"; // fallback si no existe
-            img.title = nuevoRango; // también actualiza el tooltip
+            img.src = mapaRangos[nuevoRango] || "resources/default.png"; 
+            img.title = nuevoRango; 
         }
     }
 }
 
-
-function eliminarNavMarcado(){
-    perfil.classList.remove("nav-marcado")
-    cuentasPublicas.classList.remove("nav-marcado")
-    cuentas.classList.remove("nav-marcado")
-    agregarCuenta.classList.remove("nav-marcado")
-    cerrarSesion.classList.remove("nav-marcado")
+function eliminarNavMarcado() {
+    perfil.classList.remove("nav-marcado");
+    cuentasPublicas.classList.remove("nav-marcado");
+    cuentas.classList.remove("nav-marcado");
+    agregarCuenta.classList.remove("nav-marcado");
+    cerrarSesion.classList.remove("nav-marcado");
 }
 
-function marcarNav(navMarcado){
-    navMarcado.classList.add("nav-marcado")
+function marcarNav(navMarcado) {
+    navMarcado.classList.add("nav-marcado");
+}
 
+function recagarDefault(){
+    eliminarNavMarcado();
+    const divBorrar = document.getElementById("cuentas");
+    divBorrar.remove();
+    getCuentas(true);
+    marcarNav(cuentasPublicas);
 }

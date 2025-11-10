@@ -1,0 +1,30 @@
+# Desactivar el listado de directorios
+Options -Indexes
+
+# Especificar el archivo por defecto al entrar en una carpeta
+DirectoryIndex public/index.php
+
+# Activar el motor de reescritura
+RewriteEngine On
+
+# Definir el directorio base del proyecto
+RewriteBase /valopass/
+
+# --- Excepciones: no reescribir si el archivo o directorio existe ---
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# --- Redirecciones limpias ---
+# Página principal
+RewriteRule ^$ public/index.php [L]
+
+# Páginas HTML dentro de /views/
+RewriteRule ^login$ public/views/login.html [L]
+RewriteRule ^aviso$ public/views/aviso.html [L]
+RewriteRule ^recuperar$ public/views/recuperar.html [L]
+RewriteRule ^crear-cuenta$ public/views/crear-cuenta.html [L]
+
+# --- Opcional: manejar 404 personalizados ---
+ErrorDocument 404 /public/views/aviso.html
+

@@ -21,11 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Guardar en sesión
         $_SESSION["usuario_id"] = $user["id_usuario"];
         $_SESSION["usuario"] = $username;
-        header("Location: ../public/index.php");
+        header("Location: /valopass/");
         exit;
     } else {
         $_SESSION["error"] = "Usuario o contraseña incorrectos ❌";
-        header("Location: ../public/views/login.html");
+        header("Location: /valopass/public/views/login");
         exit;
     }
 }

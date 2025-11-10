@@ -1,6 +1,7 @@
 <?php
 session_start();
-include "db.php";
+include __DIR__ . "/db.php";
+
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 
@@ -25,7 +26,7 @@ if ($isTodas) {
 } else {
     $sql = "SELECT c.id_cuenta, c.username_cuenta, c.nick_cuenta, c.tag_cuenta, c.password_cuenta, c.rango_cuenta
             FROM cuentas c
-            INNER JOIN cuentas_usuario cu ON c.id_cuenta = cu.id_cuenta
+            INNER JOIN cuentas_usuarios cu ON c.id_cuenta = cu.id_cuenta
             WHERE cu.id_usuario = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $usuarioId);

@@ -7,5 +7,7 @@
     session_start();
     session_unset();
     session_destroy(); 
+    header("Location: /valopass/public/views/login");
+
     echo json_encode(["status" => "ok", "msg" => "Sesión cerrada"]);
 ?>

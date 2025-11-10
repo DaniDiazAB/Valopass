@@ -4,16 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../resources/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="/valopass/public/resources/favicon.ico">
 
   <title>Login - Valopass</title>
-  <link rel="stylesheet" type="text/css" href="styles/login.css">
+  <link rel="stylesheet" href="/valopass/public/views/styles/login.css">
+
 </head>
 
 <body>
   <div id="div-login" class="login-container">
     <h2>Iniciar Sesión</h2>
-    <form id="login" action="../../server/login.php" method="POST">
+    <form id="login" action="/valopass/server/login.php" method="POST">
       <div class="form-group">
         <label for="username">Nombre de usuario</label>
         <input type="text" id="username" name="username" placeholder="Tu usuario" required>
@@ -24,14 +25,9 @@
         <input type="password" id="password" name="password" placeholder="Tu contraseña" required>
         <span class="toggle-password" onclick="togglePassword()">👁️</span>
       </div>
-      <!---
-      <div class="checkbox-group">
-        <input type="checkbox" id="remember">
-        <label for="remember">Recordar inicio de sesión</label>
-      </div>
-      -->
+
       <button type="submit" class="login-btn">Entrar</button>
-      <a href="aviso.html" class="forgot-password">AVISO LEGAL</a>
+      <a href="/valopass/aviso" class="forgot-password">AVISO LEGAL</a>
     </form>
   </div>
 
@@ -60,9 +56,6 @@
       }
     }
 
-
-
-    // Mostrar solo si no hay consentimiento guardado
 document.addEventListener("DOMContentLoaded", () => {
   const banner = document.getElementById("cookie-banner");
   const acceptBtn = document.getElementById("acceptCookies");
@@ -75,13 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
   acceptBtn.addEventListener("click", () => {
     localStorage.setItem("cookieConsent", "accepted");
     banner.classList.add("hidden");
-    // activar cookies analíticas aquí
   });
 
   rejectBtn.addEventListener("click", () => {
     localStorage.setItem("cookieConsent", "rejected");
     banner.classList.add("hidden");
-    // no activar cookies analíticas
     const divLogin = document.getElementById("div-login")
     divLogin.setAttribute("hidden", "")
   });
