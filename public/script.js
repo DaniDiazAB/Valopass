@@ -414,7 +414,6 @@ function editarCuenta(
     btnEliminar,
     btnCopiarPassword
 ) {
-    
     textoNick.readOnly = false;
     textoTag.readOnly = false;
     textoUsername.readOnly = false;
@@ -435,7 +434,6 @@ function editarCuenta(
 
     const labelPublica = document.createElement("label");
     labelPublica.innerHTML = "¿La cuenta es publica?";
-
 
     let isChecked = false;
 
@@ -515,6 +513,47 @@ function editarCuenta(
     divBtn.append(btnDeshacerCambios);
 }
 
+function modificarCambios(
+    textoNick,
+    textoTag,
+    textoUsername,
+    textoPassword,
+    isEliminar,
+    isPublica
+) {
+    console.log(textoNick);
+    console.log(textoTag);
+    
+    const datosCuenta = {
+        nick: textoNick,
+        tag: textoTag,
+        username: textoUsername.trim(),
+        password: textoPassword.trim(),
+        eliminar: isEliminar,
+        isPublica: isPublica,
+    };
+
+    fetch("/valopass/server/guardar-cambios-cuentas.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datosCuenta),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (!data){
+                alert("No tienes permisos para cambiar esta cuenta")
+                recagarDefault()
+            }
+            
+
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
 function guardarNuevaCuenta(
     textoNick,
     textoTag,
@@ -551,43 +590,6 @@ function guardarNuevaCuenta(
     setTimeout(function () {
         getCuentas(true);
     }, 100);
-}
-
-function modificarCambios(
-    textoNick,
-    textoTag,
-    textoUsername,
-    textoPassword,
-    isEliminar,
-    isPublica
-) {
-    console.log(textoNick);
-    console.log(textoTag);
-    
-
-    const datosCuenta = {
-        nick: textoNick,
-        tag: textoTag,
-        username: textoUsername.trim(),
-        password: textoPassword.trim(),
-        eliminar: isEliminar,
-        isPublica: isPublica,
-    };
-
-    fetch("/valopass/server/guardar-cambios-cuentas.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datosCuenta),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            //console.log('Respuesta:', isPublica);
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
 }
 
 function agregarImgRango(rango, textoNick) {
