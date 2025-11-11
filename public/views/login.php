@@ -47,7 +47,8 @@ if (isset($_SESSION["usuario_id"])) {
       <div>
 
       <button id="btn-login" type="submit" class="login-btn">Entrar</button>
-      <a href="/valopass/aviso" class="forgot-password">AVISO LEGAL</a>
+      <a href="/valopass/" id="password-olvidada" class="form-btn">¿Has olvidado la contraseña?</a>
+      <a href="/valopass/crear-usuario" id="crear-usuario" class="form-btn">¿No eres usuario?</a>
     </form>
   </div>
 
@@ -57,14 +58,13 @@ if (isset($_SESSION["usuario_id"])) {
       Si no las aceptas no podrás usar la aplicación.
     </p>
     <div class="cookie-buttons">
+      <a href="/valopass/aviso" class="aviso-legal">AVISO LEGAL</a>
       <button id="acceptCookies" class="cookie-btn aceptar">Aceptar</button>
       <button id="rejectCookies" class="cookie-btn rechazar">Rechazar</button>
     </div>
   </div>
 
   <script>
-    
-
     function togglePassword() {
       const passwordInput = document.getElementById("password");
       const toggle = document.querySelector(".toggle-password");
