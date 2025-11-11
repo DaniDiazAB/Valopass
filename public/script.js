@@ -7,7 +7,6 @@ title.onclick = function(){
     recagarDefault()
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
     cargarNavegacion();
     getCuentas(true);
@@ -224,7 +223,22 @@ function cargarInputs(
     textoNick.classList.add("nick");
     textoNick.setAttribute("type", "text");
     textoNick.setAttribute("name", "nick");
-    textoNick.value = nick + " #" + tag;
+    textoNick.value = nick
+
+    const textoAlmohadilla = document.createElement("input");
+    textoAlmohadilla.classList.add("almohadilla");
+    textoAlmohadilla.setAttribute("type", "text");
+    textoAlmohadilla.setAttribute("name", "almohadilla");
+    textoAlmohadilla.disabled = true
+    textoAlmohadilla.value = "#";
+
+    const textoTag = document.createElement("input");
+    textoTag.classList.add("nick");
+    textoTag.setAttribute("type", "text");
+    textoTag.setAttribute("name", "tag");
+    textoTag.value = tag;
+    
+    const nickCompleto = textoNick.value + " #" + textoTag.value
 
     const textoRango = document.createElement("p");
     textoRango.classList.add("rango");
@@ -267,6 +281,8 @@ function cargarInputs(
     infoRango.setAttribute("data-username", usename);
 
     infoRango.append(textoNick);
+    infoRango.append(textoAlmohadilla);
+    infoRango.append(textoTag);
     infoRango.append(textoRango);
     infoRango.append(textoUsername);
     infoRango.append(textoPassword);
@@ -302,7 +318,7 @@ function cargarInputs(
 
         btnGuardarCuenta.onclick = function () {
             guardarNuevaCuenta(
-                textoNick.value,
+                nickCompleto,
                 textoUsername.value,
                 textoPassword.value,
                 isPublica.checked
@@ -321,7 +337,10 @@ function cargarInputs(
         elementoPadre.insertBefore(infoRango, elementoPadre.firstChild);
         infoRango.append(divBtn);
     } else {
+        
         textoNick.readOnly = true;
+        textoAlmohadilla.readOnly = true;
+        textoTag.readOnly = true;
         textoRango.readOnly = true;
         textoUsername.readOnly = true;
         textoPassword.readOnly = true;
@@ -341,6 +360,7 @@ function cargarInputs(
         btnEditar.onclick = function () {
             editarCuenta(
                 textoNick,
+                textoTag,
                 textoUsername,
                 textoPassword,
                 divBtn,
@@ -359,6 +379,7 @@ function cargarInputs(
             if (isBorrar) {
                 modificarCambios(
                     textoNick.value,
+                    textoTag.value,
                     textoUsername.value,
                     textoPassword.value,
                     true
@@ -385,6 +406,7 @@ function cargarInputs(
 
 function editarCuenta(
     textoNick,
+    textoTag,
     textoUsername,
     textoPassword,
     divBtn,
@@ -392,7 +414,9 @@ function editarCuenta(
     btnEliminar,
     btnCopiarPassword
 ) {
+    
     textoNick.readOnly = false;
+    textoTag.readOnly = false;
     textoUsername.readOnly = false;
     textoPassword.readOnly = false;
 
@@ -412,14 +436,13 @@ function editarCuenta(
     const labelPublica = document.createElement("label");
     labelPublica.innerHTML = "¿La cuenta es publica?";
 
-    let partes = textoNick.value.split("#");
 
     let isChecked = false;
 
     fetch("/valopass/server/get-cuenta-publica.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: partes[0] }),
+        body: JSON.stringify({ username: textoNick.value }),
     })
         .then((res) => res.json())
         .then((data) => {            
@@ -456,6 +479,7 @@ function editarCuenta(
 
             modificarCambios(
                 textoNick.value,
+                textoTag.value,
                 textoUsername.value,
                 textoPassword.value,
                 false,
@@ -493,18 +517,17 @@ function editarCuenta(
 
 function guardarNuevaCuenta(
     textoNick,
+    textoTag,
     textoUsername,
     textoPassword,
     isPublica
-) {
+) {    
     const parent = document.getElementById("cuentas");
     parent.remove();
 
-    let partes = textoNick.split("#");
-
     const datosNuevaCuenta = {
-        nick: partes[0].trim(),
-        tag: partes[1].trim(),
+        nick: textoNick,
+        tag: textoTag,
         username: textoUsername.trim(),
         password: textoPassword.trim(),
         isPublica: isPublica,
@@ -532,15 +555,19 @@ function guardarNuevaCuenta(
 
 function modificarCambios(
     textoNick,
+    textoTag,
     textoUsername,
     textoPassword,
     isEliminar,
     isPublica
 ) {
-    let partes = textoNick.split("#");
+    console.log(textoNick);
+    console.log(textoTag);
+    
+
     const datosCuenta = {
-        nick: partes[0].trim(),
-        tag: partes[1].trim(),
+        nick: textoNick,
+        tag: textoTag,
         username: textoUsername.trim(),
         password: textoPassword.trim(),
         eliminar: isEliminar,
@@ -670,6 +697,7 @@ function actualizarImagenRango(username, nuevoRango) {
         "Platinum 1": "/valopass/public/resources/img_rangos/plat1.png",
         "Platinum 2": "/valopass/public/resources/img_rangos/plat2.png",
         "Platinum 3": "/valopass/public/resources/img_rangos/plat3.png",
+        "Diamond 1": "/valopass/public/resources/img_rangos/dia1.png",
     };
 
     const cuentaDiv = document.querySelector(
