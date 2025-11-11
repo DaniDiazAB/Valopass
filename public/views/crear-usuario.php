@@ -8,8 +8,6 @@ $password = $_SESSION['password'] ?? '';
 $passwordConfirmar = $_SESSION['passwordConfirmar'] ?? '';
 $usuario_repetido = $_SESSION['usuarioRepetido'] ?? '';
 
-
-
 unset($_SESSION['usuario']);
 unset($_SESSION['email']);
 unset($_SESSION['password']);
@@ -31,7 +29,7 @@ if (isset($_SESSION["usuario_id"])) {
   <link rel="icon" type="image/x-icon" href="/valopass/public/resources/favicon.ico">
 
   <title>Crear usuario - Valopass</title>
-  <link rel="stylesheet" href="/valopass/public/views/styles/crear-cuenta.css">
+  <link rel="stylesheet" href="/valopass/public/views/styles/crear-usuario.css">
 
 </head>
 
