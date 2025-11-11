@@ -21,11 +21,21 @@ if ($username === '') {
 
 try {
     if ($eliminar){
+        $sql = "SELECT id_cuenta FROM cuentas WHERE username_cuenta = :username";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":username" => $username]);
+        $id_cuenta = $stmt->fetchColumn();
+
         $sql = "DELETE FROM cuentas WHERE username_cuenta = :username";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ":username" => $username
         ]);
+
+         $sql = "DELETE FROM cuentas_usuarios WHERE id_cuenta = :id_cuenta";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([":id_cuenta" => $id_cuenta]);
+
         echo json_encode(["status" => "ok", "msg" => "Cuenta eliminada"]);
 
     }else{

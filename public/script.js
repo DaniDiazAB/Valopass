@@ -130,9 +130,9 @@ linkActualizarRangos.onclick = function () {
     document.body.insertBefore(cargandoRangos, document.body.firstChild);
 
     const divCuentas = document.getElementById("cuentas");
+    divCuentas.className = "cuenta";
 
     const url = "/valopass/server/proxy.php";
-    divCuentas.className = "cuenta";
     fetch(url)
         .then((response) => response.text())
         .then((data) => {
@@ -277,7 +277,8 @@ function cargarInputs(
 
         btnGuardarCuenta.onclick = function () {
             guardarNuevaCuenta(
-                nickCompleto,
+                textoNick.value,
+                textoTag.value,
                 textoUsername.value,
                 textoPassword.value,
                 isPublica.checked
@@ -518,6 +519,12 @@ function guardarNuevaCuenta(
     textoPassword,
     isPublica
 ) {
+    console.log(textoNick);
+    console.log(textoTag);
+    console.log(textoUsername);
+    console.log(textoPassword);
+    console.log(isPublica);
+    
     const parent = document.getElementById("cuentas");
     parent.remove();
 
