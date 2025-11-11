@@ -1,9 +1,8 @@
-// Index loging
 const title = document.getElementById("title");
 const navBar = document.createElement("div");
 navBar.classList.add("nav");
 
-title.onclick = function(){
+title.onclick = function () {
     recagarDefault()
 }
 
@@ -55,7 +54,7 @@ agregarCuenta.onclick = function () {
 cerrarSesion.onclick = function () {
     alert("Sesión cerrada");
     window.location.href = "/valopass/login";
-    
+
     fetch("/valopass/server/outlog.php")
         .then((response) => response.json())
         .then((data) => {
@@ -132,60 +131,20 @@ linkActualizarRangos.onclick = function () {
 
     const divCuentas = document.getElementById("cuentas");
 
-    fetch("/valopass/server/conseguir-cuentas.php")
-        .then((res) => res.json())
+    const url = "/valopass/server/proxy.php";
+    divCuentas.className = "cuenta";
+    fetch(url)
+        .then((response) => response.text())
         .then((data) => {
-            const arrayPlano = [];
-            data.forEach((cuenta) => {
-                arrayPlano.push(cuenta.nick_cuenta);
-                arrayPlano.push(cuenta.tag_cuenta);
-                arrayPlano.push(cuenta.username_cuenta);
-            });
-
-            for (let i = 0; i < arrayPlano.length; i += 3) {
-                // PROXY, CAMBIAR EN LA VERSION FINAL -> https://vaccie.pythonanywhere.com/mmr/Dani/KKC/eu
-                const url =
-                    "http://localhost:3000/api/mmr/" +
-                    arrayPlano[i] +
-                    "/" +
-                    arrayPlano[i + 1] +
-                    "/EU";
-                divCuentas.className = "cuenta";
-
-                fetch(url)
-                    .then((response) => response.text())
-                    .then((data) => {
-                        let rango = data;
-                        rango = rango.split(","[0])[0];
-
-                        const datosActuCuenta = {
-                            username: arrayPlano[i + 2],
-                            rango: rango,
-                        };
-
-                        fetch("/valopass/server/cambiar-rango.php", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(datosActuCuenta),
-                        })
-                            .then((res) => res.json())
-                            .then((data) => {
-                                //console.log(data);
-                                if (data.status === "ok") {
-                                    actualizarImagenRango(data.username, data.rango);
-                                }
-                                cargandoRangos.setAttribute("hidden", "");
-                            })
-                            .catch((err) => console.error("Error al actualizar rango:", err));
-                    })
-                    .catch((error) => {
-                        console.error("Error al obtener el texto:", error);
-                    });
+            if (data.status === "ok") {
+                actualizarImagenRango(data.username, data.rango);
             }
+            cargandoRangos.setAttribute("hidden", "");
         })
-        .catch((err) => console.error("Error:", err));
+        .catch((error) => {
+            console.error("Error al obtener el texto:", error);
+        });
+
 };
 
 function getRangos(nick, tag, username, password, divCuentas) {
@@ -237,7 +196,7 @@ function cargarInputs(
     textoTag.setAttribute("type", "text");
     textoTag.setAttribute("name", "tag");
     textoTag.value = tag;
-    
+
     const nickCompleto = textoNick.value + " #" + textoTag.value
 
     const textoRango = document.createElement("p");
@@ -264,7 +223,7 @@ function cargarInputs(
     btnVerPassword.innerHTML = "👁️"
 
 
-    btnVerPassword.onclick = function(){
+    btnVerPassword.onclick = function () {
         const passwordInput = document.getElementById("password");
         const toggle = document.querySelector(".toggle-password");
         if (passwordInput.type === "password") {
@@ -337,7 +296,7 @@ function cargarInputs(
         elementoPadre.insertBefore(infoRango, elementoPadre.firstChild);
         infoRango.append(divBtn);
     } else {
-        
+
         textoNick.readOnly = true;
         textoAlmohadilla.readOnly = true;
         textoTag.readOnly = true;
@@ -443,7 +402,7 @@ function editarCuenta(
         body: JSON.stringify({ username: textoNick.value }),
     })
         .then((res) => res.json())
-        .then((data) => {            
+        .then((data) => {
             if (data.cuenta_publica) {
                 isCuentaPublica.checked = true;
                 isChecked = true;
@@ -521,9 +480,7 @@ function modificarCambios(
     isEliminar,
     isPublica
 ) {
-    console.log(textoNick);
-    console.log(textoTag);
-    
+
     const datosCuenta = {
         nick: textoNick,
         tag: textoTag,
@@ -542,11 +499,11 @@ function modificarCambios(
     })
         .then((response) => response.json())
         .then((data) => {
-            if (!data){
+            if (!data) {
                 alert("No tienes permisos para cambiar esta cuenta")
                 recagarDefault()
             }
-            
+
 
         })
         .catch((error) => {
@@ -560,7 +517,7 @@ function guardarNuevaCuenta(
     textoUsername,
     textoPassword,
     isPublica
-) {    
+) {
     const parent = document.getElementById("cuentas");
     parent.remove();
 
@@ -581,7 +538,6 @@ function guardarNuevaCuenta(
     })
         .then((response) => response.json())
         .then((data) => {
-            //console.log('Respuesta:', data);
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -709,8 +665,8 @@ function actualizarImagenRango(username, nuevoRango) {
     if (cuentaDiv) {
         const img = cuentaDiv.querySelector(".img-rango");
         if (img) {
-            img.src = mapaRangos[nuevoRango] || "resources/default.png"; 
-            img.title = nuevoRango; 
+            img.src = mapaRangos[nuevoRango] || "resources/default.png";
+            img.title = nuevoRango;
         }
     }
 }
@@ -727,7 +683,7 @@ function marcarNav(navMarcado) {
     navMarcado.classList.add("nav-marcado");
 }
 
-function recagarDefault(){
+function recagarDefault() {
     eliminarNavMarcado();
     const divBorrar = document.getElementById("cuentas");
     divBorrar.remove();

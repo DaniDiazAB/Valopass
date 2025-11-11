@@ -1,4 +1,5 @@
 <?php
+/* EN DESUSO
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -69,3 +70,4 @@ try {
 } catch (PDOException $e) {
     echo json_encode(["status" => "error", "msg" => $e->getMessage()]);
 }
+    */
