@@ -148,4 +148,7 @@ public/style.css
 # Composer
 /vendor/
 
+# ENV
+/config/
+
 # End of https://www.toptal.com/developers/gitignore/api/node

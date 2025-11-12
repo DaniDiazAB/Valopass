@@ -3,16 +3,21 @@ session_start();
 header("Content-Type: application/json; charset=UTF-8");
 
 require_once "db.php";
+require_once "../config/secret.php";
+
 
 $input = file_get_contents("php://input");
 $datos = json_decode($input, true);
 
+$user_login = $_SESSION["usuario_id"];
+
 $nick     = $datos['nick'] ?? '';
 $tag      = $datos['tag'] ?? '';
 $username = $datos['username'] ?? '';
-$password = $datos['password'] ?? '';
 $eliminar = $datos['eliminar'] ?? '';
 $isPublica = $datos['isPublica'] ?? '';
+$passwordPlano = $datos['password'];
+$passwordCifrado = encriptar($passwordPlano);
 
 if ($username === '') {
     echo json_encode(["status" => "error", "msg" => "Falta username para identificar la fila"]);
@@ -32,9 +37,9 @@ try {
             ":username" => $username
         ]);
 
-         $sql = "DELETE FROM cuentas_usuarios WHERE id_cuenta = :id_cuenta";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([":id_cuenta" => $id_cuenta]);
+        $sql = "DELETE FROM cuentas_usuarios WHERE id_cuenta = :id_cuenta";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":id_cuenta" => $id_cuenta]);
 
         echo json_encode(["status" => "ok", "msg" => "Cuenta eliminada"]);
 
@@ -45,30 +50,25 @@ try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([":username" => $username]);
         $idCuenta = $stmt->fetch(PDO::FETCH_ASSOC); 
-        $id_cuenta_valor = $idCuenta['id_cuenta'];
+        $id_cuenta_valor = $idCuenta['id_cuenta']; // ID de la tabla cuentas
 
-        /*
-        $sql = "SELECT id_usuario FROM cuentas_usuarios WHERE id:cuenta = :usuario";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([":usuario" => $resultado]);
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC); 
-        */
 
         $sql = "SELECT id_usuario FROM cuentas_usuarios WHERE id_cuenta = :cuenta";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([":cuenta" => $id_cuenta_valor]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-        $id_usuario_valor = $usuario['id_usuario'];
+        $id_usuario_valor = $usuario['id_usuario']; // id_usuario de la tabla cuentas_usuarios
 
-        if ($id_usuario_valor == $id_cuenta_valor){
+    
+        if ($id_usuario_valor == $user_login){
             $sql = "UPDATE cuentas 
-            SET nick_cuenta = :nick, tag_cuenta = :tag, password_cuenta = :password, cuenta_publica = :isPublica
+            SET nick_cuenta = :nick, tag_cuenta = :tag, password_cuenta = :passwordCifrado, cuenta_publica = :isPublica
             WHERE username_cuenta = :username";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 ":nick"     => $nick,
                 ":tag"      => $tag,
-                ":password" => $password,
+                ":passwordCifrado" => $passwordCifrado,
                 ":username" => $username,
                 ":isPublica" => $isPublica
             ]);
@@ -78,19 +78,20 @@ try {
             echo json_encode(false);
 
         }
-
-                
         
-
-        
-        
-        
-       //echo json_encode(["status" => "ok", "msg" => "Cuenta actualizada correctamente", "nick" => $nick, "Publica" => $isPublica, "Sesion" => $_SESSION["usuario_id"]]);
-      
-
+        //echo json_encode(["status" => "ok", "msg" => "Cuenta actualizada correctamente", "nick" => $nick, "Publica" => $isPublica, "Sesion" => $_SESSION["usuario_id"]]);
     }
     
-
 } catch (PDOException $e) {
     echo json_encode(["status" => "error", "msg" => $e->getMessage()]);
 }
+
+
+function encriptar($textoPlano) {
+    return openssl_encrypt($textoPlano, METHOD, SECRET_KEY, 0, SECRET_IV);
+}
+
+function desencriptar($textoCifrado) {
+    return openssl_decrypt($textoCifrado, METHOD, SECRET_KEY, 0, SECRET_IV);
+}
+    

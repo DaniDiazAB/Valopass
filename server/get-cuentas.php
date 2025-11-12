@@ -1,6 +1,8 @@
 <?php
 session_start();
 include __DIR__ . "/db.php";
+require_once "../config/secret.php";
+
 
 
 $conn = new mysqli($host, $user, $pass, $dbname);
@@ -36,7 +38,16 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 $datos = [];
+
 while ($row = $result->fetch_assoc()) {
+    $passwordDecrypt = desencriptar($row['password_cuenta']);
+
+    unset($row['password_cuenta']);
+
+
+
+    $row['password_cuenta'] = $passwordDecrypt;
+
     $datos[] = $row;
 }
 
@@ -45,5 +56,9 @@ echo json_encode($datos);
 
 $stmt->close();
 $conn->close();
+
+function desencriptar($textoCifrado) {
+    return openssl_decrypt($textoCifrado, METHOD, SECRET_KEY, 0, SECRET_IV);
+}
 ?>
 
