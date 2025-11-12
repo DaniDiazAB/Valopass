@@ -47,7 +47,11 @@ if (isset($_SESSION["usuario_id"])) {
       <div>
 
       <div class="form-group recordar-sesion">
-
+        <label>
+          <input type="checkbox" name="recordar" id="recordar">
+          Recordar sesión
+        </label>
+      </div>
 
       <button id="btn-login" type="submit" class="login-btn">Entrar</button>
       <a href="/valopass/" id="password-olvidada" class="form-btn">¿Has olvidado la contraseña?</a>

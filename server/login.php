@@ -2,6 +2,10 @@
 session_start();
 include "db.php";
 
+$username = $_POST['username'] ?? '';
+$password = $_POST['password'] ?? '';
+$recordar = isset($_POST['recordar']);
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -20,6 +24,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($user && password_verify($password, $user["password_usuario"])) {
         $_SESSION["usuario_id"] = $user["id_usuario"];
         $_SESSION["usuario"] = $username;
+
+    if ($recordar) {
+        setcookie(session_name(), session_id(), [
+            'expires' => time() + (86400 * 30), // 30 días
+            'path' => '/',
+            'secure' => false, 
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+    }
+
         header("Location: /valopass/");
         exit;
     } else {
