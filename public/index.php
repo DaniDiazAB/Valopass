@@ -18,7 +18,7 @@ if (!isset($_SESSION["usuario_id"])) {
     <link rel="stylesheet" type="text/css" href="/valopass/public/style.css">
 </head>
 <body>
-    <h1 id="title"><img class="logo" src="/valopass/public/resources/logo.png"></img></h1>
+    <h1 id="title"><img class="logo" src="/valopass/public/resources/logo.png"  alt="Valopass"></img></h1>
     
 </body>
     <script src="/valopass/public/script.js"></script>

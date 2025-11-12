@@ -29,3 +29,5 @@ RewriteRule ^crear-usuario$ public/views/crear-usuario.php [L]
 ErrorDocument 404 /valopass/public/views/error.php
 
 
+
+

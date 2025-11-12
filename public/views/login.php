@@ -46,6 +46,9 @@ if (isset($_SESSION["usuario_id"])) {
         <p class="mensaje-login"><?= htmlspecialchars($mensaje) ?></p>
       <div>
 
+      <div class="form-group recordar-sesion">
+
+
       <button id="btn-login" type="submit" class="login-btn">Entrar</button>
       <a href="/valopass/" id="password-olvidada" class="form-btn">¿Has olvidado la contraseña?</a>
       <a href="/valopass/crear-usuario" id="crear-usuario" class="form-btn">¿No eres usuario?</a>

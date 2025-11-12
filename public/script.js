@@ -178,26 +178,41 @@ function cargarInputs(
     isNuevaCuenta,
     divCuentas
 ) {
+    const labelNick = document.createElement("label");
+    labelNick.classList.add("account-label");
+    labelNick.htmlFor = "nick-" + usename; 
+    labelNick.textContent = ""
+
     const textoNick = document.createElement("input");
     textoNick.classList.add("nick");
-    textoNick.setAttribute("type", "text");
-    textoNick.setAttribute("name", "nick");
-    textoNick.value = nick
+    textoNick.type = "text";
+    textoNick.name = "nick";
+    textoNick.value = nick;
+    textoNick.id = "nick-" + usename;
+    labelNick.append(textoNick);
 
-    const textoAlmohadilla = document.createElement("input");
+    const labelAlmohadilla = document.createElement("label");
+    labelAlmohadilla.classList.add("account-label");
+    labelAlmohadilla.htmlFor = "almohadilla-" + usename;
+    labelAlmohadilla.textContent = ""
+    
+    const textoAlmohadilla = document.createElement("p");
     textoAlmohadilla.classList.add("almohadilla");
-    textoAlmohadilla.setAttribute("type", "text");
-    textoAlmohadilla.setAttribute("name", "almohadilla");
-    textoAlmohadilla.disabled = true
+    textoAlmohadilla.textContent = "#";
+
     textoAlmohadilla.value = "#";
+
+    const labelTag = document.createElement("label");
+    labelTag.classList.add("account-label");
+    labelTag.htmlFor = "tag-" + usename; 
+    labelTag.textContent = ""
 
     const textoTag = document.createElement("input");
     textoTag.classList.add("nick");
     textoTag.setAttribute("type", "text");
     textoTag.setAttribute("name", "tag");
     textoTag.value = tag;
-
-    const nickCompleto = textoNick.value + " #" + textoTag.value
+    textoTag.id = "tag-" + usename;
 
     const textoRango = document.createElement("p");
     textoRango.classList.add("rango");
@@ -205,32 +220,42 @@ function cargarInputs(
     textoRango.setAttribute("name", "rango");
     textoRango.value = rango;
 
+    const labelUsername = document.createElement("label");
+    labelUsername.classList.add("account-label");
+    labelUsername.htmlFor = "username-" + usename; 
+    labelUsername.textContent = ""
+
     const textoUsername = document.createElement("input");
     textoUsername.setAttribute("type", "text");
     textoUsername.setAttribute("name", "username");
     textoUsername.classList.add("username");
     textoUsername.value = usename;
+    textoUsername.id = "username-" + usename;
+
+    const labelPassword = document.createElement("label");
+    labelUsername.classList.add("account-label");
+    labelPassword.htmlFor = "password-" + usename; 
+    labelPassword.textContent = ""
 
     const textoPassword = document.createElement("input");
     textoPassword.setAttribute("type", "password");
     textoPassword.setAttribute("name", "password");
-    textoPassword.id = "password"
     textoPassword.classList.add("password");
     textoPassword.value = password;
+    textoPassword.id = "password-" + usename;
+
 
     const btnVerPassword = document.createElement("span")
     btnVerPassword.classList.add("toggle-password")
     btnVerPassword.innerHTML = "👁️"
 
-
     btnVerPassword.onclick = function () {
-        const passwordInput = document.getElementById("password");
-        const toggle = document.querySelector(".toggle-password");
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
+        const input = this.parentElement.querySelector(".password");   
+        if (input.type === "password") {
+            input.type = "text";
             toggle.textContent = "🙈";
         } else {
-            passwordInput.type = "password";
+            input.type = "password";
             toggle.textContent = "👁️";
         }
     }
@@ -239,13 +264,23 @@ function cargarInputs(
     infoRango.classList.add("div-cuenta");
     infoRango.setAttribute("data-username", usename);
 
-    infoRango.append(textoNick);
+     infoRango.append(labelNick);
+    labelNick.appendChild(textoNick);
+
     infoRango.append(textoAlmohadilla);
-    infoRango.append(textoTag);
+
+    infoRango.append(labelTag);
+    labelTag.appendChild(textoTag);
+
     infoRango.append(textoRango);
-    infoRango.append(textoUsername);
-    infoRango.append(textoPassword);
-    infoRango.append(btnVerPassword)
+
+    infoRango.append(labelUsername);
+    labelUsername.appendChild(textoUsername);
+
+    infoRango.append(labelPassword);
+    labelPassword.appendChild(textoPassword);
+
+    infoRango.append(btnVerPassword);
 
 
     const divBtn = document.createElement("div");
@@ -307,15 +342,18 @@ function cargarInputs(
 
         const btnEditar = document.createElement("button");
         btnEditar.innerHTML = "Editar cuenta";
-        btnEditar.classList.add("btn-guardar-cambios");
+        //btnEditar.classList.add("btn-guardar-cambios");
+        btnEditar.classList.add("btn-editar-cuenta");
 
         const btnEliminar = document.createElement("button");
         btnEliminar.innerHTML = "Eliminar cuenta";
-        btnEliminar.classList.add("btn-deshacer-cambios");
+        //btnEliminar.classList.add("btn-deshacer-cambios");
+        btnEliminar.classList.add("btn-eliminar-cuenta");
+
 
         const btnCopiarPassword = document.createElement("button");
         btnCopiarPassword.innerHTML = "Copiar contraseña";
-        btnCopiarPassword.classList.add("btn-password");
+        btnCopiarPassword.classList.add("btn-copiar-password");
 
         btnEditar.onclick = function () {
             editarCuenta(
@@ -376,8 +414,10 @@ function editarCuenta(
 ) {
     textoNick.readOnly = false;
     textoTag.readOnly = false;
-    textoUsername.readOnly = false;
+    //textoUsername.readOnly = false;
     textoPassword.readOnly = false;
+
+    textoUsername.onclick = function(){ alert("No se puede cambiar el nombre de la cuenta para iniciar sesión") }
 
     const btnGuardarCambios = document.createElement("button");
     btnGuardarCambios.innerHTML = "Guardar cambios";
@@ -640,7 +680,7 @@ function agregarImgRango(rango, textoNick) {
             imgRango.src = "/valopass/public/resources/img_rangos/unranked.png";
             break;
     }
-
+    imgRango.alt = rango;
     textoNick.append(imgRango);
 }
 
