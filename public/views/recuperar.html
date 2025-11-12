@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/valopass/public/resources/favicon.ico">
+
+  <title>Crear usuario - Valopass</title>
+  <link rel="stylesheet" href="/valopass/public/views/styles/crear-usuario.css">
+
+</head>
+
+<body>
+  <img class="logo" src="/valopass/public/resources/logo.png"></img>
+  <div id="div-cambiar-password" class="cambiar-password">
+    <h2>Contraseña perdida</h2>
+    <form id="crear-cuenta" action="/valopass/server/set-new-password.php" method="POST">
+
+      <div class="form-group" id="correo-form">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" name="email" class="email" placeholder="valopass@danidiaz.site" required>
+      </div>
+
+      <div class="msg-err-pass">
+        <div>
+          <button id="btn-crear-cuenta" type="submit" class="login-btn">Cambiar contraseña</button>
+          <a href="/valopass/" id="tengo-cuenta" class="crear-cuenta" disabled>Ya recuerdo la contraseña</a>
+    </form>
+  </div>
+
+
+
+  <script>
+  </script>
+</body>
+
+</html>

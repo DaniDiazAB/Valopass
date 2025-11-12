@@ -145,5 +145,7 @@ cors-proxy/
 
 public/style.css
 
+# Composer
+/vendor/
 
 # End of https://www.toptal.com/developers/gitignore/api/node

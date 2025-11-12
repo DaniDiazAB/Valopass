@@ -103,7 +103,7 @@ if (isset($_SESSION["usuario_id"])) {
     const mensajeSegura = document.getElementById("mensaje-segura")
 
     function validarPasswords() {
-      /*
+      
       const passwordSegura = esPasswordSegura(passwordUno.value)
       
       if (passwordSegura) {
@@ -119,7 +119,7 @@ if (isset($_SESSION["usuario_id"])) {
       } else {
         mensajeSegura.removeAttribute("hidden")
       }
-        */
+      
     } 
 
     function esPasswordSegura(password) {

@@ -54,7 +54,7 @@ if (isset($_SESSION["usuario_id"])) {
       </div>
 
       <button id="btn-login" type="submit" class="login-btn">Entrar</button>
-      <a href="/valopass/" id="password-olvidada" class="form-btn">¿Has olvidado la contraseña?</a>
+      <a href="/valopass/recuperar" id="password-olvidada" class="form-btn">¿Has olvidado la contraseña?</a>
       <a href="/valopass/crear-usuario" id="crear-usuario" class="form-btn">¿No eres usuario?</a>
     </form>
   </div>

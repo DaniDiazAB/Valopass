@@ -153,3 +153,9 @@ input:focus {
 .cookie-banner.hidden {
   display: none;
 }
+
+.form-btn{
+  display: block;
+  margin-bottom: 1em;
+
+}
