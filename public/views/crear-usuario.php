@@ -37,7 +37,7 @@ if (isset($_SESSION["usuario_id"])) {
   <img class="logo" src="/valopass/public/resources/logo.png"></img>
   <div id="div-crear-cuenta" class="crear-cuenta-container">
     <h2>Crear cuenta</h2>
-    <form id="crear-cuenta" action="/valopass/server/registrar-usuario.php" method="POST">
+    <form id="crear-cuenta" action="/valopass/server/set-new-user.php" method="POST">
 
       <div class="form-group">
         <label for="username">Nombre de usuario</label>

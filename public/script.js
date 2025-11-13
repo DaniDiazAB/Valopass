@@ -87,7 +87,7 @@ function cargarNavegacion() {
 }
 
 function getCuentas(isTodasCuentas) {
-    fetch("/valopass/server/get-cuentas.php", {
+    fetch("/valopass/server/get-accounts.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -147,7 +147,7 @@ function getRangos(nick, tag, username, password, divCuentas) {
         username: username,
     };
 
-    fetch("/valopass/server/get-rangos.php", {
+    fetch("/valopass/server/get-ranks.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -431,7 +431,7 @@ function editarCuenta(
 
     let isChecked = false;
 
-    fetch("/valopass/server/get-cuenta-publica.php", {
+    fetch("/valopass/server/get-publics-accounts.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: textoNick.value }),
@@ -525,7 +525,7 @@ function modificarCambios(
     };    
     
     
-    fetch("/valopass/server/guardar-cambios-cuentas.php", {
+    fetch("/valopass/server/set-changes-accounts.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -563,7 +563,7 @@ function guardarNuevaCuenta(
     };   
      
 
-    fetch("/valopass/server/crear-nueva-cuenta.php", {
+    fetch("/valopass/server/set-new-account.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -693,6 +693,15 @@ function actualizarImagenRango(username, nuevoRango) {
         "Platinum 2": "/valopass/public/resources/img_rangos/plat2.png",
         "Platinum 3": "/valopass/public/resources/img_rangos/plat3.png",
         "Diamond 1": "/valopass/public/resources/img_rangos/dia1.png",
+        "Diamond 2": "/valopass/public/resources/img_rangos/dia2.png",
+        "Diamond 3": "/valopass/public/resources/img_rangos/dia3.png",
+        "Ascendent 1": "/valopass/public/resources/img_rangos/asc1.png",
+        "Ascendent 2": "/valopass/public/resources/img_rangos/asc2.png",
+        "Ascendent 3": "/valopass/public/resources/img_rangos/asc3.png",
+        "Immortal 1": "/valopass/public/resources/img_rangos/imm1.png",
+        "Immortal 2": "/valopass/public/resources/img_rangos/imm2.png",
+        "Immortal 3": "/valopass/public/resources/img_rangos/imm3.png",
+        "Radiant": "/valopass/public/resources/img_rangos/radiant.png",
     };
 
     const cuentaDiv = document.querySelector(
