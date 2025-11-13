@@ -1,67 +1,73 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Valopass - Aviso legal</title>
+  <meta name="description" content="Aviso informativo sobre la demo incluida en el portfolio: uso de datos, cookies de sesión y acceso al código en GitHub." />
+  <link rel="stylesheet" href="/valopass/public/views/styles/aviso.css">
+
   <link rel="icon" type="image/x-icon" href="/valopass/public/resources/favicon.ico">
 
-  <title>Aviso Legal — Valopass (Demo)</title>
-  <link rel="stylesheet" type="text/css" href="/valopass/public/views/styles/aviso.css">
-  
 </head>
 <body>
-  <div class="container" role="main">
+  <div class="container">
     <header>
-      <div class="logo">VP</div>
+      <img class="logo" src="/valopass/public/resources/logo.png"></img>
       <div>
-        <h1>Aviso Legal — Live Demo de ValoPass</h1>
-        <p class="lead">Advertencia sobre el uso del entorno de demostración (live demo) y el tratamiento de datos.</p>
+        <h1>Aviso informativo — Live Demo</h1>
+        <div class="muted">Última actualización: 13 de noviembre de 2025</div>
       </div>
     </header>
 
-    <section class="card">
-      <div class="important">
-        <strong>IMPORTANTE — DEMO NO SEGURO</strong>
-        <p style="margin:6px 0 0;color:var(--muted)">Esta versión en línea es <strong>únicamente una demo</strong> para mostrar el funcionamiento de la aplicación. <strong>Aunque no se almacenen datos se recomienda no introducir ningún tipo de información</strong>
-      </div>
+    <div class="card">
+      <section>
+        <h2>1. Finalidad de la demo</h2>
+        <p>Esta página web es una <strong>demostración técnica</strong> creada con fines de portfolio personal. No se trata de una plataforma de pruebas ni de un servicio funcional. Su propósito es únicamente <strong>mostrar mis capacidades de desarrollo</strong> (diseño, estructura, interacción, etc.).</p>
+        <div class="note">
+          No es posible realizar pruebas reales con datos ni ejecutar procesos persistentes. La demo muestra el funcionamiento visual de la aplicación.
+        </div>
+      </section>
 
-      <h2 style="margin-top:8px">¿Cómo se almacenan los datos?</h2>
-      <p>En esta demo, las cuentas de Valorant (las que aparecen en la lista de "cuentas") <strong>no almacenan las contraseñas cifradas en la base de datos</strong>. Es decir, las contraseñas relacionadas con las cuentas que se ven en la demo <strong>están guardadas en texto plano</strong> en la base de datos de demostración. Por el contrario, las contraseñas de los usuarios que se registran en la aplicación (login) <strong>sí están encriptadas</strong> según el comportamiento actual de la aplicación.</p>
+      <section>
+        <h2>2. Datos introducidos</h2>
+        <p>Durante la visualización de la demo, el sistema puede simular el almacenamiento de información en la base de datos. Sin embargo, <strong>los datos no se guardan realmente</strong> ni se conservan tras finalizar la sesión.</p>
+        <p><strong>No se recomienda introducir datos personales o sensibles</strong>, ya que la finalidad es únicamente expositiva.</p>
+      </section>
 
-      <h3>Resumen rápido</h3>
-      <ul>
-        <li><strong>No almacenar datos sensibles:</strong>, aunque no se guarden evita introducir contraseñas reales en la demo.</li>
-        <li><strong>Demo visible públicamente:</strong> la demo está pensada para mostrar funcionalidad, no para operar en producción.</li>
-        <li><strong>Código abierto:</strong> puedes descargar, revisar y modificar el código desde el repositorio del proyecto.</li>
-      </ul>
+      <section>
+        <h2>3. Acceso a la demo</h2>
+        <p>No existe la posibilidad de crear nuevas cuentas ni realizar registros de usuario. El acceso está limitado a un usuario genérico disponible para la demostración:</p>
+        <div class="example">
+          Usuario: <strong>Dani</strong><br>
+          Contraseña: <strong>ABCdfg456@_</strong>
+        </div>
+        <p>Este usuario permite visualizar la interfaz general de la aplicación, sin funcionalidades de registro, recuperación de contraseña o gestión de cuentas.</p>
+      </section>
 
-      <div class="tips">
-        <strong>Recomendaciones de seguridad (para quien use o instale el código):</strong>
-        <ul>
-          <li>Usa <code>password_hash</code> / <code>password_verify</code> en PHP para almacenar contraseñas de forma segura.</li>
-          <li>Aplica consultas preparadas / parámetros enlazados para evitar inyecciones SQL.</li>
-          <li>Protege la aplicación con HTTPS y controla el acceso a la base de datos.</li>
-          <li>Si publicas una instancia en producción, encripta todas las contraseñas y datos sensibles, y no reutilices contraseñas reales de usuarios.</li>
-        </ul>
-      </div>
+      <section>
+        <h2>4. Cookies</h2>
+        <p>Esta demo utiliza únicamente <strong>cookies esenciales</strong> necesarias para mantener la sesión activa (por ejemplo, la cookie de sesión PHP). No se emplean cookies de seguimiento, analítica ni de terceros.</p>
+      </section>
 
-      <p><a class="btn" href="login">Volver al login</a></p>
+      <section>
+        <h2>5. Código fuente</h2>
+        <p>El <strong>código completo</strong> de esta demo está disponible públicamente en GitHub. En el repositorio se incluye una explicación detallada sobre cómo instalar y configurar la aplicación en un servidor propio.</p>
+        <p>Puedes acceder al repositorio en:</p>
+        <p><a href="https://github.com/DaniDiazAB/Valopass" target="_blank" rel="noopener noreferrer">🔗 Ver el proyecto en GitHub</a></p>
+      </section>
 
-
-      <p style="margin-top:12px">El repositorio con el código fuente, instrucciones e historial está disponible en GitHub:</p>
-      <p><a class="btn" href="https://github.com/DaniDiazAB/Valopass" target="_blank" rel="noopener">Abrir repositorio en GitHub</a></p>
+      <section>
+        <h2>6. Uso y responsabilidad</h2>
+        <p>Esta demo no gestiona información real ni ofrece garantías de funcionamiento continuo. Se proporciona “tal cual”, con el único objetivo de mostrar un ejemplo funcional dentro del portfolio personal.</p>
+        <p>El autor no se hace responsable del uso indebido que se pueda hacer del código ni de los datos introducidos durante la demostración.</p>
+      </section>
+        <p><a href="/valopass/" rel="noopener noreferrer">Volver al inicio</a></p>
 
       <footer>
-        <div>Última actualización: <span id="year"></span></div>
-        <div style="text-align:right">Contacto del autor: <em> danidiazab@hotmail.com </em></div>
+        <p>© 2025 — Proyecto de demostración personal. Este contenido forma parte del portfolio del desarrollador y no representa una empresa ni un servicio comercial.</p>
       </footer>
-    </section>
-
+    </div>
   </div>
-
-  <script>
-    // Rellenar año dinámicamente
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>

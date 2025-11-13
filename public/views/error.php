@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Error 404 - Página no encontrada</title>
-  <link rel="stylesheet" href="/valopass/public/resources/styles/error.css">
+  <link rel="stylesheet" href="/valopass/public/views/styles/error.css">
+
+
 </head>
 <body>
   <h1>404 - Página no encontrada</h1>

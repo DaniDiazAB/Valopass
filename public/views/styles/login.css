@@ -1,97 +1,103 @@
-/* === LOGIN.CSS === */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+/* ----- login.css ----- */
+:root {
+  --bg: #0e0f13;
+  --bg-card: #1a1c22;
+  --text: #e4e6eb;
+  --muted: #9b9ca1;
+  --accent: #ff4655;
+  --accent-hover: #ff6a75;
+  --border: #2a2b31;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 body {
-  background-color: #0f0f0f;
-  color: #f5f5f5;
+  background: var(--bg);
+  color: var(--text);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1.5rem;
+}
+
+.logo {
+  width: 110px;
+  margin: 0 auto 1rem auto;
+  display: block;
 }
 
 .login-container {
-  background: #1a1a1a;
-  padding: 30px;
-  border-radius: 12px;
-  width: 320px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  text-align: center;
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
-  color: #ff4655;
+  margin-bottom: 1.5rem;
+  color: var(--accent);
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
   position: relative;
 }
 
 label {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
-  color: #ccc;
+  font-size: .9rem;
+  margin-bottom: .4rem;
+  text-align: left;
 }
 
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px 40px 10px 10px;
-  border: 1px solid #333;
+input {
+  background: #23252b;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: #2a2a2a;
-  color: #fff;
-  font-size: 1rem;
-}
-
-input:focus {
-  border-color: #ff4655;
-  outline: none;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 35px;
-  cursor: pointer;
-  color: #aaa;
-  font-size: 0.9rem;
+  color: var(--text);
+  padding: .6rem;
+  padding-right: 2.5rem;
 }
 
 .login-btn {
-  width: 100%;
-  padding: 12px;
-  background: #ff4655;
-  color: white;
+  background: var(--accent);
   border: none;
   border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  padding: .7rem;
+  width: 100%;
   cursor: pointer;
-  transition: background 0.2s;
+  margin-top: .6rem;
+  transition: background .2s;
 }
+.login-btn:hover { background: var(--accent-hover); }
 
-.login-btn:hover {
-  background: #e63b4a;
-}
-
-.forgot-password {
-  display: block;
+.form-btn {
   text-align: center;
-  margin-top: 12px;
-  font-size: 0.85rem;
-  color: #4da6ff;
+  display: block;
+  color: var(--muted);
+  margin-top: .8rem;
   text-decoration: none;
+  font-size: .85rem;
 }
+.form-btn:hover { color: var(--accent); }
 
-.forgot-password:hover {
-  color: #80c0ff;
+.toggle-password {
+  position: absolute;
+  right: 0.8rem;
+  top: 2.2rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  user-select: none;
 }
 
 .cookie-banner {
@@ -99,63 +105,32 @@ input:focus {
   bottom: 0;
   left: 0;
   right: 0;
-  background: #0b1220;
-  color: #fff;
-  font-family: "Segoe UI", sans-serif;
-  padding: 16px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
-  z-index: 9999;
-}
-
-.cookie-banner p {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 1rem;
   text-align: center;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.cookie-banner a {
-  color: #7dd3fc;
-  text-decoration: none;
+  color: var(--muted);
+  font-size: .9rem;
 }
 
 .cookie-buttons {
-  display: flex;
-  gap: 8px;
+  margin-top: .5rem;
 }
 
 .cookie-btn {
+  background: var(--accent);
   border: none;
   border-radius: 8px;
-  padding: 8px 14px;
+  padding: .5rem .9rem;
+  color: white;
+  margin: 0 .3rem;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
 }
+.cookie-btn.rechazar { background: #333; }
+.cookie-btn:hover { opacity: .9; }
 
-.aceptar {
-  background: #4ade80;
-  color: #071533;
-}
+.hidden { display: none; }
 
-.rechazar {
-  background: #f87171;
-  color: #fff;
-}
-
-.config {
-  background: #7dd3fc;
-  color: #071533;
-}
-
-.cookie-banner.hidden {
-  display: none;
-}
-
-.form-btn{
-  display: block;
-  margin-bottom: 1em;
-
+@media (max-width: 480px) {
+  .login-container { padding: 1.3rem; }
 }

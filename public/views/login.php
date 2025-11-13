@@ -24,12 +24,13 @@ if (isset($_SESSION["usuario_id"])) {
   <title>Login - Valopass</title>
   <link rel="stylesheet" href="/valopass/public/views/styles/login.css">
 
+
 </head>
 
 <body>
-  <img class="logo" src="/valopass/public/resources/logo.png"></img>
   <div id="div-login" class="login-container">
-    <h2>Iniciar Sesión</h2>
+    <img class="logo" src="/valopass/public/resources/logo.png"></img>
+    
     <form id="login" action="/valopass/server/login.php" method="POST">
       <div class="form-group">
         <label for="username">Nombre de usuario</label>
@@ -61,13 +62,10 @@ if (isset($_SESSION["usuario_id"])) {
 
   <div id="cookie-banner" class="cookie-banner">
     <p>
-      Utilizamos cookies propias para analizar el tráfico y mejorar tu experiencia.
-      Si no las aceptas no podrás usar la aplicación.
+      Solo se usan cookies propias y esenciales para el uso de la aplicación.
     </p>
     <div class="cookie-buttons">
       <a href="/valopass/aviso" class="aviso-legal">AVISO LEGAL</a>
-      <button id="acceptCookies" class="cookie-btn aceptar">Aceptar</button>
-      <button id="rejectCookies" class="cookie-btn rechazar">Rechazar</button>
     </div>
   </div>
 
