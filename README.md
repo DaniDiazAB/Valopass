@@ -20,6 +20,16 @@ Puedes acceder a la versión de demostración en:
 > - **Contraseña:** `ABCdfg456@_`
 
 ---
+# 📘 Funcionalidades actuales
+
+- **Gestión de cuentas de Valorant**. Puedes ver el usuario y la contraseña de las cuentas, además del rango.
+- **Encriptación y desencriptación segura de contraseñas de cuentas**. Las contraseñas de las cuentas se guardan cifradas en base de datos, pero son descifradas para que los usuarios puedan verlas.
+- **Contraseñas de usuarios con hash seguro**.
+- **Permisos básicos de visibilidad**. Puedes elegir si todo el mundo puede ver tus cuentas o solo tú.
+- **Vinculación cuenta ↔ usuario**. Solo el propietario de la cuenta puede modificar datos de ella.
+- **Recuperación de contraseña por email**. En caso de perdida de la contraseñas se puede solicitar una nueva por correo electrónico
+
+---
 
 ## 🛠️ Tecnologías utilizadas
 
@@ -75,4 +85,32 @@ Este proyecto está abierto a mejoras. Si quieres contribuir:
 3. Envía un pull request.
 
 ---
+
+# 🔮 Roadmap — Versión 2.0 (2026)
+
+Estas son las funcionalidades previstas para la actualización que llegará durante el 2026:
+
+## 🧑‍💻 Creación de "Mi Perfil"
+
+- **Tus cuentas**  
+- **Estadísticas**  
+- **Poder cambiar la contraseña, correo y nombre de usuario**
+
+## 🌐 Primer paso hacia una red social
+
+- **Añadir amigos**  
+- **Ver cuentas de tus amigos**  
+- **Nuevo apartado social**
+
+## 🗄️ Mejoras internas
+- **Nueva organización de la Base de Datos**
+- **Más seguridad**
+- **Mejoras en el CSS**
+
+## 🎨 Mejoras de usabilidad general
+
+## 🔑 Mejora del sistema de cambio de contraseña
+
+
+
 
