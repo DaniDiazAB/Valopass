@@ -1,88 +1,75 @@
-# Proyecto Web
+# ValoPass
 
-Este proyecto es una aplicación web que utiliza **PHP** para la lógica de servidor y **MySQL** como base de datos.  
-El **CSS** y este READ.ME que encontrarás en este repositorio fueron generado con ayuda de **Inteligencia Artificial (IA)**.  
-Aunque esto permitió avanzar rápido, **todavía faltan algunos puntos clave por completar y mejorar**, por lo que este repositorio debe considerarse una **versión en desarrollo**.
-
-# AVISO DEL LIVE DEMO
-IMPORTANTE: El uso de la aplicación en el live demo no funciona correctamente y realmente nunca fue utilizado con un propósito de uso real. Este proyecto es únicamente una demostración técnica y educativa. Por esta razón, el proyecto cuenta con un documento .HTML de aviso al usuario que explica las limitaciones y el propósito educativo de esta demostración.
+ValoPass es una aplicación web desarrollada con **JavaScript** y **PHP Vanilla** cuyo objetivo es gestionar cuentas de Valorant de forma sencilla y centralizada.  
+Este proyecto **no está pensado aún para un uso real**, sigue en desarrollo activo, y todo su **CSS** así como este **README** han sido generados íntegramente por IA.
 
 ---
 
-## Características principales
+## 🚀 Live Demo
 
-- Aplicación web con conexión a base de datos MySQL.
-- Estructura modular que separa el cliente (frontend) del servidor (backend).
-- Estilos generados parcialmente con IA (pueden necesitar ajustes).
-- Página de muestra incluida para referencia visual y de estructura.
-- Fácil de probar en local con una configuración mínima.
+Puedes acceder a la versión de demostración en:
+
+**[https://danidiaz.site/valopass/](https://danidiaz.site/valopass/)**
+
+> ⚠️ Debido a que es una *Live Demo* pública, para evitar ataques y cumplir con la legislación:
+> - **No se pueden registrar nuevos usuarios**
+> - **No se pueden crear nuevas cuentas**
+>
+> Para entrar en la demo, tienes disponible este usuario:
+> - **Usuario:** `Dani`  
+> - **Contraseña:** `ABCdfg456@_`
+
+---
+# 📘 Funcionalidades actuales
+
+- **Gestión de cuentas de Valorant**. Puedes ver el usuario y la contraseña de las cuentas, además del rango.
+- **Encriptación y desencriptación segura de contraseñas de cuentas**. Las contraseñas de las cuentas se guardan cifradas en base de datos, pero son descifradas para que los usuarios puedan verlas.
+- **Contraseñas de usuarios con hash seguro**.
+- **Permisos básicos de visibilidad**. Puedes elegir si todo el mundo puede ver tus cuentas o solo tú.
+- **Vinculación cuenta ↔ usuario**. Solo el propietario de la cuenta puede modificar datos de ella.
+- **Recuperación de contraseña por email**. En caso de perdida de la contraseñas se puede solicitar una nueva por correo electrónico
 
 ---
 
-## Requisitos previos
+## 🛠️ Tecnologías utilizadas
 
-Antes de instalar y probar el proyecto, asegúrate de tener:
-
-- [PHP 7.4+](https://www.php.net/downloads) o superior
-- [MySQL 5.7+](https://dev.mysql.com/downloads/) o superior
-- Servidor web (por ejemplo [XAMPP](https://www.apachefriends.org/) o [WAMP](https://www.wampserver.com/))
-- Navegador web moderno (Chrome, Firefox, Edge, etc.)
+- **PHP Vanilla**  
+- **JavaScript Vanilla**  
+- **CSS generado automáticamente por IA**  
+- **Composer** (para la gestión de dependencias y envío de emails)  
 
 ---
 
-## Configuración inicial
+## 🔐 Seguridad y gestión de contraseñas
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/usuario/proyecto-web.git
-   ```
+ValoPass incluye diferentes niveles de seguridad, tanto para usuarios como para cuentas gestionadas:
 
-2. **Configurar la base de datos**  
-   - Crear una nueva base de datos en MySQL.
-   - Importar el archivo `database.sql` (si existe en el proyecto).
-   - Editar el archivo `Server/db.php` y colocar tus credenciales de conexión:
-     ```php
-     $host = "localhost";  // Cambiar si usas un host distinto
-     $user = "usuario";    // Tu usuario de MySQL
-     $pass = "contraseña"; // Tu contraseña de MySQL
-     $db   = "basedatos";  // El nombre de tu base de datos
-     ```
+### ✔ Recuperación de contraseñas (solo versión real)
+Si un usuario pierde su contraseña, puede solicitar una nueva.  
+La aplicación enviará una nueva contraseña por correo electrónico.  
+> *(En la Live Demo esta funcionalidad está deshabilitada)*
 
-3. **Activar la ejecución en local**  
-   - Abrir el archivo principal de configuración.
-   - Buscar la línea con el comentario:
-     ```php
-     // PARA USO LOCAL
-     ```
-   - **Descomentar esa línea** y **comentar la línea anterior**, para que la aplicación funcione correctamente en tu entorno local.
+### ✔ Encriptación de contraseñas de cuentas
+Las contraseñas de las *cuentas guardadas* se encriptan en la base de datos.  
+Cuando el usuario las consulta, se **desencriptan temporalmente** para mostrarlas.
+
+### ✔ Hash seguro para contraseñas de usuarios
+Las contraseñas de los usuarios **se almacenan con hash** en la base de datos mediante funciones seguras de PHP (ej. `password_hash`).
 
 ---
 
-## Ejecución en local
+## 📦 Manual de instalación
 
-1. Levanta tu servidor Apache/MySQL (ej. con XAMPP/WAMP).
-2. Accede desde tu navegador a:
-   ```
-   http://localhost/proyecto-web/
-   ```
+Descarga haciendo click aquí un PDF para instalar el proyecto, ya sea en localhost o en un servidor público:
+
+https://danidiaz.site/valopass/manualinstalacion.pdf
 
 ---
 
-## Página de muestra
-
-Para ver este proyecto puedes acceder a: https://danidiaz.site/valopass/public/views/login.html
-Usuario: Demo
-Contraseña: UsuarioDemo
-
----
-
-## Limitaciones actuales
-
-- Faltan implementar algunas funciones clave (pendientes de desarrollo).
-- Los estilos generados automáticamente pueden necesitar refactorización.
-- La seguridad no ha sido auditada (no usar en producción sin revisiones).
-- La documentación es inicial y se ampliará a medida que el proyecto crezca.
-- En la Pre-Release puedes ver las siguientes mejoras: https://github.com/DaniDiazAB/Valopass/releases/tag/pre-relase
+### 1️⃣ Clonar el proyecto
+```bash
+git clone https://github.com/tu-repo/valopass.git
+cd valopass
 
 ---
 
@@ -99,9 +86,31 @@ Este proyecto está abierto a mejoras. Si quieres contribuir:
 
 ---
 
-## Notas finales
+# 🔮 Roadmap — Versión 2.0 (2026)
 
-Este proyecto debe entenderse como una **base inicial**:  
-sirve para aprender, probar o construir sobre él, pero **no está listo para usarse directamente en un entorno de producción**.
+Estas son las funcionalidades previstas para la actualización que llegará durante el 2026:
 
----
+## 🧑‍💻 Creación de "Mi Perfil"
+
+- **Tus cuentas**  
+- **Estadísticas**  
+- **Poder cambiar la contraseña, correo y nombre de usuario**
+
+## 🌐 Primer paso hacia una red social
+
+- **Añadir amigos**  
+- **Ver cuentas de tus amigos**  
+- **Nuevo apartado social**
+
+## 🗄️ Mejoras internas
+- **Nueva organización de la Base de Datos**
+- **Más seguridad**
+- **Mejoras en el CSS**
+
+## 🎨 Mejoras de usabilidad general
+
+## 🔑 Mejora del sistema de cambio de contraseña
+
+
+
+
