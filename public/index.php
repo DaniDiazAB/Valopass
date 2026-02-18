@@ -5,6 +5,8 @@ if (!isset($_SESSION["usuario_id"])) {
     header("Location: /valopass/login");
     exit;
 }
+$username = $_SESSION['usuario'] ?? '';
+
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +18,10 @@ if (!isset($_SESSION["usuario_id"])) {
 
     <title>Valopass - Gestor de cuentas de Valorant</title>
     <link rel="stylesheet" type="text/css" href="/valopass/public/style.css">
+
+    <script>
+        const usernameSesion = <?php echo json_encode($username); ?>;
+    </script>
 </head>
 <body>
     <h1 id="title"><img class="logo" src="/valopass/public/resources/logo.png"  alt="Valopass"></img></h1>

@@ -1,101 +1,264 @@
 /* === INDEX.CSS === */
 body {
-background-color: #0e0f13;
-color: #e4e6eb;
-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-margin: 0;
-padding: 0;
+    background-color: #0e0f13;
+    color: #e4e6eb;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 /* NAVBAR */
 .nav {
-display: flex;
-gap: 16px;
-background: #1a1c22;
-padding: 12px 20px;
-border-bottom: 2px solid #ff4655;
+    display: flex;
+    gap: 16px;
+    background: #1a1c22;
+    padding: 12px 20px;
+    border-bottom: 2px solid #ff4655;
 }
 
 .enlace-nav {
-color: #e4e6eb;
-text-decoration: none;
-font-size: 0.95rem;
-cursor: pointer;
-transition: color 0.2s;
+    color: #e4e6eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s;
 }
 
 .enlace-nav:hover {
-color: #ff4655;
+    color: #ff4655;
+}
+
+.enlace-final {
+    color: #e4e6eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-left: auto;
+}
+
+.enlace-final:hover {
+    color: #ff4655;
 }
 
 .nav-marcado {
-color: #ff4655 !important;
-font-weight: bold;
+    color: #ff4655 !important;
+    font-weight: bold;
 }
 
 /* CUENTAS */
 #cuentas {
-padding: 20px;
-display: flex;
-flex-direction: column;
-gap: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .div-cuenta {
-background: #1a1c22;
-border-radius: 10px;
-padding: 12px;
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-gap: 10px;
-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    background: #1a1c22;
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 input[type="text"],
 input[type="password"] {
-background: #23252b;
-border: 1px solid #2a2b31;
-border-radius: 6px;
-color: #e4e6eb;
-padding: 6px 10px;
+    background: #23252b;
+    border: 1px solid #2a2b31;
+    border-radius: 6px;
+    color: #e4e6eb;
+    padding: 6px 10px;
 }
 
 .img-rango {
-width: 32px;
-height: 32px;
-margin-left: 6px;
+    width: 32px;
+    height: 32px;
+    margin-left: 6px;
 }
 
 .div-btn {
-display: flex;
-gap: 8px;
-flex-wrap: wrap;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 button {
-background: #ff4655;
-border: none;
-color: #fff;
-padding: 6px 10px;
-border-radius: 6px;
-cursor: pointer;
-transition: background 0.2s;
+    background: #ff4655;
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
 button:hover {
-background: #e63b4a;
+    background: #e63b4a;
 }
 
 .checkbox-publica {
-margin-left: 6px;
+    margin-left: 6px;
 }
 
-.logo{
-width: 320px;
-margin-left: 6px;
+.logo {
+    width: 320px;
+    margin-left: 6px;
 }
 
-.almohadilla{
-width: 10px;
+.almohadilla {
+    width: 10px;
+}
+
+
+/* PERFIL */
+body {
+    background: #0f1115;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #e4e6eb;
+}
+
+#title {
+    text-align: center;
+    margin: 50px 0 25px;
+}
+
+.div-perfil {
+    background: #1a1c22;
+    border-radius: 14px;
+    padding: 32px;
+    margin: 0 auto 40px;
+    margin-top: 10px;
+    max-width: 1100px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.div-perfil:empty {
+    display: none;
+}
+
+.div-perfil > h1 {
+    font-size: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 35px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ff4655;
+}
+
+.div-perfil .div-perfil {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.div-perfil-especializacion {
+    background: #23252b;
+    border-radius: 12px;
+    padding: 22px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+
+}
+
+.div-perfil-especializacion:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.div-perfil-especializacion h2 {
+    color: #ff4655;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.div-perfil-especializacion h4 {
+    font-weight: 400;
+    font-size: 0.95rem;
+    margin: 6px 0;
+    color: #b0b3b8;
+}
+
+.div-amigos .div-perfil-especializacion {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 15px;
+    box-shadow: none;
+}
+
+.div-amigos h3 {
+    font-size: 0.95rem;
+    margin: 12px 0;
+    cursor: pointer;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+#agregar-amigo:hover {
+    color: #4ade80;
+}
+
+#bloquear-usuario:hover {
+    color: #ff4655;
+}
+
+.user-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #14161b;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.user-item:hover {
+    background: #1f2229;
+    transform: scale(1.02);
+}
+
+.user-profile img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.user-info strong {
+    color: #ff4655;
+}
+
+.div-amigos h3:last-of-type {
+    font-size: 0.8rem;
+    text-align: right;
+    opacity: 0.7;
+}
+
+.div-amigos h3:last-of-type:hover {
+    opacity: 1;
+    color: #ff4655;
 }

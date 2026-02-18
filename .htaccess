@@ -24,9 +24,14 @@ RewriteRule ^login$ public/views/login.php [L]
 RewriteRule ^aviso$ public/views/aviso.html [L]
 RewriteRule ^recuperar$ public/views/recuperar.html [L]
 RewriteRule ^crear-usuario$ public/views/crear-usuario.php [L]
+# RewriteRule ^perfil$ public/views/perfil.php [L]
 
 # --- Opcional: manejar 404 personalizados ---
 ErrorDocument 404 /valopass/public/views/error.php
+
+
+RewriteRule ^([a-zA-Z0-9_-]+)$ public/views/perfil.php?user=$1 [L,QSA]
+
 
 
 

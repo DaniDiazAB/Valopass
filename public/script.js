@@ -13,6 +13,7 @@ const cuentas = document.createElement("a");
 const agregarCuenta = document.createElement("a");
 const cerrarSesion = document.createElement("a");
 const linkActualizarRangos = document.createElement("a");
+const linkPerfil = document.createElement("a");
 
 document.addEventListener("DOMContentLoaded", function () {
     cargarNavegacion();
@@ -57,33 +58,40 @@ cerrarSesion.onclick = function () {
         .catch((error) => console.error("Error:", error));
 };
 
-function cargarNavegacion() {
-    perfil.classList.add("enlace-nav");
-    perfil.innerHTML = "Mi perfil";
+linkPerfil.onclick = function (){
+    window.location.href = "/valopass/" + usernameSesion;
+}
 
-    cuentas.classList.add("enlace-nav");
-    cuentas.innerHTML = "Mis cuentas";
+
+function cargarNavegacion() {
 
     cuentasPublicas.classList.add("enlace-nav");
     cuentasPublicas.innerHTML = "Cuentas publicas";
 
-    agregarCuenta.classList.add("enlace-nav");
-    agregarCuenta.innerHTML = "Agregar cuenta";
-
-    cerrarSesion.classList.add("enlace-nav");
-    cerrarSesion.innerHTML = "Cerrar Sesión";
+    cuentas.classList.add("enlace-nav");
+    cuentas.innerHTML = "Mis cuentas";
 
     linkActualizarRangos.classList.add("enlace-nav");
     linkActualizarRangos.innerHTML = "Actualizar rangos";
 
+    agregarCuenta.classList.add("enlace-nav");
+    agregarCuenta.innerHTML = "Agregar cuenta";
+
+    linkPerfil.classList.add("enlace-nav");
+    linkPerfil.innerHTML = usernameSesion;
+
+    cerrarSesion.classList.add("enlace-final");
+    cerrarSesion.innerHTML = "Cerrar Sesión";
+
     title.insertAdjacentElement("afterend", navBar);
 
-    //navBar.append(perfil)
     navBar.append(cuentasPublicas);
     navBar.append(cuentas);
     navBar.append(linkActualizarRangos);
     navBar.append(agregarCuenta);
+    navBar.append(linkPerfil);
     navBar.append(cerrarSesion);
+
 }
 
 function getCuentas(isTodasCuentas) {
