@@ -17,6 +17,7 @@ $username = $_GET['user'] ?? '';
 $loginUsername = $_SESSION['usuario'] ?? '';
 $existe_perfil = true;
 $is_mismo_perfil = false;
+$is_cuenta_main = false;
 
 
 $usuario = null;
@@ -35,14 +36,12 @@ if (!empty($username)) {
         // conseguir el ID del perfil
         $stmt = $pdo->prepare('SELECT id_usuario AS id FROM usuarios WHERE nombre_usuario = :username');
         $stmt->execute(['username' => $username]);
-
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         $id_usuario_perfil = $resultado['id'];
 
         // conseguir el ID del perfil del usuario
         $stmt = $pdo->prepare('SELECT id_usuario AS id FROM usuarios WHERE nombre_usuario = :username');
         $stmt->execute(['username' => $loginUsername]);
-
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         $id_usuario_login = $resultado['id'];
 
@@ -52,32 +51,38 @@ if (!empty($username)) {
 
 
         // total de las cuentas del usuario
-        $stmt = $pdo->query('SELECT COUNT(*) AS total FROM cuentas_usuarios WHERE id_usuario = ' . $id_usuario_perfil);
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-        $total_cuentas_usuario = $resultado['total'];
+        $stmt = $pdo->prepare(
+            'SELECT COUNT(*) AS total FROM cuentas_usuarios WHERE id_usuario = ?'
+        );
+        $stmt->execute([$id_usuario_perfil]);
+        $total_cuentas_usuario = $stmt->fetchColumn();
 
         // total de los amigos del usuario
-        $stmt = $pdo->query('SELECT COUNT(*) AS total FROM amigos_usuarios where id_usuario_uno = ' . $id_usuario_perfil . ' OR id_usuario_dos = ' . $id_usuario_login);
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-        $total_amigos_usuario = $resultado['total'];
+        $stmt = $pdo->prepare(
+            'SELECT COUNT(*) FROM usuarios_amigos WHERE id_usuario_uno_usuarios_amigos = ? OR id_usuario_dos_usuarios_amigos = ?'
+        );
+        $stmt->execute([$id_usuario_perfil, $id_usuario_perfil]);
+        $total_amigos_usuario = $stmt->fetchColumn();
 
         // conseguir la fecha de registro del usuario
-        $stmt = $pdo->query('SELECT registro_usuario AS fecha FROM usuarios where id_usuario = ' . $id_usuario_perfil);
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-        $fecha_registro = $resultado['fecha'];
+        $stmt = $pdo->prepare(
+            'SELECT registro_usuario AS fecha FROM usuarios WHERE id_usuario = ?'
+        );
+        $stmt->execute([$id_usuario_perfil]);
+        $fecha_registro = $stmt->fetchColumn();
 
         // conseguir la cuenta main del usuario
-        $stmt = $pdo->query(
-            "
-                SELECT nombre_cuenta_main, tag_cuenta_main, elo_cuenta_main
-                FROM cuenta_main 
-                WHERE id_usuario_cuenta_main = " . $id_usuario_perfil
+        $stmt = $pdo->prepare(
+            'SELECT nombre_cuenta_main, tag_cuenta_main, elo_cuenta_main 
+            FROM cuenta_main 
+            WHERE id_usuario_cuenta_main = ?'
         );
+        $stmt->execute([$id_usuario_perfil]);
         $resultado_main = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $is_cuenta_main = false;
+        
 
-        if ($resultado) {
+        if ($resultado_main) {
             $nombre = $resultado_main['nombre_cuenta_main'] ?? '';
             $tag = $resultado_main['tag_cuenta_main'] ?? '';
             $elo = $resultado_main['elo_cuenta_main'] ?? '';
@@ -105,10 +110,11 @@ if (!empty($username)) {
 
     <script>
         const usernameSesion = <?php echo json_encode($loginUsername); ?>;
-        const nombreCuenta = "<?php echo $nombre; ?>";
-        const tagCuenta = "<?php echo $tag; ?>";
+        const nombreCuenta = <?php echo json_encode($nombre ?? ""); ?>;
+        const tagCuenta = <?php echo json_encode($tag ?? ""); ?>;
         const idPerfilUsuario = "<?php echo $id_usuario_perfil; ?>";
         const idUsuarioLogin = "<?php echo $id_usuario_login; ?>";
+        const totalAmigos = "<?php echo $total_amigos_usuario; ?>";
     </script>
 </head>
 
@@ -233,15 +239,15 @@ if (!empty($username)) {
 
 
     <div id="modal-confirmacion" class="modal">
-  <div class="modal-contenido">
-    <p id="modal-texto">¿Estás seguro?</p>
+        <div class="modal-contenido">
+            <p id="modal-texto">¿Estás seguro?</p>
 
-    <div class="modal-botones">
-      <button id="modal-confirmar">Confirmar</button>
-      <button id="modal-cancelar">Cancelar</button>
+            <div class="modal-botones">
+                <button id="modal-confirmar">Confirmar</button>
+                <button id="modal-cancelar">Cancelar</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 </body>
 <script src="/valopass/public/views/script.js">

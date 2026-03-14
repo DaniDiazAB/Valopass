@@ -8,7 +8,6 @@ const cuentasPublicas = document.createElement("a");
 const cuentas = document.createElement("a");
 const agregarCuenta = document.createElement("a");
 const cerrarSesion = document.createElement("a");
-
 const elementosInicio = [title, cuentas, cuentasPublicas, agregarCuenta];
 
 const linkActualizarRangos = document.createElement("a");
@@ -28,7 +27,6 @@ const btnEditarCuenta = document.getElementById("editar-cuenta");
 const btnEliminarCuenta = document.getElementById("eliminar-cuenta");
 
 let isCuentaMainAgregada = false;
-
 
 const datosCuentaMain = {
     nombreCuentaMain: null,
@@ -156,12 +154,9 @@ function funcionesBtns() {
         }
 
         btnEditarCuenta.onclick = function () {
-            
             crearInputs();
 
             btnGuardar.onclick = async function () {
-                
-                
                 const datos = {
                     nombreCuenta: btnNombreAgregarCuentaMain.value,
                     tagCuenta: btnTagAgregarCuentaMain.value
@@ -237,8 +232,6 @@ function crearInputs() {
     btnCancelar.textContent = "Cancelar";
     divEstadisticas.appendChild(btnCancelar);
 
-    //btnCancelar.onclick = location.reload;
-
 }
 
 function mostrarModal(texto, callbackConfirmar) {
@@ -263,12 +256,9 @@ function mostrarModal(texto, callbackConfirmar) {
 }
 
 cerrarSesion.onclick = async function () {
+
+    await fetch("/valopass/server/outlog.php");
+
     alert("Sesión cerrada");
     window.location.href = "/valopass/login";
-
-    fetch("/valopass/server/outlog.php")
-        .then((response) => response.json())
-        .then((data) => { })
-        .catch((error) => console.error("Error:", error));
-
 };
