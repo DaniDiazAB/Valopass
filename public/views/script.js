@@ -8,6 +8,9 @@ const cuentasPublicas = document.createElement("a");
 const cuentas = document.createElement("a");
 const agregarCuenta = document.createElement("a");
 const cerrarSesion = document.createElement("a");
+
+const elementosInicio = [title, cuentas, cuentasPublicas, agregarCuenta];
+
 const linkActualizarRangos = document.createElement("a");
 const linkPerfil = document.createElement("a");
 const btnNombreAgregarCuentaMain = document.createElement("input");
@@ -58,7 +61,6 @@ async function postJSON(url, data) {
     }
 }
 
-const elementosInicio = [title, cuentas, cuentasPublicas, agregarCuenta];
 
 elementosInicio.forEach(elemento => {
     elemento.addEventListener("click", () => {
@@ -91,16 +93,16 @@ function cargarEstadisticas() {
                 document.getElementById("elo-menor").innerHTML = "";
                 return;
             } else if (data.length === 1) {
-                document.getElementById("elo-mayor").innerHTML = 
-                `La cuenta con más elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
+                document.getElementById("elo-mayor").innerHTML =
+                    `La cuenta con más elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
 
             } else {
 
-                document.getElementById("elo-mayor").innerHTML = 
-                `La cuenta con más elo es: ${data[1].nick_cuenta} #${data[1].tag_cuenta} con un elo de ${data[1].rango_cuenta}`;
+                document.getElementById("elo-mayor").innerHTML =
+                    `La cuenta con más elo es: ${data[1].nick_cuenta} #${data[1].tag_cuenta} con un elo de ${data[1].rango_cuenta}`;
 
-                document.getElementById("elo-menor").innerHTML = 
-                `La cuenta con menos elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
+                document.getElementById("elo-menor").innerHTML =
+                    `La cuenta con menos elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
             }
         })
         .catch((error) => {
@@ -154,22 +156,22 @@ function funcionesBtns() {
         }
 
         btnEditarCuenta.onclick = function () {
+            
             crearInputs();
 
-            btnGuardar.id = "btnGuardarCuentaMain";
-            btnGuardar.textContent = "Guardar cuenta";
-            divEstadisticas.appendChild(btnGuardar);
-
-            btnCancelar.id = "btnCancelarCuentaMain";
-            btnCancelar.textContent = "Cancelar";
-            divEstadisticas.appendChild(btnCancelar);
-
             btnGuardar.onclick = async function () {
+                
+                
                 const datos = {
                     nombreCuenta: btnNombreAgregarCuentaMain.value,
                     tagCuenta: btnTagAgregarCuentaMain.value
                 };
-                await postJSON("/valopass/server/set-cuenta-main.php", datos);
+
+                await postJSON("/valopass/server/set-editar-cuenta-main.php", datos);
+                    location.reload();
+            }
+
+            btnCancelar.onclick = function () {
                 location.reload();
             }
 
@@ -196,11 +198,6 @@ function funcionesBtns() {
             linkAgregarCuentaMain.onclick = function () {
                 crearInputs();
 
-
-                btnGuardar.id = "btnGuardarCuentaMain";
-                btnGuardar.textContent = "Guardar cuenta";
-                divEstadisticas.appendChild(btnGuardar);
-
                 btnGuardar.onclick = async function () {
                     const datos = {
                         nombreCuenta: btnNombreAgregarCuentaMain.value,
@@ -210,13 +207,6 @@ function funcionesBtns() {
                     location.reload();
                 }
 
-                btnCancelar.id = "btnCancelarCuentaMain";
-                btnCancelar.textContent = "Cancelar";
-                divEstadisticas.appendChild(btnCancelar);
-
-                btnCancelar.onclick = function () {
-                    location.reload();
-                }
 
                 linkAgregarCuentaMain.setAttribute("hidden", "");
             };
@@ -238,6 +228,16 @@ function crearInputs() {
     divEstadisticas.appendChild(btnTagAgregarCuentaMain);
 
     btnNombreAgregarCuentaMain.focus();
+
+    btnGuardar.id = "btnGuardarCuentaMain";
+    btnGuardar.textContent = "Guardar cuenta";  
+    divEstadisticas.appendChild(btnGuardar);
+
+    btnCancelar.id = "btnCancelarCuentaMain";
+    btnCancelar.textContent = "Cancelar";
+    divEstadisticas.appendChild(btnCancelar);
+
+    //btnCancelar.onclick = location.reload;
 
 }
 
