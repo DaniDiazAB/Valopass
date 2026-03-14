@@ -8,7 +8,8 @@ use PHPMailer\PHPMailer\Exception;
 
 $email = $_POST['email'] ?? '';
 
-$password = generarPassword();
+//$password = generarPassword();
+$password = 'dos';
 $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
 
@@ -28,7 +29,10 @@ $stmt->execute([
    ":passwordHash" => $passwordHash,
    ":id_usuario" => $id_cuenta
 ]);
+header("Location: /valopass/");
 
+
+/*
 function generarPassword() {
     $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=';
     return substr(str_shuffle($caracteres), 0, 12);
@@ -58,3 +62,4 @@ try {
 } catch (Exception $e) {
     echo "Fallo: {$mail->ErrorInfo}";
 }
+*/

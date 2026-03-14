@@ -3,8 +3,6 @@ session_start();
 include __DIR__ . "/db.php";
 require_once "../config/secret.php";
 
-
-
 $conn = new mysqli($host, $user, $pass, $dbname);
 
 if ($conn->connect_error) {

@@ -4,7 +4,6 @@ include "db.php";
 
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
-$recordar = isset($_POST['recordar']);
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);

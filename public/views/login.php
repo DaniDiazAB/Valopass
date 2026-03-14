@@ -1,8 +1,14 @@
 <?php
 session_start();
 
+
 $usuario = $_SESSION['usuario'] ?? '';
 $mensaje = $_SESSION['mensaje'] ?? '';
+
+if (isset($usuario)) {
+    $usuario = '';
+}
+
 
 unset($_SESSION['usuario']);
 unset($_SESSION['mensaje']);
@@ -86,7 +92,7 @@ if (isset($_SESSION["usuario_id"])) {
       const banner = document.getElementById("cookie-banner");
       const acceptBtn = document.getElementById("acceptCookies");
       const rejectBtn = document.getElementById("rejectCookies");
-
+      /*
       const consent = localStorage.getItem("cookieConsent");
 
       if (!consent) banner.classList.remove("hidden");
@@ -102,6 +108,7 @@ if (isset($_SESSION["usuario_id"])) {
         const divLogin = document.getElementById("div-login")
         divLogin.setAttribute("hidden", "")
       });
+      */
     });
 
   </script>

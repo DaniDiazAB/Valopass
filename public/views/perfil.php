@@ -39,7 +39,7 @@ if (!empty($username)) {
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         $id_usuario_perfil = $resultado['id'];
 
-        // conseguir el ID del login
+        // conseguir el ID del perfil del usuario
         $stmt = $pdo->prepare('SELECT id_usuario AS id FROM usuarios WHERE nombre_usuario = :username');
         $stmt->execute(['username' => $loginUsername]);
 
@@ -81,7 +81,6 @@ if (!empty($username)) {
             $nombre = $resultado_main['nombre_cuenta_main'] ?? '';
             $tag = $resultado_main['tag_cuenta_main'] ?? '';
             $elo = $resultado_main['elo_cuenta_main'] ?? '';
-
             if ($nombre !== '') {
                 $is_cuenta_main = true;
             }
@@ -92,7 +91,6 @@ if (!empty($username)) {
     $existe_perfil = false;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -109,6 +107,8 @@ if (!empty($username)) {
         const usernameSesion = <?php echo json_encode($loginUsername); ?>;
         const nombreCuenta = "<?php echo $nombre; ?>";
         const tagCuenta = "<?php echo $tag; ?>";
+        const idPerfilUsuario = "<?php echo $id_usuario_perfil; ?>";
+        const idUsuarioLogin = "<?php echo $id_usuario_login; ?>";
     </script>
 </head>
 
@@ -116,14 +116,13 @@ if (!empty($username)) {
     <h1 id="title"><img class="logo" src="/valopass/public/resources/logo.png" alt="Valopass"></img></h1>
     <?php if ($existe_perfil): ?>
         <div id="div-perfil" class="div-perfil">
-            <h1><?php echo ($username); ?></h1>
+            <h1 id="username-perfil"><?php echo ($username); ?></h1>
             <div class="div-perfil">
                 <div class="div-perfil-especializacion" id="div-estadisticas">
                     <h2 class="titulo-perfil">Estadísticas</h2>
                     <h4 class="div-detalle-perfil" id="elo-mayor">Su cuenta de más elo es: SummDani - Oro 1</h4>
                     <h4 class="div-detalle-perfil" id="elo-menor">Su cuenta de menos elo es: SummDani - Oro 1</h4>
                     <h4 class="div-detalle-perfil" id="total-cuentas">Tiene un total de <?php echo $total_cuentas_usuario ?> cuenta(s)</h4>
-                    <h4 class="div-detalle-perfil" id="total-amigos">Tiene <?php echo $total_amigos_usuario ?> amigo(s)</h4>
                     <h4 class="div-detalle-perfil">Miembro desde: <?php echo $fecha_registro ?></h4>
                     <?php if ($is_cuenta_main): ?>
 
@@ -146,7 +145,7 @@ if (!empty($username)) {
                             <div class="div-perfil">
                                 <button id="agregar-main">Añadir Main</button>
                             </div>
-                         <?php endif ?>
+                        <?php endif ?>
 
                     <?php endif ?>
 
@@ -155,13 +154,14 @@ if (!empty($username)) {
 
                 <div class="div-perfil-especializacion" id="div-amigos">
                     <h2 class="titulo-perfil">Amigos</h2>
+                    <h4 class="div-detalle-perfil" id="total-amigos">Tiene <?php echo $total_amigos_usuario ?> amigo(s)</h4>
                     <div class="div-amigos">
                         <div class="div-perfil-especializacion">
 
                             <h3 class="">Lista de amigos</h3>
                             <ul class="user-list">
                                 <li class="user-item">
-                                    
+
                                     <div class="user-info">
                                         <p><strong>Nombre de usuario:</strong> Usuario123</p>
                                         <p><strong>ELO del usuario:</strong> 1500</p>
@@ -169,7 +169,7 @@ if (!empty($username)) {
                                 </li>
 
                                 <li class="user-item">
-                                    
+
                                     <div class="user-info">
                                         <p><strong>Nombre de usuario:</strong> Usuario123</p>
                                         <p><strong>ELO del usuario:</strong> 1500</p>
@@ -177,7 +177,7 @@ if (!empty($username)) {
                                 </li>
 
                                 <li class="user-item">
-                                    
+
                                     <div class="user-info">
                                         <p><strong>Nombre de usuario:</strong> Usuario123</p>
                                         <p><strong>ELO del usuario:</strong> 1500</p>
@@ -185,7 +185,7 @@ if (!empty($username)) {
                                 </li>
 
                                 <li class="user-item">
-                                    
+
                                     <div class="user-info">
                                         <p><strong>Nombre de usuario:</strong> Usuario123</p>
                                         <p><strong>ELO del usuario:</strong> 1500</p>
