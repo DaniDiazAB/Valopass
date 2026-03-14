@@ -232,6 +232,17 @@ if (!empty($username)) {
     <?php endif; ?>
 
 
+    <div id="modal-confirmacion" class="modal">
+  <div class="modal-contenido">
+    <p id="modal-texto">¿Estás seguro?</p>
+
+    <div class="modal-botones">
+      <button id="modal-confirmar">Confirmar</button>
+      <button id="modal-cancelar">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 <script src="/valopass/public/views/script.js">
 

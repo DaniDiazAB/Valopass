@@ -24,21 +24,17 @@ const btnActualizarRango = document.getElementById("actualizar-elo");
 const btnEditarCuenta = document.getElementById("editar-cuenta");
 const btnEliminarCuenta = document.getElementById("eliminar-cuenta");
 
-const cuentaMasElo = null;
-const cuentaMenosElo = null;
-
 let isCuentaMainAgregada = false;
+
 
 const datosCuentaMain = {
     nombreCuentaMain: null,
     tagCuentaMain: null,
 };
 
-title.onclick = function () {
-    window.location.href = "/valopass/";
-};
+document.addEventListener("DOMContentLoaded", init);
 
-document.addEventListener("DOMContentLoaded", function () {
+function init() {
     cargarNavegacion();
     cargarEstadisticas();
     linkPerfil.classList.add("nav-marcado");
@@ -47,31 +43,37 @@ document.addEventListener("DOMContentLoaded", function () {
         isCuentaMainAgregada = true;
     }
     funcionesBtns();
+}
 
+async function postJSON(url, data) {
+    try {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+        return await res.json();
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
 
+const elementosInicio = [title, cuentas, cuentasPublicas, agregarCuenta];
+
+elementosInicio.forEach(elemento => {
+    elemento.addEventListener("click", () => {
+        window.location.href = "/valopass/";
+    });
 });
 
-cuentas.onclick = function () {
-    window.location.href = "/valopass/";
-};
-
-cuentasPublicas.onclick = function () {
-    window.location.href = "/valopass/";
-};
-
-agregarCuenta.onclick = function () {
-    window.location.href = "/valopass/";
-};
-
-linkPerfil.onclick = function () {
-    window.location.href = "/valopass/" + usernameSesion;
-};
+linkPerfil.addEventListener("click", () => {
+    window.location.href = `/valopass/${usernameSesion}`;
+});
 
 function cargarEstadisticas() {
     const datosCuentaMain = {
         idPerfilUsuario: idPerfilUsuario,
     };
-
 
     fetch("/valopass/server/get-low-high-accounts.php", {
         method: "POST",
@@ -83,31 +85,28 @@ function cargarEstadisticas() {
     })
         .then((response) => response.json())
         .then((data) => {
-            
+
             if (data.length === 0) {
                 document.getElementById("elo-mayor").innerHTML = "No hay cuentas públicas agregadas.";
                 document.getElementById("elo-menor").innerHTML = "";
                 return;
             } else if (data.length === 1) {
-                document.getElementById("elo-mayor").innerHTML = "La cuenta con más elo es: " + 
-                data[0].nick_cuenta + " con un elo de: " + data[0].rango_cuenta;
+                document.getElementById("elo-mayor").innerHTML = 
+                `La cuenta con más elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
 
-            } else{
-                
-                document.getElementById("elo-mayor").innerHTML = "La cuenta con más elo es: " + 
-                data[0].nick_cuenta + " con un elo de: " + data[0].rango_cuenta;
+            } else {
 
-                document.getElementById("elo-menor").innerHTML = "La cuenta con menos elo es: " + 
-                data[1].nick_cuenta + " con un elo de: " + data[1].rango_cuenta;
+                document.getElementById("elo-mayor").innerHTML = 
+                `La cuenta con más elo es: ${data[1].nick_cuenta} #${data[1].tag_cuenta} con un elo de ${data[1].rango_cuenta}`;
+
+                document.getElementById("elo-menor").innerHTML = 
+                `La cuenta con menos elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
             }
-                
-
         })
         .catch((error) => {
             console.error("Error:", error);
         });
 }
-
 
 function cargarNavegacion() {
     cuentasPublicas.classList.add("enlace-nav");
@@ -138,69 +137,24 @@ function cargarNavegacion() {
     navBar.append(cerrarSesion);
 }
 
-function setNewMain(nombreCuentaMain, tagCuentaMain) {
-    const datosCuentaMain = {
-        nombreCuentaMain: nombreCuentaMain,
-        tagCuentaMain: tagCuentaMain,
-    };
-
-    fetch("/valopass/server/set-new-main-account.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datosCuentaMain),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            location.reload();
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
-}
-
 function funcionesBtns() {
     if (isCuentaMainAgregada) {
         btnTracker.onclick = function () {
-            window.open("https://tracker.gg/valorant/profile/riot/" + nombreCuenta + "%23" + tagCuenta + "/overview", "_blank");
+            window.open(`https://tracker.gg/valorant/profile/riot/${nombreCuenta}%23${tagCuenta}/overview`, "_blank");
         }
 
-        btnActualizarRango.onclick = function () {
+        btnActualizarRango.onclick = async function () {
             const datosCuentaMain = {
                 nombreCuenta: nombreCuenta,
                 tagCuenta: tagCuenta,
             };
 
-            fetch("/valopass/server/set-editar-cuenta-main.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(datosCuentaMain),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    location.reload();
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
+            await postJSON("/valopass/server/set-editar-cuenta-main.php", datosCuentaMain);
+            location.reload();
         }
 
         btnEditarCuenta.onclick = function () {
-            btnNombreAgregarCuentaMain.type = "text";
-            btnNombreAgregarCuentaMain.value = nombreCuenta;
-            btnNombreAgregarCuentaMain.name = "nombreCuentaMain";
-
-            btnTagAgregarCuentaMain.type = "text";
-            btnTagAgregarCuentaMain.value = tagCuenta;
-            btnTagAgregarCuentaMain.name = "tagCuentaMain";
-
-            divEstadisticas.appendChild(btnNombreAgregarCuentaMain);
-            divEstadisticas.appendChild(btnTagAgregarCuentaMain);
-
-            btnNombreAgregarCuentaMain.focus();
+            crearInputs();
 
             btnGuardar.id = "btnGuardarCuentaMain";
             btnGuardar.textContent = "Guardar cuenta";
@@ -210,118 +164,105 @@ function funcionesBtns() {
             btnCancelar.textContent = "Cancelar";
             divEstadisticas.appendChild(btnCancelar);
 
-            btnGuardar.onclick = function () {
-
-                const datosCuentaMain = {
+            btnGuardar.onclick = async function () {
+                const datos = {
                     nombreCuenta: btnNombreAgregarCuentaMain.value,
-                    tagCuenta: btnTagAgregarCuentaMain.value,
+                    tagCuenta: btnTagAgregarCuentaMain.value
                 };
-
-                fetch("/valopass/server/set-editar-cuenta-main.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(datosCuentaMain),
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error);
-                    });
+                await postJSON("/valopass/server/set-cuenta-main.php", datos);
+                location.reload();
             }
+
         }
 
-        btnEliminarCuenta.onclick = function () {
-            const respuesta = confirm("¿Estás seguro de que quieres guardar los cambios?");
-
-            if (respuesta) {
-                const datosCuentaMain = {
+        btnEliminarCuenta.onclick = async function () {
+            mostrarModal("¿Seguro que quieres eliminar la cuenta?", function () {
+                const datos = {
                     nombreCuenta: nombreCuenta,
-                    tagCuenta: tagCuenta,
+                    tagCuenta: tagCuenta
                 };
-                fetch("/valopass/server/delete-cuenta-main.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(datosCuentaMain),
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error);
-                    });
-            }
+                postJSON("/valopass/server/delete-cuenta-main.php", datos);
+                location.reload();
+
+            });
+
         }
 
     } else {
-        if (idUsuarioLogin === idPerfilUsuario){
-        const linkAgregarCuentaMain = document.getElementById("agregar-main");
-        
+        if (idUsuarioLogin === idPerfilUsuario) {
+            const linkAgregarCuentaMain = document.getElementById("agregar-main");
 
-        linkAgregarCuentaMain.onclick = function () {
-            btnNombreAgregarCuentaMain.type = "text";
-            btnNombreAgregarCuentaMain.placeholder = "Nombre de la cuenta";
-            btnNombreAgregarCuentaMain.name = "nombreCuentaMain";
 
-            btnTagAgregarCuentaMain.type = "text";
-            btnTagAgregarCuentaMain.placeholder = "Tag de la cuenta";
-            btnTagAgregarCuentaMain.name = "tagCuentaMain";
+            linkAgregarCuentaMain.onclick = function () {
+                crearInputs();
 
-            divEstadisticas.appendChild(btnNombreAgregarCuentaMain);
-            divEstadisticas.appendChild(btnTagAgregarCuentaMain);
 
-            btnNombreAgregarCuentaMain.focus();
+                btnGuardar.id = "btnGuardarCuentaMain";
+                btnGuardar.textContent = "Guardar cuenta";
+                divEstadisticas.appendChild(btnGuardar);
 
-            btnGuardar.id = "btnGuardarCuentaMain";
-            btnGuardar.textContent = "Guardar cuenta";
-            divEstadisticas.appendChild(btnGuardar);
+                btnGuardar.onclick = async function () {
+                    const datos = {
+                        nombreCuenta: btnNombreAgregarCuentaMain.value,
+                        tagCuenta: btnTagAgregarCuentaMain.value
+                    };
+                    await postJSON("/valopass/server/set-cuenta-main.php", datos);
+                    location.reload();
+                }
 
-            btnGuardar.onclick = function () {
-                const datosCuentaMain = {
-                    nombreCuenta: btnNombreAgregarCuentaMain.value,
-                    tagCuenta: btnTagAgregarCuentaMain.value,
-                };
+                btnCancelar.id = "btnCancelarCuentaMain";
+                btnCancelar.textContent = "Cancelar";
+                divEstadisticas.appendChild(btnCancelar);
 
-                fetch("/valopass/server/set-cuenta-main.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(datosCuentaMain),
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        location.reload();  
-                        
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error);
-                    });
-            }
+                btnCancelar.onclick = function () {
+                    location.reload();
+                }
 
-            btnCancelar.id = "btnCancelarCuentaMain";
-            btnCancelar.textContent = "Cancelar";
-            divEstadisticas.appendChild(btnCancelar);
+                linkAgregarCuentaMain.setAttribute("hidden", "");
+            };
 
-            btnCancelar.onclick = function () {
-                location.reload();  
-
-            }
-
-            linkAgregarCuentaMain.setAttribute("hidden", "");
-        };
-
-    }
+        }
     }
 }
 
-cerrarSesion.onclick = function () {
+function crearInputs() {
+    btnNombreAgregarCuentaMain.type = "text";
+    btnNombreAgregarCuentaMain.placeholder = "Nombre de la cuenta";
+    btnNombreAgregarCuentaMain.name = "nombreCuentaMain";
+
+    btnTagAgregarCuentaMain.type = "text";
+    btnTagAgregarCuentaMain.placeholder = "Tag de la cuenta";
+    btnTagAgregarCuentaMain.name = "tagCuentaMain";
+
+    divEstadisticas.appendChild(btnNombreAgregarCuentaMain);
+    divEstadisticas.appendChild(btnTagAgregarCuentaMain);
+
+    btnNombreAgregarCuentaMain.focus();
+
+}
+
+function mostrarModal(texto, callbackConfirmar) {
+
+    const modal = document.getElementById("modal-confirmacion");
+    const modalTexto = document.getElementById("modal-texto");
+    const btnConfirmar = document.getElementById("modal-confirmar");
+    const btnCancelar = document.getElementById("modal-cancelar");
+
+    modalTexto.textContent = texto;
+
+    modal.style.display = "flex";
+
+    btnConfirmar.onclick = function () {
+        modal.style.display = "none";
+        callbackConfirmar();
+    };
+
+    btnCancelar.onclick = function () {
+        modal.style.display = "none";
+    };
+}
+
+cerrarSesion.onclick = async function () {
     alert("Sesión cerrada");
     window.location.href = "/valopass/login";
 
@@ -329,5 +270,5 @@ cerrarSesion.onclick = function () {
         .then((response) => response.json())
         .then((data) => { })
         .catch((error) => console.error("Error:", error));
-};
 
+};
