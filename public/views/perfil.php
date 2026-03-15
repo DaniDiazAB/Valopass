@@ -18,8 +18,6 @@ $loginUsername = $_SESSION['usuario'] ?? '';
 $existe_perfil = true;
 $is_mismo_perfil = false;
 $is_cuenta_main = false;
-
-
 $usuario = null;
 $error = "";
 
@@ -48,7 +46,6 @@ if (!empty($username)) {
         if ($id_usuario_perfil == $id_usuario_login) {
             $is_mismo_perfil = true;
         }
-
 
         // total de las cuentas del usuario
         $stmt = $pdo->prepare(
@@ -79,8 +76,6 @@ if (!empty($username)) {
         );
         $stmt->execute([$id_usuario_perfil]);
         $resultado_main = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        
 
         if ($resultado_main) {
             $nombre = $resultado_main['nombre_cuenta_main'] ?? '';
@@ -115,6 +110,7 @@ if (!empty($username)) {
         const idPerfilUsuario = "<?php echo $id_usuario_perfil; ?>";
         const idUsuarioLogin = "<?php echo $id_usuario_login; ?>";
         const totalAmigos = "<?php echo $total_amigos_usuario; ?>";
+        
     </script>
 </head>
 
@@ -126,8 +122,8 @@ if (!empty($username)) {
             <div class="div-perfil">
                 <div class="div-perfil-especializacion" id="div-estadisticas">
                     <h2 class="titulo-perfil">Estadísticas</h2>
-                    <h4 class="div-detalle-perfil" id="elo-mayor">Su cuenta de más elo es: SummDani - Oro 1</h4>
-                    <h4 class="div-detalle-perfil" id="elo-menor">Su cuenta de menos elo es: SummDani - Oro 1</h4>
+                    <h4 class="div-detalle-perfil" id="elo-mayor">El usuario: <?php echo $username; ?></h4>
+                    <h4 class="div-detalle-perfil" id="elo-menor">No tiene cuentas agregadas.</h4>
                     <h4 class="div-detalle-perfil" id="total-cuentas">Tiene un total de <?php echo $total_cuentas_usuario ?> cuenta(s)</h4>
                     <h4 class="div-detalle-perfil">Miembro desde: <?php echo $fecha_registro ?></h4>
                     <?php if ($is_cuenta_main): ?>
@@ -164,7 +160,7 @@ if (!empty($username)) {
                     <div class="div-amigos">
                         <div class="div-perfil-especializacion">
 
-                            <h3 class="">Lista de amigos</h3>
+                            <h2 class="lista-amigos">Lista de amigos</h2>
                             <ul class="user-list">
                                 <li class="user-item">
 
@@ -175,7 +171,6 @@ if (!empty($username)) {
                                 </li>
 
                                 <li class="user-item">
-
                                     <div class="user-info">
                                         <p><strong>Nombre de usuario:</strong> Usuario123</p>
                                         <p><strong>ELO del usuario:</strong> 1500</p>
@@ -198,19 +193,18 @@ if (!empty($username)) {
                                     </div>
                                 </li>
                             </ul>
-                            <h3 class="link-agregar-amigo">Ver todos los amigos</h3>
-
+                            <div class="div-perfil-especializacion">
+                                <h3 class="link-agregar-amigo" id="ver-todos-amigos">Ver todos los amigos</h3>
+                            </div>
                         </div>
                         <?php if ($id_usuario_login != $id_usuario_perfil): ?>
 
                             <div class="div-perfil-especializacion">
-
-                                <h3 id="agregar-amigo" class="link-agregar-amigo">Añadir amigo</h3>
+                                <h3 id="agregar-amigo" id="agregar-amigo" class="link-agregar-amigo">Añadir amigo</h3>
                             </div>
 
                             <div class="div-perfil-especializacion">
-
-                                <h3 id="bloquear-usuario" class="link-eliminar-amigo">Bloquear usuario</h3>
+                                <h3 id="bloquear-usuario" id="bloquear-usuario" class="link-eliminar-amigo">Bloquear usuario</h3>
                             </div>
                         <?php endif ?>
 

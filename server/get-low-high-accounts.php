@@ -36,7 +36,7 @@ try {
     } else {
         echo json_encode([
             "status" => "error",
-            "msg" => "No se encontraron cuentas con mayor o menor elo"
+            "msg" => "No se encontraron cuentas con mayor o menor elo" . $sql
         ]);
     }
 
