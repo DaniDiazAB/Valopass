@@ -27,6 +27,7 @@ const btnEditarCuenta = document.getElementById("editar-cuenta");
 const btnEliminarCuenta = document.getElementById("eliminar-cuenta");
 
 let btnAgregarAmigo = null;
+let btnBloquearUsuario = null;
 let isCuentaMainAgregada = false;
 
 const datosCuentaMain = {
@@ -74,7 +75,12 @@ function init() {
     if (idUsuarioLogin != idPerfilUsuario) {
         btnAgregarAmigo = document.getElementById("agregar-amigo");
         btnAgregarAmigo.onclick = function () {
-            agregarAmigo();
+            agregarAmigo('amistad');
+        };
+
+        btnBloquearUsuario = document.getElementById("bloquear-usuario");
+        btnBloquearUsuario.onclick = function () {            
+            agregarAmigo('bloqueo');
         };
     }
     funcionesBtns();
@@ -131,9 +137,23 @@ function cargarEstadisticas() {
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log(data);
 
-                if (data.son_amigos) {
+                if (data.status === 'error') {
+                    btnAgregarAmigo.innerHTML = "Añadir amigo";
+                }
+                
+                if (data.estado_relacion === 1) {
                     btnAgregarAmigo.innerHTML = "Eliminar amigo";
+                }
+
+                 if (data.estado_relacion === 2) {
+                    btnAgregarAmigo.innerHTML = "Solicitud enviada";
+                }
+
+                 if (data.estado_relacion === 3) {
+                    document.getElementById("div-perfil").innerHTML = "<h2>Este usuario te ha bloqueado.</h2>";
+                    btnAgregarAmigo.innerHTML = "";
                 }
             })
             .catch((error) => {
@@ -141,6 +161,7 @@ function cargarEstadisticas() {
             });
     }
 }
+
 function cargarNavegacion() {
     cuentasPublicas.classList.add("enlace-nav");
     cuentasPublicas.innerHTML = "Cuentas publicas";
@@ -265,11 +286,12 @@ function crearInputs() {
     divEstadisticas.appendChild(btnCancelar);
 }
 
-function agregarAmigo() {
+function agregarAmigo(tipoSolicitud) {
     const nuevosAmigos = {
         idPerfilUsuario: idPerfilUsuario,
         idUsuarioLogin: idUsuarioLogin,
-    };
+        tipoSolicitud: tipoSolicitud
+    };    
 
     fetch("/valopass/server/set-nueva-amistad.php", {
         method: "POST",
