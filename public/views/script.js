@@ -26,6 +26,12 @@ const btnActualizarRango = document.getElementById("actualizar-elo");
 const btnEditarCuenta = document.getElementById("editar-cuenta");
 const btnEliminarCuenta = document.getElementById("eliminar-cuenta");
 
+const btnVerAmigos = document.getElementById("ver-todos-amigos");
+
+btnVerAmigos.onclick = function () {
+    modalListaAmigos();
+}
+
 let btnAgregarAmigo = null;
 let btnBloquearUsuario = null;
 let isCuentaMainAgregada = false;
@@ -112,9 +118,9 @@ function cargarEstadisticas() {
                     document.getElementById("elo-menor").innerHTML = ``;
                 } else {
                     document.getElementById("elo-mayor").innerHTML =
-                        `La cuenta con más elo es: ${data[1].nick_cuenta} #${data[1].tag_cuenta} con un elo de ${data[1].rango_cuenta}`;
+                        `La cuenta con menos elo es: ${data[1].nick_cuenta} #${data[1].tag_cuenta} con un elo de ${data[1].rango_cuenta}`;
                     document.getElementById("elo-menor").innerHTML =
-                        `La cuenta con menos elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
+                        `La cuenta con más elo es: ${data[0].nick_cuenta} #${data[0].tag_cuenta} con un elo de ${data[0].rango_cuenta}`;
                 }
             }
         })
@@ -128,7 +134,7 @@ function cargarEstadisticas() {
     };
 
     if (idUsuarioLogin != idPerfilUsuario) {
-        fetch("/valopass/server/get-son-amigos.php", {
+        fetch("/valopass/server/get-relacion-usuarios.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -137,7 +143,6 @@ function cargarEstadisticas() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
 
                 if (data.status === 'error') {
                     btnAgregarAmigo.innerHTML = "Añadir amigo";
@@ -293,7 +298,7 @@ function agregarAmigo(tipoSolicitud) {
         tipoSolicitud: tipoSolicitud
     };    
 
-    fetch("/valopass/server/set-nueva-amistad.php", {
+    fetch("/valopass/server/set-nueva-relacion-usuarios.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -308,14 +313,22 @@ function agregarAmigo(tipoSolicitud) {
             console.error("Error:", error);
         });
 }
-
 function mostrarModal(texto, callbackConfirmar) {
     const modal = document.getElementById("modal-confirmacion");
-    const modalTexto = document.getElementById("modal-texto");
+
+    modal.innerHTML = `
+        <div class="modal-contenido">
+            <p id="modal-texto">${texto}</p>
+
+            <div class="modal-botones">
+                <button id="modal-confirmar">Confirmar</button>
+                <button id="modal-cancelar">Cancelar</button>
+            </div>
+        </div>
+    `;
+
     const btnConfirmar = document.getElementById("modal-confirmar");
     const btnCancelar = document.getElementById("modal-cancelar");
-
-    modalTexto.textContent = texto;
 
     modal.style.display = "flex";
 
@@ -329,6 +342,41 @@ function mostrarModal(texto, callbackConfirmar) {
     };
 }
 
+function modalListaAmigos(){
+
+
+    
+
+    const listaAmigos = window.listaAmistades.map(amistad => 
+        `<p>
+            <a href="/valopass/${amistad.nombre_usuario}">${amistad.nombre_usuario}</a> - 
+            ${amistad.elo_cuenta_main}
+        </p>`).join("");
+    const modal = document.getElementById("modal-amigos");
+    
+    modal.innerHTML = `
+        <div class="modal-contenido">
+            <p id="modal-texto-amigos">Lista de amigos</p>
+            ` + listaAmigos + `
+            <div class="modal-botones">
+                <button id="modal-cerrar-lista">Cerrar</button>
+            </div>
+        </div>
+    `;
+
+    modal.innerHTML = listaAmigos + modal.innerHTML;
+
+    const modalTexto = document.getElementById("modal-texto-amigos");
+    const btnCerrar = document.getElementById("modal-cerrar-lista");
+
+    modalTexto.textContent = "Lista de amigos";
+
+    modal.style.display = "flex";
+
+    btnCerrar.onclick = function () {
+        modal.style.display = "none";
+    };
+}
 cerrarSesion.onclick = async function () {
     await fetch("/valopass/server/outlog.php");
 

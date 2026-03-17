@@ -95,7 +95,12 @@ function bloquearUsuario($usuario_uno, $usuario_dos, $pdo){
             ":id_dos" => $usuario_dos
         ]);
 
-        $sql = "INSERT INTO usuarios_amigos 
+        
+
+
+    }
+
+    $sql = "INSERT INTO usuarios_amigos 
                 (id_usuario_uno_usuarios_amigos, id_usuario_dos_usuarios_amigos, estado_usuarios_amigos) 
                 VALUES (:usuario_uno, :usuario_dos, 3)";
 
@@ -109,8 +114,5 @@ function bloquearUsuario($usuario_uno, $usuario_dos, $pdo){
             "status" => "ok",
             "msg" => "Usuario bloqueado"
         ]);
-
-
-    }
 
 }

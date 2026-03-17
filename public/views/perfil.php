@@ -85,6 +85,28 @@ if (!empty($username)) {
                 $is_cuenta_main = true;
             }
         }
+
+        // conseguir ids de amistades del usuario
+        $stmt = $pdo->prepare(
+            'SELECT * FROM usuarios_amigos where id_usuario_uno_usuarios_amigos = ? OR id_usuario_dos_usuarios_amigos = ?'
+        );
+        $stmt->execute([$id_usuario_perfil, $id_usuario_perfil]);
+        $lista_amistades = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // conseguir nombres de amistades del usuario
+        $stmt = $pdo->prepare("SELECT u.nombre_usuario, cm.elo_cuenta_main
+                                FROM usuarios_amigos ua
+                                JOIN usuarios u 
+                                    ON (u.id_usuario = ua.id_usuario_uno_usuarios_amigos 
+                                        OR u.id_usuario = ua.id_usuario_dos_usuarios_amigos)
+                                LEFT JOIN cuenta_main cm
+                                    ON cm.id_usuario_cuenta_main = u.id_usuario
+                                WHERE (ua.id_usuario_uno_usuarios_amigos = ? 
+                                    OR ua.id_usuario_dos_usuarios_amigos = ?)
+                                AND u.id_usuario != ?");
+
+        $stmt->execute([$id_usuario_perfil, $id_usuario_perfil, $id_usuario_perfil]);
+        $lista_amistades = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 } else {
     $error = "No se ha especificado ningún perfil.";
@@ -104,13 +126,14 @@ if (!empty($username)) {
     <link rel="stylesheet" type="text/css" href="/valopass/public/style.css">
 
     <script>
-        const usernameSesion = <?php echo json_encode($loginUsername); ?>;
-        const nombreCuenta = <?php echo json_encode($nombre ?? ""); ?>;
-        const tagCuenta = <?php echo json_encode($tag ?? ""); ?>;
-        const idPerfilUsuario = "<?php echo $id_usuario_perfil; ?>";
-        const idUsuarioLogin = "<?php echo $id_usuario_login; ?>";
-        const totalAmigos = "<?php echo $total_amigos_usuario; ?>";
-        
+        window.usernameSesion = <?php echo json_encode($loginUsername); ?>;
+        window.nombreCuenta = <?php echo json_encode($nombre ?? ""); ?>;
+        window.tagCuenta = <?php echo json_encode($tag ?? ""); ?>;
+        window.idPerfilUsuario = "<?php echo $id_usuario_perfil; ?>";
+        window.idUsuarioLogin = "<?php echo $id_usuario_login; ?>";
+        window.totalAmigos = "<?php echo $total_amigos_usuario; ?>";
+        window.listaAmistades = <?php echo json_encode($lista_amistades); ?>;
+
     </script>
 </head>
 
@@ -162,36 +185,31 @@ if (!empty($username)) {
 
                             <h2 class="lista-amigos">Lista de amigos</h2>
                             <ul class="user-list">
-                                <li class="user-item">
+                                <?php
+                                $limite = 4;
+                                $contador = 0;
 
-                                    <div class="user-info">
-                                        <p><strong>Nombre de usuario:</strong> Usuario123</p>
-                                        <p><strong>ELO del usuario:</strong> 1500</p>
-                                    </div>
-                                </li>
+                                foreach ($lista_amistades as $amistad) {
 
-                                <li class="user-item">
-                                    <div class="user-info">
-                                        <p><strong>Nombre de usuario:</strong> Usuario123</p>
-                                        <p><strong>ELO del usuario:</strong> 1500</p>
-                                    </div>
-                                </li>
+                                    if ($contador >= $limite) {
+                                        break;
+                                    }
 
-                                <li class="user-item">
+                                    $nombre = htmlspecialchars($amistad['nombre_usuario']);
+                                    $elo = htmlspecialchars($amistad['elo_cuenta_main'] ?? 'Sin ELO');
 
-                                    <div class="user-info">
-                                        <p><strong>Nombre de usuario:</strong> Usuario123</p>
-                                        <p><strong>ELO del usuario:</strong> 1500</p>
-                                    </div>
-                                </li>
+                                    echo "
+                                    <li class='user-item'>
+                                        <div class='user-info'>
+                                            <p id='amistad-$nombre'><strong>Nombre de usuario:</strong><a href='/valopass/$nombre'> $nombre</a>
+                                            <p><strong>ELO del usuario:</strong> $elo</p>
+                                        </div>
+                                    </li>
+                                    ";
 
-                                <li class="user-item">
-
-                                    <div class="user-info">
-                                        <p><strong>Nombre de usuario:</strong> Usuario123</p>
-                                        <p><strong>ELO del usuario:</strong> 1500</p>
-                                    </div>
-                                </li>
+                                    $contador++;
+                                }
+                                ?>
                             </ul>
                             <div class="div-perfil-especializacion">
                                 <h3 class="link-agregar-amigo" id="ver-todos-amigos">Ver todos los amigos</h3>
@@ -207,19 +225,8 @@ if (!empty($username)) {
                                 <h3 id="bloquear-usuario" id="bloquear-usuario" class="link-eliminar-amigo">Bloquear usuario</h3>
                             </div>
                         <?php endif ?>
-
-
-
                     </div>
                 </div>
-
-
-            </div>
-
-            <div class="div-perfil-especializacion">
-                <h2>Notas</h2>
-                <h3>Editar nota</h3>
-                <h3>Es un bobo</h3>
             </div>
         </div>
 
@@ -232,16 +239,9 @@ if (!empty($username)) {
     <?php endif; ?>
 
 
-    <div id="modal-confirmacion" class="modal">
-        <div class="modal-contenido">
-            <p id="modal-texto">¿Estás seguro?</p>
+    <div id="modal-confirmacion" class="modal"></div>
 
-            <div class="modal-botones">
-                <button id="modal-confirmar">Confirmar</button>
-                <button id="modal-cancelar">Cancelar</button>
-            </div>
-        </div>
-    </div>
+    <div id="modal-amigos" class="modal"></div>
 
 </body>
 <script src="/valopass/public/views/script.js">
