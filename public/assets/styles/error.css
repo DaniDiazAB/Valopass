@@ -1,14 +1,25 @@
-/* ----- error.css ----- */
+/* ═══════════════════════════════════════════════════════════════
+   ERROR.CSS  —  Página 404
+   ═══════════════════════════════════════════════════════════════ */
+
 :root {
-  --bg: #0e0f13;
-  --text: #e4e6eb;
-  --accent: #ff4655;
-  font-family: "Inter", "Segoe UI", sans-serif;
+  --bg:           #0e0f13;
+  --text:         #e4e6eb;
+  --text-muted:   #9b9ca1;
+  --accent:       #ff4655;
+  --accent-hover: #ff6a75;
+  --accent-glow:  rgba(255,70,85,0.3);
+  --border:       #2a2b31;
+  --font:         "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   background: var(--bg);
   color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
   text-align: center;
   padding: 2rem;
   display: flex;
@@ -16,24 +27,95 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  margin: 0;
+  /* Halo de error sutil */
+  background-image:
+    radial-gradient(ellipse 60% 45% at 50% 50%, rgba(255,70,85,0.06) 0%, transparent 65%);
 }
 
+/* ── Número de error gigante decorativo ──────────────────────── */
+.error-code {
+  font-size: clamp(6rem, 20vw, 10rem);
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  background: linear-gradient(135deg, var(--accent) 0%, #ff8a94 50%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  letter-spacing: -0.04em;
+  margin-bottom: 0;
+  /* Brillo sutil */
+  filter: drop-shadow(0 0 40px var(--accent-glow));
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { filter: drop-shadow(0 0 30px var(--accent-glow)); }
+  50%       { filter: drop-shadow(0 0 55px rgba(255,70,85,0.45)); }
+}
+
+/* ── Título ───────────────────────────────────────────────────── */
 h1 {
-  font-size: 2rem;
-  color: var(--accent);
-  margin-bottom: 1rem;
-}
-
-p {
-  margin-bottom: 1.5rem;
-  color: #c0c0c0;
-}
-
-a {
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 700;
   color: var(--text);
-  background: var(--accent);
-  padding: .6rem 1.2rem;
-  border-radius: 8px;
-  text-decoration: none;
+  margin: 0.4rem 0 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
-a:hover { background: #ff6a75; }
+
+/* ── Descripción ──────────────────────────────────────────────── */
+p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  max-width: 340px;
+  line-height: 1.65;
+  margin: 0 auto 2rem;
+}
+
+/* ── Separador decorativo ─────────────────────────────────────── */
+.divider {
+  width: 48px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 99px;
+  margin: 0 auto 1.8rem;
+  opacity: 0.6;
+}
+
+/* ── Botón de volver ──────────────────────────────────────────── */
+a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  background: var(--accent);
+  padding: 0.65rem 1.4rem;
+  border-radius: 9px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+a:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+a:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ── Animación de entrada ─────────────────────────────────────── */
+.error-wrapper {
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
