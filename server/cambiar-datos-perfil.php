@@ -8,13 +8,32 @@ require_once "../config/secret.php";
 $input = file_get_contents("php://input");
 $datos = json_decode($input, true);
 
-$id_usuario =  $_SESSION['usuario_id'] ?? '';
+$id_usuario = $_SESSION['usuario_id'] ?? null;
 
-$tipo_cambio     = $datos['tipoCambio'] ?? '';
-$informacion     = $datos['informacion'] ?? '';
-$password     = $datos['password'] ?? '';
+$tipo_cambio = $datos['tipoCambio'] ?? '';
+$informacion = trim($datos['informacion'] ?? '');
+$password    = $datos['password'] ?? '';
 
-$sql = "SELECT password_usuario FROM usuarios WHERE id_usuario = :id_usuario";
+if (!$id_usuario) {
+    echo json_encode([
+        "success" => false,
+        "mensaje" => "Sesión no válida"
+    ]);
+    exit;
+}
+
+if (empty($tipo_cambio) || empty($informacion) || empty($password)) {
+    echo json_encode([
+        "success" => false,
+        "mensaje" => "Faltan datos"
+    ]);
+    exit;
+}
+
+$sql = "SELECT password_usuario
+        FROM usuarios
+        WHERE id_usuario = :id_usuario";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute([
     ":id_usuario" => $id_usuario
@@ -22,91 +41,89 @@ $stmt->execute([
 
 $passwordHash = $stmt->fetchColumn();
 
-if ($passwordHash && password_verify($password, $passwordHash)) {
-    echo json_encode([
-        "success" => true,
-        "mensaje" => "La contraseña es correcta",
-            "tipoCambio" => $tipo_cambio,
-            "informacion" => $informacion
-    ]);
-} else {
+if (!$passwordHash || !password_verify($password, $passwordHash)) {
     echo json_encode([
         "success" => false,
         "mensaje" => "La contraseña es incorrecta"
     ]);
-}
-
-
-
-//echo json_encode(["status" => "error", "msg" => '$tipo_cambio: ' . $tipo_cambio]);
-
-/*
-if ($username === '') {
-    echo json_encode(["status" => "error", "msg" => "Falta username para identificar la fila"]);
     exit;
 }
-    */
-/*
-try {
-    if ($eliminar){
-        $sql = "SELECT id_cuenta FROM cuentas WHERE username_cuenta = :username";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([":username" => $username]);
-        $id_cuenta = $stmt->fetchColumn();
 
-        $sql = "DELETE FROM cuentas WHERE username_cuenta = :username";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ":username" => $username
+$texto_log = '';
+
+if ($tipo_cambio === 'password') {
+
+    $nuevaPasswordHash = password_hash($informacion, PASSWORD_DEFAULT);
+
+    $sql = "UPDATE usuarios
+            SET password_usuario = :password
+            WHERE id_usuario = :id_usuario";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ":password"   => $nuevaPasswordHash,
+        ":id_usuario" => $id_usuario
+    ]);
+
+    $texto_log = "La contraseña se ha cambiado";
+} elseif ($tipo_cambio === 'username') {
+
+    $sql = "SELECT COUNT(*)
+            FROM usuarios
+            WHERE nombre_usuario = :informacion
+            AND id_usuario != :id_usuario";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ":informacion" => $informacion,
+        ":id_usuario"  => $id_usuario
+    ]);
+
+    $nombreExiste = $stmt->fetchColumn() > 0;
+
+    if ($nombreExiste) {
+        echo json_encode([
+            "success" => false,
+            "mensaje" => "El nombre de usuario ya está en uso"
         ]);
-
-        $sql = "DELETE FROM cuentas_usuarios WHERE id_cuenta = :id_cuenta";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([":id_cuenta" => $id_cuenta]);
-
-        echo json_encode(["status" => "ok", "msg" => "Cuenta eliminada"]);
-
-    }else{
-        // se saca el id de la cuenta, con ese id, se va a la tabla cuentas_usuarios y se comprueba
-        // si el id del usuario coincide con el id en el que se ha iniciado sesion
-        $sql = "SELECT id_cuenta FROM cuentas WHERE username_cuenta = :username";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([":username" => $username]);
-        $idCuenta = $stmt->fetch(PDO::FETCH_ASSOC); 
-        $id_cuenta_valor = $idCuenta['id_cuenta']; // ID de la tabla cuentas
-
-
-        $sql = "SELECT id_usuario FROM cuentas_usuarios WHERE id_cuenta = :cuenta";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([":cuenta" => $id_cuenta_valor]);
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-        $id_usuario_valor = $usuario['id_usuario']; // id_usuario de la tabla cuentas_usuarios
-
-    
-        if ($id_usuario_valor == $user_login){
-            $sql = "UPDATE cuentas 
-            SET nick_cuenta = :nick, tag_cuenta = :tag, password_cuenta = :passwordCifrado, cuenta_publica = :isPublica
-            WHERE username_cuenta = :username";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ":nick"     => $nick,
-                ":tag"      => $tag,
-                ":passwordCifrado" => $passwordCifrado,
-                ":username" => $username,
-                ":isPublica" => $isPublica
-            ]);
-            echo json_encode(true);
-
-        }else{
-            echo json_encode(false);
-
-        }
-        
-        //echo json_encode(["status" => "ok", "msg" => "Cuenta actualizada correctamente", "nick" => $nick, "Publica" => $isPublica, "Sesion" => $_SESSION["usuario_id"]]);
+        exit;
     }
-    
-} catch (PDOException $e) {
-    echo json_encode(["status" => "error", "msg" => $e->getMessage()]);
+
+    $sql = "UPDATE usuarios
+            SET nombre_usuario = :informacion
+            WHERE id_usuario = :id_usuario";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ":informacion" => $informacion,
+        ":id_usuario"  => $id_usuario
+    ]);
+
+    $texto_log = "El nombre de usuario se ha cambiado";
+} elseif ($tipo_cambio === 'email') {
+
+    $sql = "UPDATE usuarios
+            SET correo_usuario = :informacion
+            WHERE id_usuario = :id_usuario";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ":informacion" => $informacion,
+        ":id_usuario"  => $id_usuario
+    ]);
+
+    $texto_log = "El correo se ha cambiado";
+} else {
+    echo json_encode([
+        "success" => false,
+        "mensaje" => "Tipo de cambio no válido"
+    ]);
+    exit;
 }
 
-*/
+echo json_encode([
+    "success"     => true,
+    "mensaje"     => $texto_log,
+    "tipoCambio"  => $tipo_cambio,
+    "informacion" => $informacion
+]);

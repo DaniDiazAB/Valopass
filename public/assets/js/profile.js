@@ -357,6 +357,7 @@ function cambiarDatosPerfil(tipoCambio, informacion) {
         "password_confirmar_usuario",
     ).value;
     let password = "";
+    let mensaje = '';
 
     if (tipoCambio === "password") {
         if (!esPasswordSegura(informacion)) {
@@ -366,14 +367,17 @@ function cambiarDatosPerfil(tipoCambio, informacion) {
             return;
         }else{
             password = passwordPassword;
+            mensaje = 'Contraseña cambiada correctamente';
         }
     }
 
     if (tipoCambio === "email") {
+        mensaje = 'Correo cambiado correctamente';
         password = passwordEmail;
     }
 
     if (tipoCambio === "username") {
+        mensaje = 'Nombre de usuario cambiado correctamente. Se va a cerrar la sesión para aplicar los cambios.';
         password = passwordUsername;
     }
 
@@ -394,7 +398,21 @@ function cambiarDatosPerfil(tipoCambio, informacion) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
-         })
+            if (data.success) {
+                alert(mensaje);      
+            } 
+
+            if (tipoCambio === "username") { 
+                window.location.href = "/valopass/login";
+
+    fetch("/valopass/server/outlog.php")
+        .then((response) => response.json())
+        .then((data) => {
+
+        })
+        .catch((error) => console.error("Error:", error));
+            }
+        })
         .catch((error) => {
             console.error("Error:", error);
         });
