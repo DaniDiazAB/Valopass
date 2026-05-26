@@ -59,7 +59,7 @@ cerrarSesion.onclick = function () {
 };
 
 linkPerfil.onclick = function (){
-    window.location.href = "/valopass/" + usernameSesion;
+    window.location.href = "/valopass/user/" + usernameSesion;
 }
 
 

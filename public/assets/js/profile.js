@@ -30,7 +30,7 @@ const btnVerAmigos = document.getElementById("ver-todos-amigos");
 
 btnVerAmigos.onclick = function () {
     modalListaAmigos();
-}
+};
 
 let btnAgregarAmigo = null;
 let btnBloquearUsuario = null;
@@ -81,13 +81,15 @@ function init() {
     if (idUsuarioLogin != idPerfilUsuario) {
         btnAgregarAmigo = document.getElementById("agregar-amigo");
         btnAgregarAmigo.onclick = function () {
-            agregarAmigo('amistad');
+            agregarAmigo("amistad");
         };
 
         btnBloquearUsuario = document.getElementById("bloquear-usuario");
-        btnBloquearUsuario.onclick = function () {            
-            agregarAmigo('bloqueo');
+        btnBloquearUsuario.onclick = function () {
+            agregarAmigo("bloqueo");
         };
+    } else {
+        funcionesBtnsPerfil();
     }
     funcionesBtns();
 }
@@ -143,21 +145,21 @@ function cargarEstadisticas() {
         })
             .then((response) => response.json())
             .then((data) => {
-
-                if (data.status === 'error') {
+                if (data.status === "error") {
                     btnAgregarAmigo.innerHTML = "Añadir amigo";
                 }
-                
+
                 if (data.estado_relacion === 1) {
                     btnAgregarAmigo.innerHTML = "Eliminar amigo";
                 }
 
-                 if (data.estado_relacion === 2) {
+                if (data.estado_relacion === 2) {
                     btnAgregarAmigo.innerHTML = "Solicitud enviada";
                 }
 
-                 if (data.estado_relacion === 3) {
-                    document.getElementById("div-perfil").innerHTML = "<h2>Este usuario te ha bloqueado.</h2>";
+                if (data.estado_relacion === 3) {
+                    document.getElementById("div-perfil").innerHTML =
+                        "<h2>Este usuario te ha bloqueado.</h2>";
                     btnAgregarAmigo.innerHTML = "";
                 }
             })
@@ -295,8 +297,8 @@ function agregarAmigo(tipoSolicitud) {
     const nuevosAmigos = {
         idPerfilUsuario: idPerfilUsuario,
         idUsuarioLogin: idUsuarioLogin,
-        tipoSolicitud: tipoSolicitud
-    };    
+        tipoSolicitud: tipoSolicitud,
+    };
 
     fetch("/valopass/server/set-nueva-relacion-usuarios.php", {
         method: "POST",
@@ -313,6 +315,91 @@ function agregarAmigo(tipoSolicitud) {
             console.error("Error:", error);
         });
 }
+
+function funcionesBtnsPerfil() {
+    const btnCambiarPassword = document.getElementById("btn-cambiar-password");
+    const btnCambiarEmail = document.getElementById("btn-cambiar-email");
+    const btnCambiarUsername = document.getElementById("btn-cambiar-username");
+
+    btnCambiarPassword.onclick = function () {
+        const passwordNueva = document.getElementById("password_nueva").value;
+        const passwordConfirmar =
+            document.getElementById("password_confirmar").value;
+
+        if (passwordNueva === passwordConfirmar) {
+            const isPasswordSegura = esPasswordSegura(passwordNueva);
+            cambiarDatosPerfil("password", passwordNueva);
+        }
+    };
+
+    btnCambiarEmail.onclick = function () {
+        const emailNuevo = document.getElementById("email_nuevo").value;
+        cambiarDatosPerfil("email", emailNuevo);
+    };
+
+    btnCambiarUsername.onclick = function () {
+        const usernameNuevo = document.getElementById("username_nuevo").value;
+        cambiarDatosPerfil("username", usernameNuevo);
+    };
+}
+
+function esPasswordSegura(password) {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
+    return regex.test(password);
+}
+
+function cambiarDatosPerfil(tipoCambio, informacion) {
+    const passwordPassword = document.getElementById("password_actual").value;
+    const passwordEmail = document.getElementById(
+        "password_confirmar_email",
+    ).value;
+    const passwordUsername = document.getElementById(
+        "password_confirmar_usuario",
+    ).value;
+    let password = "";
+
+    if (tipoCambio === "password") {
+        if (!esPasswordSegura(informacion)) {
+            alert(
+                "La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula y un símbolo.",
+            );
+            return;
+        }else{
+            password = passwordPassword;
+        }
+    }
+
+    if (tipoCambio === "email") {
+        password = passwordEmail;
+    }
+
+    if (tipoCambio === "username") {
+        password = passwordUsername;
+    }
+
+    const datosCambiar = {
+        tipoCambio: tipoCambio,
+        informacion: informacion,
+        password: password,
+    };
+
+
+    fetch("/valopass/server/cambiar-datos-perfil.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datosCambiar),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+         })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
 function mostrarModal(texto, callbackConfirmar) {
     const modal = document.getElementById("modal-confirmacion");
 
@@ -342,22 +429,25 @@ function mostrarModal(texto, callbackConfirmar) {
     };
 }
 
-function modalListaAmigos(){
-
-
-    
-
-    const listaAmigos = window.listaAmistades.map(amistad => 
-        `<p>
+function modalListaAmigos() {
+    const listaAmigos = window.listaAmistades
+        .map(
+            (amistad) =>
+                `<p>
             <a href="/valopass/${amistad.nombre_usuario}">${amistad.nombre_usuario}</a> - 
             ${amistad.elo_cuenta_main}
-        </p>`).join("");
+        </p>`,
+        )
+        .join("");
     const modal = document.getElementById("modal-amigos");
-    
-    modal.innerHTML = `
+
+    modal.innerHTML =
+        `
         <div class="modal-contenido">
             <p id="modal-texto-amigos">Lista de amigos</p>
-            ` + listaAmigos + `
+            ` +
+        listaAmigos +
+        `
             <div class="modal-botones">
                 <button id="modal-cerrar-lista">Cerrar</button>
             </div>
@@ -377,6 +467,7 @@ function modalListaAmigos(){
         modal.style.display = "none";
     };
 }
+
 cerrarSesion.onclick = async function () {
     await fetch("/valopass/server/outlog.php");
 

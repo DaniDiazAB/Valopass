@@ -289,3 +289,26 @@ body {
     display:flex;
     justify-content:space-around;
 }
+
+.form-cambiar-password{
+    max-width:400px;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+input{
+    padding:8px;
+    font-size:14px;
+}
+
+button{
+    padding:10px;
+    cursor:pointer;
+}
