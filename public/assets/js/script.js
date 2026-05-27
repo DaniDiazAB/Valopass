@@ -63,6 +63,46 @@ linkPerfil.onclick = function () {
 }
 
 
+// filtro cuentas
+const selectFiltro = document.createElement("select");
+selectFiltro.id = "input-filtro";
+selectFiltro.classList.add("select-filtro");
+const rangosValorant = [
+    { label: "Todos los rangos", value: "todos los rangos" },
+    { label: "Hierro", value: "iron" },
+    { label: "Bronce", value: "bronze" },
+    { label: "Plata", value: "silver" },
+    { label: "Oro", value: "gold" },
+    { label: "Platino", value: "platinum" },
+    { label: "Diamante", value: "diamond" },
+    { label: "Ascendente", value: "ascendant" },
+    { label: "Inmortal", value: "immortal" },
+    { label: "Radiante", value: "radiant" },
+];
+
+rangosValorant.forEach(({ label, value }) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    selectFiltro.appendChild(option);
+});
+
+selectFiltro.addEventListener("change", () => {
+    const valorFiltro = selectFiltro.value;
+    const divsCuenta = document.querySelectorAll(".div-cuenta");
+
+    divsCuenta.forEach((div) => {
+        const rango = div.getAttribute("data-rango").toLowerCase();
+
+        if (valorFiltro === "todos los rangos" || rango.startsWith(valorFiltro)) {
+            div.style.display = "";
+        } else {
+            div.style.display = "none";
+        }
+    });
+});
+
+
 function cargarNavegacion() {
 
     cuentasPublicas.classList.add("enlace-nav");
@@ -89,11 +129,14 @@ function cargarNavegacion() {
     navBar.append(cuentas);
     navBar.append(linkActualizarRangos);
     navBar.append(agregarCuenta);
+    navBar.append(selectFiltro);
+
     navBar.append(linkPerfil);
     navBar.append(cerrarSesion);
 
+
 }
-// ZZZ
+
 async function getCuentas(isTodasCuentas) {
     fetch("/valopass/server/get-accounts.php", {
         method: "POST",
@@ -279,6 +322,7 @@ function cargarInputs(
     const infoRango = document.createElement("div");
     infoRango.classList.add("div-cuenta");
     infoRango.setAttribute("data-username", username);
+    infoRango.setAttribute("data-rango", rango);
 
     infoRango.append(labelNick);
     labelNick.appendChild(textoNick);
@@ -618,7 +662,6 @@ function guardarNuevaCuenta(
     }, 100);
 }
 
-// ZZZ
 async function getPropietarioCuenta(nickname, tag) {
 
     const response = await fetch("/valopass/server/get-propiedad-cuenta.php", {

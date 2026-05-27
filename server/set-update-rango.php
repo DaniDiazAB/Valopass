@@ -1,5 +1,5 @@
 <?php
-/*
+
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -56,4 +56,3 @@ try {
     echo json_encode(["status" => "error", "msg" => $e->getMessage()]);
 }
 
-*/

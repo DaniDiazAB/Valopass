@@ -486,3 +486,155 @@ button:active {
     grid-template-columns: 1fr;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   SELECT FILTRO
+   ══════════════════════════════════════════════════════════════ */
+
+.select-filtro {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: var(--bg-elevated);
+  color: var(--text);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  padding: 9px 38px 9px 14px;
+
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  outline: none;
+
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+
+  box-shadow: var(--shadow-sm);
+
+  /* Flecha custom */
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 2px),
+    calc(100% - 12px) calc(50% - 2px);
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+
+  min-width: 180px;
+}
+
+/* Hover */
+.select-filtro:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-soft);
+  transform: translateY(-1px);
+}
+
+/* Focus */
+.select-filtro:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Option */
+.select-filtro option {
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+/* Disabled */
+.select-filtro:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Variante compacta */
+.select-filtro.compacto {
+  min-width: auto;
+  padding: 7px 32px 7px 12px;
+  font-size: 0.82rem;
+  border-radius: var(--radius-sm);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LINK PROPIETARIO
+   ══════════════════════════════════════════════════════════════ */
+
+.propietario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: var(--accent);
+  text-decoration: none;
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+  border: 1px solid transparent;
+
+  transition:
+    color var(--transition),
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+
+  cursor: pointer;
+
+  position: relative;
+}
+
+/* Hover */
+.propietario:hover {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+/* Active */
+.propietario:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Focus accesible */
+.propietario:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Icono opcional delante */
+.propietario::before {
+  content: '@';
+  opacity: 0.7;
+  font-weight: 700;
+}
+
+/* Variante sutil */
+.propietario.sutil {
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+.propietario.sutil:hover {
+  background: var(--accent);
+  color: #fff;
+}
