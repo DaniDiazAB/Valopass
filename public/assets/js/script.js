@@ -43,7 +43,7 @@ cuentasPublicas.onclick = function () {
 
 agregarCuenta.onclick = function () {
     eliminarNavMarcado();
-    cargarInputs("", "", "", "", "", true);
+    cargarInputs("", "", "", "", "", "", true);
 };
 
 cerrarSesion.onclick = function () {
@@ -58,7 +58,7 @@ cerrarSesion.onclick = function () {
         .catch((error) => console.error("Error:", error));
 };
 
-linkPerfil.onclick = function (){
+linkPerfil.onclick = function () {
     window.location.href = "/valopass/user/" + usernameSesion;
 }
 
@@ -93,8 +93,8 @@ function cargarNavegacion() {
     navBar.append(cerrarSesion);
 
 }
-
-function getCuentas(isTodasCuentas) {
+// ZZZ
+async function getCuentas(isTodasCuentas) {
     fetch("/valopass/server/get-accounts.php", {
         method: "POST",
         headers: {
@@ -103,21 +103,29 @@ function getCuentas(isTodasCuentas) {
         body: "isTodasCuentas=" + encodeURIComponent(isTodasCuentas),
     })
         .then((response) => response.json())
-        .then((data) => {
+        .then(async (data) => {
+
             const divCuentas = document.createElement("div");
             divCuentas.id = "cuentas";
             navBar.insertAdjacentElement("afterend", divCuentas);
 
-            data.forEach((cuenta) => {
+            for (const cuenta of data) {
+                const propietario = await getPropietarioCuenta(
+                    cuenta.nick_cuenta,
+                    cuenta.tag_cuenta
+                );
+
+                console.log();
+
                 getRangos(
                     cuenta.nick_cuenta,
                     cuenta.tag_cuenta,
                     cuenta.username_cuenta,
                     cuenta.password_cuenta,
+                    propietario,
                     divCuentas
                 );
-            });
-            
+            }
         })
         .catch((error) => console.error("Error:", error));
 }
@@ -150,7 +158,7 @@ linkActualizarRangos.onclick = function () {
 
 };
 
-function getRangos(nick, tag, username, password, divCuentas) {
+function getRangos(nick, tag, username, password, propietario, divCuentas) {
     const datosCuenta = {
         username: username,
     };
@@ -165,7 +173,7 @@ function getRangos(nick, tag, username, password, divCuentas) {
         .then((response) => response.json())
         .then((data) => {
             let rango = data[0];
-            cargarInputs(rango, nick, tag, username, password, false, divCuentas);
+            cargarInputs(rango, nick, tag, username, password, propietario, false, divCuentas);
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -178,12 +186,13 @@ function cargarInputs(
     tag,
     username,
     password,
+    propietario,
     isNuevaCuenta,
     divCuentas
 ) {
     const labelNick = document.createElement("label");
     labelNick.classList.add("account-label");
-    labelNick.htmlFor = "nick-" + username; 
+    labelNick.htmlFor = "nick-" + username;
     labelNick.textContent = ""
 
     const textoNick = document.createElement("input");
@@ -198,14 +207,14 @@ function cargarInputs(
     labelAlmohadilla.classList.add("account-label");
     labelAlmohadilla.htmlFor = "almohadilla-" + username;
     labelAlmohadilla.textContent = ""
-    
+
     const textoAlmohadilla = document.createElement("p");
     textoAlmohadilla.classList.add("almohadilla");
     textoAlmohadilla.textContent = "#";
 
     const labelTag = document.createElement("label");
     labelTag.classList.add("account-label");
-    labelTag.htmlFor = "tag-" + username; 
+    labelTag.htmlFor = "tag-" + username;
     labelTag.textContent = ""
 
     const textoTag = document.createElement("input");
@@ -223,7 +232,7 @@ function cargarInputs(
 
     const labelUsername = document.createElement("label");
     labelUsername.classList.add("account-label");
-    labelUsername.htmlFor = "username-" + username; 
+    labelUsername.htmlFor = "username-" + username;
     labelUsername.textContent = ""
 
     const textoUsername = document.createElement("input");
@@ -235,7 +244,7 @@ function cargarInputs(
 
     const labelPassword = document.createElement("label");
     labelPassword.classList.add("account-label");
-    labelPassword.htmlFor = "password-" + username; 
+    labelPassword.htmlFor = "password-" + username;
     labelPassword.textContent = ""
 
     const textoPassword = document.createElement("input");
@@ -245,13 +254,19 @@ function cargarInputs(
     textoPassword.value = password;
     textoPassword.id = "password-" + username;
 
-
     const btnVerPassword = document.createElement("span")
     btnVerPassword.classList.add("toggle-password")
     btnVerPassword.innerHTML = "👁️"
 
+    const textoPropietario = document.createElement("a");
+    textoPropietario.classList.add("propietario");
+    textoPropietario.href = "/valopass/user/" + propietario;
+    textoPropietario.target = "_blank";
+    textoPropietario.innerHTML = propietario;
+    textoPropietario.value = propietario;
+
     btnVerPassword.onclick = function () {
-        const input = this.parentElement.querySelector(".password");   
+        const input = this.parentElement.querySelector(".password");
         if (input.type === "password") {
             input.type = "text";
             btnVerPassword.textContent = "🙈";
@@ -282,6 +297,8 @@ function cargarInputs(
     labelPassword.appendChild(textoPassword);
 
     infoRango.append(btnVerPassword);
+
+    infoRango.append(textoPropietario);
 
 
     const divBtn = document.createElement("div");
@@ -352,10 +369,13 @@ function cargarInputs(
         //btnEliminar.classList.add("btn-deshacer-cambios");
         btnEliminar.classList.add("btn-eliminar-cuenta");
 
-
         const btnCopiarPassword = document.createElement("button");
         btnCopiarPassword.innerHTML = "Copiar contraseña";
         btnCopiarPassword.classList.add("btn-copiar-password");
+
+        const btnTracker = document.createElement("button");
+        btnTracker.innerHTML = "Ver Tracker";
+        btnTracker.classList.add("btn-tracker");
 
         btnEditar.onclick = function () {
             editarCuenta(
@@ -392,11 +412,16 @@ function cargarInputs(
             navigator.clipboard.writeText(password);
         };
 
+        btnTracker.onclick = function () {
+            window.open("https://tracker.gg/valorant/profile/riot/" + textoNick.value + "%23" + textoTag.value, "_blank");
+        }
+
         agregarImgRango(rango, textoRango);
 
         divBtn.append(btnEditar);
         divBtn.append(btnEliminar);
         divBtn.append(btnCopiarPassword);
+        divBtn.append(btnTracker);
 
         divCuentas.append(infoRango);
         infoRango.append(divBtn);
@@ -419,7 +444,7 @@ function editarCuenta(
     //textoUsername.readOnly = false;
     textoPassword.readOnly = false;
 
-    textoUsername.onclick = function(){ alert("No se puede cambiar el nombre de la cuenta para iniciar sesión") }
+    textoUsername.onclick = function () { alert("No se puede cambiar el nombre de la cuenta para iniciar sesión") }
 
     const btnGuardarCambios = document.createElement("button");
     btnGuardarCambios.innerHTML = "Guardar cambios";
@@ -530,9 +555,9 @@ function modificarCambios(
         password: textoPassword.trim(),
         eliminar: isEliminar,
         isPublica: isPublica,
-    };    
-    
-    
+    };
+
+
     fetch("/valopass/server/set-changes-accounts.php", {
         method: "POST",
         headers: {
@@ -545,7 +570,7 @@ function modificarCambios(
             if (!data) {
                 alert("No tienes permisos para cambiar esta cuenta")
                 recargarDefault()
-            }            
+            }
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -568,8 +593,8 @@ function guardarNuevaCuenta(
         username: textoUsername.trim(),
         password: textoPassword.trim(),
         isPublica: isPublica,
-    };   
-     
+    };
+
 
     fetch("/valopass/server/set-new-account.php", {
         method: "POST",
@@ -580,7 +605,7 @@ function guardarNuevaCuenta(
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data.status === "error"){
+            if (data.status === "error") {
                 alert("Usuario ya existente en la BBDD")
             }
         })
@@ -591,6 +616,25 @@ function guardarNuevaCuenta(
     setTimeout(function () {
         getCuentas(true);
     }, 100);
+}
+
+// ZZZ
+async function getPropietarioCuenta(nickname, tag) {
+
+    const response = await fetch("/valopass/server/get-propiedad-cuenta.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            nickname: nickname,
+            tag: tag
+        })
+    });
+
+    const data = await response.json();
+
+    return data.nombre_usuario;
 }
 
 function agregarImgRango(rango, textoNick) {

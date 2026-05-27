@@ -42,8 +42,6 @@ while ($row = $result->fetch_assoc()) {
 
     unset($row['password_cuenta']);
 
-
-
     $row['password_cuenta'] = $passwordDecrypt;
 
     $datos[] = $row;

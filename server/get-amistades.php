@@ -8,9 +8,11 @@ $input = file_get_contents("php://input");
 $datos = json_decode($input, true);
 
 $id_perfil = $datos['idPerfilUsuario'] ?? '';
+$id_uno = $datos['idUno'] ?? '';
+$id_dos = $datos['idDos'] ?? '';
 
 try {
-    $sql = "SELECT * FROM usuarios_amigos";
+    $sql = "SELECT * FROM usuarios_amigos WHERE id_uno = :id_uno AND id_dos = :id_dos";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([":id_uno" => $id_uno, ":id_dos" => $id_dos]);
     $resultado = $stmt->fetch(PDO::FETCH_ASSOC); 
