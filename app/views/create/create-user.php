@@ -7,7 +7,8 @@
   <link rel="icon" type="image/x-icon" href="/valopass/public/resources/favicon.ico">
 
   <title>Crear usuario - Valopass</title>
-  <link rel="stylesheet" href="/valopass/public/views/styles/crear-usuario.css">
+  <link rel="stylesheet" href="/valopass/public/assets/styles/crear-usuario.css">
+
 
 </head>
 

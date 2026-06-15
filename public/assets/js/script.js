@@ -205,9 +205,8 @@ linkActualizarRangos.onclick = function () {
     fetch(url)
         .then((response) => response.text())
         .then((data) => {
-            console.log("Rangos actualizados correctamente");
-            console.log(data);
             cargandoRangos.setAttribute("hidden", "");
+            location.reload();
 
         })
         .catch((error) => {

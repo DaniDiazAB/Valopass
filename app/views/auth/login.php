@@ -8,6 +8,7 @@
 
   <title>Login - Valopass</title>
   <link rel="stylesheet" href="/valopass/public/assets/styles/login.css">
+  
 
 </head>
 
