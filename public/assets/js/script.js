@@ -174,6 +174,7 @@ async function getCuentas(isTodasCuentas) {
 }
 
 linkActualizarRangos.onclick = function () {
+    
     const cargandoRangos = document.createElement("img");
     cargandoRangos.src = "/valopass/public/resources/loading.gif";
     cargandoRangos.alt = "Actualizando los rangos en la base de datos";
@@ -182,7 +183,7 @@ linkActualizarRangos.onclick = function () {
     cargandoRangos.height = 25;
     cargandoRangos.style.borderRadius = "10px";
     document.body.insertBefore(cargandoRangos, document.body.firstChild);
-
+/*
     const divCuentas = document.getElementById("cuentas");
     divCuentas.className = "cuenta";
 
@@ -194,6 +195,20 @@ linkActualizarRangos.onclick = function () {
                 actualizarImagenRango(data.username, data.rango);
             }
             cargandoRangos.setAttribute("hidden", "");
+        })
+        .catch((error) => {
+            console.error("Error al obtener el texto:", error);
+        });*/
+
+
+    const url = "/valopass/server/set-update-rango.php";
+    fetch(url)
+        .then((response) => response.text())
+        .then((data) => {
+            console.log("Rangos actualizados correctamente");
+            console.log(data);
+            cargandoRangos.setAttribute("hidden", "");
+
         })
         .catch((error) => {
             console.error("Error al obtener el texto:", error);

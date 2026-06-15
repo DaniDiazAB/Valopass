@@ -43,7 +43,7 @@ foreach ($resultados as $fila) {
 }
 */
 
-
+/*
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -126,3 +126,4 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
+    */
