@@ -9,7 +9,7 @@ Este proyecto **no está pensado aún para un uso real**, sigue en desarrollo ac
 
 Puedes acceder a la versión de demostración en:
 
-**[https://danidiaz.site/valopass/](https://danidiaz.eu/valopass/)**
+**[https://danidiaz.eu/valopass/](https://danidiaz.eu/valopass/)**
 
 > ⚠️ Debido a que es una *Live Demo* pública, para evitar ataques y cumplir con la legislación:
 > - **No se pueden registrar nuevos usuarios**
@@ -55,14 +55,6 @@ Cuando el usuario las consulta, se **desencriptan temporalmente** para mostrarla
 
 ### ✔ Hash seguro para contraseñas de usuarios
 Las contraseñas de los usuarios **se almacenan con hash** en la base de datos mediante funciones seguras de PHP (ej. `password_hash`).
-
----
-
-## 📦 Manual de instalación
-
-Descarga haciendo click aquí un PDF para instalar el proyecto, ya sea en localhost o en un servidor público:
-
-https://danidiaz.site/valopass/manualinstalacion.pdf
 
 ---
 
