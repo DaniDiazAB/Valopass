@@ -9,7 +9,7 @@ Este proyecto **no está pensado aún para un uso real**, sigue en desarrollo ac
 
 Puedes acceder a la versión de demostración en:
 
-**[https://danidiaz.site/valopass/](https://danidiaz.site/valopass/)**
+**[https://danidiaz.site/valopass/](https://danidiaz.eu/valopass/)**
 
 > ⚠️ Debido a que es una *Live Demo* pública, para evitar ataques y cumplir con la legislación:
 > - **No se pueden registrar nuevos usuarios**
